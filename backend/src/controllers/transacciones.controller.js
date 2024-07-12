@@ -33,11 +33,11 @@ const getTransaccion = async (req, res) => {
 };
 
 const postTransaccion = async (req, res) => {
-  const { fechaTransaccion, idCuentaTransaccion, fechaEntrega } = req.body;
+  const { ventaTransaccion, fechaTransaccion, idCuentaTransaccion, fechaEntrega } = req.body;
   try {
     const results = await pool.query(
-      "INSERT INTO transacciones (fechaTransaccion, idCuentaTransaccion, fechaEntrega) VALUES (?, ?, ?)",
-      [fechaTransaccion, idCuentaTransaccion, fechaEntrega]
+      "INSERT INTO transacciones (ventaTransaccion, fechaTransaccion, idCuentaTransaccion, fechaEntrega) VALUES (?, ?, ?, ?)",
+      [ventaTransaccion, fechaTransaccion, idCuentaTransaccion, fechaEntrega]
     );
     console.log(results);
     res.status(201).send(`Transaccion added`);

@@ -17,11 +17,16 @@ const LoginPage = () => {
     e.preventDefault();
 
     async function auth(username, password) {
-      const response = await authenticate(username, password);
+      try{
+        const response = await authenticate(username, password);
+        //access token
+        localStorage.setItem("token", response.data.accessToken);
+      } catch (error) {
+        console.log(error);
+      }
 
-      //access token
-      console.log(response.data);
     }
+    
     auth(username, password);
   };
 
