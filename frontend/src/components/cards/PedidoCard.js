@@ -1,9 +1,9 @@
-import { EditButton, DeleteButton, PrintButton, CompleteButton } from "./Buttons";
+import { OptionsButton } from "../utils/Buttons";
 
 const PedidoCard = ({ pedido }) => {
   return (
-    <>
-      <div key={pedido.idTransaccion}>
+    
+      <div key={pedido.idTransaccion} className="pedido-card">
         <h3>
           {pedido.idTransaccion} - {pedido.fechaTransaccion}
         </h3>
@@ -12,12 +12,9 @@ const PedidoCard = ({ pedido }) => {
           {pedido.cuenta.cuentaDireccion} - {pedido.cuenta.cuentaTelefono} -
           {pedido.itemsTransaccion[0].map((item) => ( <li key={item.idItemTransaccion}>{item.idMarcoItemTransaccion} x{item.cantidadItemTransaccion} </li>))}
        </p>
-        <EditButton id={pedido.idTransaccion} />
-        <DeleteButton id={pedido.idTransaccion} />
-        <PrintButton id={pedido.idTransaccion} />
-        <CompleteButton id={pedido.idTransaccion} />
+        <OptionsButton id={pedido.idTransaccion} type={'pedido'} />
       </div>
-    </>
+    
   );
 };
 export default PedidoCard;

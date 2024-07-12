@@ -1,3 +1,4 @@
+import { OptionsButton } from "../utils/Buttons";
 
 const VentaCard = ({ venta }) => {
   return (
@@ -9,8 +10,13 @@ const VentaCard = ({ venta }) => {
         <p>
           {venta.cuenta.cuentaNombre} - {venta.cuenta.cuentaCuit} -{" "}
           {venta.cuenta.cuentaDireccion} - {venta.cuenta.cuentaTelefono}
-          {venta.itemsTransaccion[0].map((item) => ( <li key={item.idItemTransaccion}>{item.idMarcoItemTransaccion} x{item.cantidadItemTransaccion} </li>))}
+          {venta.itemsTransaccion[0].map((item) => (
+            <li key={item.idItemTransaccion}>
+              {item.idMarcoItemTransaccion} x{item.cantidadItemTransaccion}{" "}
+            </li>
+          ))}
         </p>
+        <OptionsButton id={venta.idTransaccion} type={'venta'} />
       </div>
     </>
   );

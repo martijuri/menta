@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { authenticate } from "../api/utils.api";
 
 const LoginPage = () => {

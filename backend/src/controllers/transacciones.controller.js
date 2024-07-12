@@ -1,6 +1,9 @@
 import { pool } from "../db.js";
 import { getItemsTransacciones } from "./utils.controller.js";
 
+// Controladores de transacciones
+
+// Funcion para obtener todas las transacciones
 const getTransacciones = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM transacciones");
@@ -14,6 +17,7 @@ const getTransacciones = async (req, res) => {
   }
 };
 
+// Funcion para obtener una transaccion por su id
 const getTransaccion = async (req, res) => {
   const { id } = req.params;
   try {
@@ -32,6 +36,7 @@ const getTransaccion = async (req, res) => {
   }
 };
 
+// Funcion para añadir una transaccion
 const postTransaccion = async (req, res) => {
   const { ventaTransaccion, fechaTransaccion, idCuentaTransaccion, fechaEntrega } = req.body;
   try {
@@ -50,6 +55,7 @@ const postTransaccion = async (req, res) => {
   }
 };
 
+// Funcion para actualizar una transaccion
 const patchTransaccion = async (req, res) => {
   const { id } = req.params;
   try {
@@ -67,6 +73,7 @@ const patchTransaccion = async (req, res) => {
   }
 };
 
+// Funcion para eliminar una transaccion
 const deleteTransaccion = async (req, res) => {
   const { id } = req.params;
   try {

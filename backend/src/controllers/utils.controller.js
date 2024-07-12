@@ -20,12 +20,29 @@ export async function getItemsTransacciones(id) {
 // Funcion para obtener los tipos de marcos
 export async function getTiposMarcos(req, res) {
   try {
-    const [rows] = await pool.query("SELECT * FROM tipoMarcos");
+    const [rows] = await pool.query("SELECT * FROM tipos");
     res.json(rows);
   } catch (error) {
     console.error(error);
     res.status(500).json({
       message: "Error al obtener los tipos de marcos",
+      error: error.message,
+    });
+  }
+}
+
+//Funcion para obtener el tipo de marco con el id
+export async function getTipoMarco(req, res) {
+  try {
+    const [rows] = await pool.query(
+      "SELECT * FROM tipos WHERE idTipo = ?",
+      [req.params.id]
+    );
+    res.json(rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al obtener el tipo de marco",
       error: error.message,
     });
   }

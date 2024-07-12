@@ -1,5 +1,4 @@
-import React from "react";
-import TransaccionesList from "../components/TransaccionesList";
+import TransaccionesList from "../components/lists/TransaccionesList";
 
 const VentasPage = () => {
   return (

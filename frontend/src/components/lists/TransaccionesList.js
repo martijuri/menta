@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { getPedidos, getVentas } from "../api/transacciones.api";
-import PedidoCard from "./PedidoCard";
-import VentaCard from "./VentaCard";
+import { getPedidos, getVentas } from "../../api/transacciones.api";
+import PedidoCard from "../cards/PedidoCard";
+import VentaCard from "../cards/VentaCard";
+import SearchBar from "../utils/SearchBar";
 
 const TransaccionesList = ({ type }) => {
   const [transacciones, setTransacciones] = useState([]);
@@ -27,16 +28,15 @@ const TransaccionesList = ({ type }) => {
   });
   return (
     <>
-      <ul>
-        {type === "pedidos" &&
-          transacciones.map((pedido) => (
-            <PedidoCard key={pedido.idTransaccion} pedido={pedido} />
-          ))}
-        {type === "ventas" &&
-          transacciones.map((venta) => (
-            <VentaCard key={venta.idTransaccion} venta={venta} />
-          ))}
-      </ul>
+      <SearchBar />
+      {type === "pedidos" &&
+        transacciones.map((pedido) => (
+          <PedidoCard key={pedido.idTransaccion} pedido={pedido} />
+        ))}
+      {type === "ventas" &&
+        transacciones.map((venta) => (
+          <VentaCard key={venta.idTransaccion} venta={venta} />
+        ))}
     </>
   );
 };
