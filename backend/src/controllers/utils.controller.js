@@ -11,3 +11,16 @@ export async function getItemsTransacciones(id) {
         return { message: "Error al obtener los items de la transaccion", error: error.message };
     }
 }
+
+export async function getTiposMarcos(req, res) {
+    try {
+        const [rows] = await pool.query("SELECT * FROM tipoMarcos");
+        res.json(rows);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error al obtener los tipos de marcos",
+            error: error.message,
+        });
+    }
+}

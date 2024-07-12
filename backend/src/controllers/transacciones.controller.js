@@ -1,5 +1,5 @@
 import { pool } from "../db.js";
-import { getItemsTransacciones } from "../routes/itemTransacciones.routes.js";
+import { getItemsTransacciones } from "./utils.controller.js";
 
 const getTransacciones = async (req, res) => {
   try {

@@ -6,4 +6,3 @@ export const pool = createPool({
     port: 3306,
     database: 'stock'
 });
-
