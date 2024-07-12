@@ -11,13 +11,13 @@ const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
+app.use(cors( { origin: "http://localhost:3000" }));
 
 app.use("/login", login);
 app.post("/auth", auth);
 
 // Aplicar middleware a todas las rutas que comiencen con '/api'
-app.use("/api", validateToken);
+//app.use("/api", validateToken);
 
 // Montar los routers específicos
 app.use("/api/transacciones", transaccionesRouter);
