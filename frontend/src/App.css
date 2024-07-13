@@ -1,3 +1,11 @@
-.pedido-card{
-    background-color: aqua;
+.pedido-card, .venta-card{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 300px;
+    height: 200px;
 }

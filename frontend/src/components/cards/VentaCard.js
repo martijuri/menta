@@ -3,7 +3,7 @@ import { OptionsButton } from "../utils/Buttons";
 const VentaCard = ({ venta }) => {
   return (
     <>
-      <div key={venta.idTransaccion}>
+      <div key={venta.idTransaccion} className="venta-card">
         <h3>
           {venta.idTransaccion} - {venta.fechaTransaccion}
         </h3>

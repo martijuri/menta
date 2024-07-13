@@ -17,13 +17,11 @@ const TransaccionesList = ({ type }) => {
     loadMarcos();
   });
   return (
-    <>
-      <ul>
+    <ul>
         {marcos.map((marco) => (
           <MarcoCard key={marco.idMarco} marco={marco} />
         ))}
       </ul>
-    </>
   );
 };
 
