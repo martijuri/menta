@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getMarcos } from "../../api/marcos.api";
 import MarcoCard from "../cards/MarcoCard";
 
-const TransaccionesList = ({ type }) => {
+const StockTable = () => {
   const [marcos, setMarcos] = useState([]);
   useEffect(() => {
     async function loadMarcos() {
@@ -15,7 +15,7 @@ const TransaccionesList = ({ type }) => {
     }
 
     loadMarcos();
-  });
+  }, []);
   return (
     <ul>
         {marcos.map((marco) => (
@@ -25,4 +25,4 @@ const TransaccionesList = ({ type }) => {
   );
 };
 
-export default TransaccionesList;
+export default StockTable;

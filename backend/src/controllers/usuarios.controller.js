@@ -5,20 +5,21 @@ import dotenv from "dotenv";
 dotenv.config();
 
 //Consulta a la base de datos para verificar si el usuario existe
-export const confirmUsuario = async (req, res) => {
-  const { username, password } = req.body;
-
+export const confirmUsuario = async (username, password) => {
   const response = await pool.query(
     "SELECT * FROM usuarios WHERE username = ? AND contraseña = ?",
     [username, password]
   );
 
-  if (response[0].length > 0) return true; return false;
+  if (response[0].length > 0) return true;
+  return false;
 };
 
 //Generar token de acceso
 export const generateAccessToken = (username) => {
-  return jwt.sign({ username }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "1h",});
+  return jwt.sign({ username }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1h",
+  });
 };
 
 //Validar token de acceso

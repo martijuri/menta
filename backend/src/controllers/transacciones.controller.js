@@ -1,5 +1,6 @@
 import { pool } from "../db.js";
 import { getItemsTransacciones } from "./utils.controller.js";
+import { getCuenta } from "./utils.controller.js";
 
 // Controladores de transacciones
 
@@ -7,7 +8,14 @@ import { getItemsTransacciones } from "./utils.controller.js";
 const getTransacciones = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM transacciones");
-    res.json(rows);
+    const transaccionesConCuentas = await Promise.all(
+      rows.map(async (row) => {
+        const cuenta = await getCuenta(row.idCuentaTransaccion);
+        const itemsTransaccion = await getItemsTransacciones(row.idTransaccion);
+        return { ...row, cuenta, itemsTransaccion };
+      })
+    );
+    res.json(transaccionesConCuentas);
   } catch (error) {
     console.error(error);
     res.status(500).json({

@@ -1,10 +1,10 @@
-import MarcosList from "../components/lists/MarcosList";
+import StockTable from "../components/lists/StockTable";
 
 const StockPage = () => {
   return (
     <>
       <h1>Stock Page</h1>
-      <MarcosList />
+      <StockTable />
     </>
   );
 };

@@ -1,8 +1,18 @@
 import { pool } from "../db.js";
 
 const getMarcos = async (req, res) => {
-  const [rows] = await pool.query("SELECT * FROM marcos");
-  res.json(rows);
+  try {
+    const query = `
+      SELECT marcos.idMarco, tipos.Tipo as idTipoMarco, marcos.stockMarco, marcos.precioDolar
+      FROM marcos
+      JOIN tipos ON marcos.idTipoMarco = tipos.idTipo
+    `;
+    const [rows] = await pool.query(query);
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener los marcos", error: error.message });
+  }
 };
 
 const postMarco = async (req, res) => {

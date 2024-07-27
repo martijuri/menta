@@ -1,6 +1,10 @@
 import { OptionsButton } from "../utils/Buttons";
+import { useContext } from "react";
+import { TransaccionContext } from "../../context/TransaccionContext";
 
 const PedidoCard = ({ pedido }) => {
+  const { updateTransaccion } = useContext(TransaccionContext);
+  
   return (
     
       <div key={pedido.idTransaccion} className="pedido-card">
@@ -12,7 +16,7 @@ const PedidoCard = ({ pedido }) => {
           {pedido.cuenta.cuentaDireccion} - {pedido.cuenta.cuentaTelefono} -
           {pedido.itemsTransaccion[0].map((item) => ( <li key={item.idItemTransaccion}>{item.idMarcoItemTransaccion} x{item.cantidadItemTransaccion} </li>))}
        </p>
-        <OptionsButton id={pedido.idTransaccion} type={'pedido'} />
+        <OptionsButton id={pedido.idTransaccion} type={'pedido'} onClick={() => updateTransaccion(pedido)}  />
       </div>
     
   );

@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(cors( { origin: "http://localhost:3000" }));
 
 app.use("/login", login);
+app.get("/auth/validate", validateToken);
 app.post("/auth", auth);
 
 // Aplicar middleware a todas las rutas que comiencen con '/api'
