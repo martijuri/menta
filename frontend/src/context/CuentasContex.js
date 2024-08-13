@@ -30,6 +30,7 @@ export const CuentasProvider = ({ children }) => {
 
 export const postCuentaContext = async (cuenta) => {
   try {
+    console.log("cuenta desde contexto:", cuenta);
     const response = await postCuenta(cuenta);
     console.log(response);
   } catch (error) {

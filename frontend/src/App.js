@@ -71,7 +71,7 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path="*" element={<h1>Not Found</h1>} />
+                  <Route path="*" element={<Navigate to="/login" />} />
                 </Routes>
               </TransaccionesProvider>
             </TransaccionProvider>

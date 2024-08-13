@@ -98,10 +98,11 @@ export async function patchCuenta(req, res) {
 // Funcion para crear una cuenta
 export async function postCuenta(req, res) {
   try {
-    const { cuenta } = req.body;
+    const { cuentaNombre, cuentaCuit, cuentaDireccion, cuentaTelefono } = req.body;
+    console.log(req.body);
     await pool.query(
-      "INSERT INTO cuentas (cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion) VALUES (?, ?, ?)",
-      [cuenta.cuentaNombre, cuenta.cuentaCuit, cuenta.cuentaTelefono, cuenta.cuentaDireccion]
+      "INSERT INTO cuentas (cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion) VALUES (?, ?, ?, ?)",
+      [cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion]
     );
     res.json({ message: "Cuenta creada" });
   } catch (error) {

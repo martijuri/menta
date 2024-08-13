@@ -19,6 +19,7 @@ export const auth = async (req, res) => {
   
     //consulta a base de datos
     const confirmation = await confirmUsuario(username, password);
+    console.log(confirmation);
   
     if (confirmation) {
       const accessToken = generateAccessToken(username);

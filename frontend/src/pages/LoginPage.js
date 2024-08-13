@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -24,16 +24,16 @@ const LoginPage = () => {
       try {
         const response = await authenticate(username, password);
         //access token
-        localStorage.setItem("token", response.data.accessToken);
+        login(response.data.accessToken);
         //Redirigir a /home
         navigate("/home");
-        login();
       } catch (error) {
         console.log(error);
       }
     }
     auth(username, password);
   };
+  
 
   return (
     <div>
@@ -54,7 +54,9 @@ const LoginPage = () => {
         </label>
         <br />
         <button type="submit">Login</button>
+        <br />
       </form>
+        <button onClick={logout}>Logout</button>
     </div>
   );
 };

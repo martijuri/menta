@@ -22,6 +22,10 @@ export const postCuenta = async (data) =>
 export const authenticate = async (username, password) =>
   await axios.post(`${BASE_URL}/auth`, { username, password });
 
+export const validate = async (token) =>
+  await axios.post(`${BASE_URL}/auth/validate`, { token });
+  
+
 // Utilidad para manejar llamadas a la API y errores
 export async function handleApiCall(call) {
   try {

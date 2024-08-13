@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authenticate } from '../api/utils.api';
 
 const AuthContext = createContext();
 
@@ -11,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   useEffect( () => {
     const token = localStorage.getItem('token');
     if (token) {
-        authenticate(token);
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
