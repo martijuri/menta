@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { authenticate } from "../api/utils.api";
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const { login, logout } = useAuth();
 
   const handleUsernameChange = (e) => {
@@ -19,19 +16,8 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    async function auth(username, password) {
-      try {
-        const response = await authenticate(username, password);
-        //access token
-        login(response.data.accessToken);
-        //Redirigir a /home
-        navigate("/home");
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    auth(username, password);
+    login(username, password);
+      
   };
   
 

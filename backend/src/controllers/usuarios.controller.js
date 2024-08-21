@@ -22,8 +22,26 @@ export const generateAccessToken = (username) => {
   });
 };
 
-//Validar token de acceso
-export const validateToken = (req, res, next) => {
+// Validar token de acceso
+export const validateToken = (req, res) => {
+  const { token } = req.body;
+
+  // Si no se proporciona un token, devolver un error 400
+  if (!token) {
+    return res.status(400).json({ message: 'Token is required' });
+  }
+
+  // Verificar el token
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    // Si el token es inválido, devolver un error 403
+    if (err) {
+      return res.status(403).json({ message: 'Invalid token' });
+    }
+    res.json({ valid: true, user });
+  });
+};
+
+export const validateTokenMiddleware = (req, res, next) => {
   const accessToken = req.headers["authorization"];
   const token = accessToken && accessToken.split(" ")[1];
 
