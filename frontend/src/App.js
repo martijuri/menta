@@ -5,6 +5,8 @@ import PedidosPage from "./pages/PedidosPage";
 import VentasPage from "./pages/VentasPage";
 import StockPage from "./pages/StockPage";
 import PedidosFormPage from "./pages/PedidosFormPage";
+import HomePage from "./pages/HomePage";
+import UserPage from "./pages/UserPage";
 import "./App.css";
 import { TiposProvider } from "./context/TiposContext";
 import { CuentasProvider } from "./context/CuentasContex";
@@ -35,7 +37,7 @@ function App() {
                     path="/home"
                     element={
                       <ProtectedRoute>
-                        <h1>Home</h1>
+                        <HomePage />
                       </ProtectedRoute>
                     }
                   />
@@ -71,6 +73,14 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
+                  <Route
+                    path="/user"
+                    element={
+                      <ProtectedRoute>
+                        <UserPage />
+                      </ProtectedRoute>
+                    }
+                  ></Route>
                   <Route path="*" element={<Navigate to="/login" />} />
                 </Routes>
               </TransaccionesProvider>
@@ -85,7 +95,7 @@ function App() {
 export default function AppWrapper() {
   return (
     <AuthProvider>
-        <App />
+      <App />
     </AuthProvider>
   );
 }

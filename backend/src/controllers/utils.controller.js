@@ -99,7 +99,6 @@ export async function patchCuenta(req, res) {
 export async function postCuenta(req, res) {
   try {
     const { cuentaNombre, cuentaCuit, cuentaDireccion, cuentaTelefono } = req.body;
-    console.log(req.body);
     await pool.query(
       "INSERT INTO cuentas (cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion) VALUES (?, ?, ?, ?)",
       [cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion]

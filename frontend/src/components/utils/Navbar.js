@@ -10,6 +10,9 @@ function Navbar() {
           <Link to="/login">Login</Link>
         </li>
         <li>
+          <Link to="/home">Home</Link>
+        </li>
+        <li>
           <Link to="/pedidos">Pedidos</Link>
         </li>
         <li>
@@ -17,6 +20,9 @@ function Navbar() {
         </li>
         <li>
           <Link to="/ventas">Ventas</Link>
+        </li>
+        <li>
+          <Link to="/user">Perfil de Usuario</Link>
         </li>
       </ul>
     </div>
