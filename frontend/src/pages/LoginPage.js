@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { authenticate } from "../api/utils.api";
+import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { login, logout } = useAuth();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -17,18 +21,19 @@ const LoginPage = () => {
     e.preventDefault();
 
     async function auth(username, password) {
-      try{
+      try {
         const response = await authenticate(username, password);
         //access token
-        localStorage.setItem("token", response.data.accessToken);
+        login(response.data.accessToken);
+        //Redirigir a /home
+        navigate("/home");
       } catch (error) {
         console.log(error);
       }
-
     }
-    
     auth(username, password);
   };
+  
 
   return (
     <div>
@@ -49,7 +54,9 @@ const LoginPage = () => {
         </label>
         <br />
         <button type="submit">Login</button>
+        <br />
       </form>
+        <button onClick={logout}>Logout</button>
     </div>
   );
 };

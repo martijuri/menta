@@ -11,6 +11,7 @@ const TransaccionesList = ({ type }) => {
       try {
         if (type === "pedidos") {
           const response = await getPedidos();
+          console.log(response);
           setTransacciones(response);
         } else if (type === "ventas") {
           const response = await getVentas();
@@ -25,7 +26,8 @@ const TransaccionesList = ({ type }) => {
     }
 
     loadTransacciones();
-  });
+    console.log("Transacciones cargadas");
+  },[] );
   return (
     <>
       <SearchBar />

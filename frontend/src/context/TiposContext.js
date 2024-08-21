@@ -10,11 +10,8 @@ export const TiposProvider = ({ children }) => {
     const cargarTiposDeMarcos = async () => {
       try {
         const response = await getTiposMarcos();
-        const tiposDeMarcosArray = Object.entries(response).map(
-          ([key, value]) => [value.idTipo, value.Tipo]
-        );
-        setTiposDeMarcos(tiposDeMarcosArray);
-        console.log("Tipos de marcos array:", tiposDeMarcosArray);
+        setTiposDeMarcos(response);
+        console.log("Tipos de marcos array:", response);
       } catch (error) {
         console.error("Error al cargar los tipos de marcos:", error);
       }

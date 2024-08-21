@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import { useState } from "react";
 import {
   deleteTransaccion,
   patchTransaccion,
 } from "../../api/transacciones.api";
 import { deleteMarco } from "../../api/marcos.api";
+import { patchCuenta, postCuenta } from "../../api/utils.api";
 
 // Botones de acción
 
@@ -31,18 +32,33 @@ export const DeleteButton = ({ id, type }) => {
   );
 };
 
-// Botón que redirige a la página de edición de un marco o transacción por id (tipo recibido en props)
+
 export const EditButton = ({ id, type }) => {
-  const handleEdit = async () => {
+  let navigate = useNavigate(); // Hook para navegar
+
+  const handleEdit = () => {
     if (type === "marco") {
-      return <Link to={`/marcos/${id}/edit`} />;
-    } else if (type === "venta" || type === "pedido")
-      return <Link to={`/transacciones/${id}/edit`} />;
+      navigate(`/marcos/${id}/edit`);
+    } else if (type === "venta" || type === "pedido") {
+      navigate(`/transacciones/${id}/edit`);
+    }
   };
+
   return (
     <button className="edit-button" onClick={handleEdit}>
       Edit
     </button>
+  );
+};
+
+// Botón que redirige a una URL específica pasada como prop
+export const LinkButton = ({ url, text}) => {
+  return (
+    <Link to={url}>
+      <button className="link-button">
+        {text}
+      </button>
+    </Link>
   );
 };
 
@@ -108,7 +124,7 @@ const buttonConfig = {
 };
 
 // Botón de opciones que muestra los botones de acción correspondientes al tipo
-export const OptionsButton = ({ id, type }) => {
+export const OptionsButton = ({ id, type , onClick}) => {
   const [showOptions, setShowOptions] = useState(false);
 
   const handleOptions = () => {
@@ -127,10 +143,24 @@ export const OptionsButton = ({ id, type }) => {
         <>
           {ButtonComponents.map((ButtonComponent, index) => (
             // Renderiza cada botón con el id proporcionado y el tipo correspondiente
-            <ButtonComponent key={index} id={id} type={type} />
+            <ButtonComponent key={index} id={id} type={type} url={"pedidos/form"} text={"to form"} />
           ))}
         </>
       )}
     </>
+  );
+};
+
+
+// Botón para confirmar una cuenta
+export const ConfirmButton = ({ id }) => {
+  const handleConfirm = async () => {
+   
+  };
+
+  return (
+    <button className="confirm-button" onClick={handleConfirm}>
+      Confirm
+    </button>
   );
 };

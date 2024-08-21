@@ -16,7 +16,7 @@ const VentaCard = ({ venta }) => {
             </li>
           ))}
         </p>
-        <OptionsButton id={venta.idTransaccion} type={'venta'} />
+        <OptionsButton id={venta.idTransaccion} type={"venta"} />
       </div>
     </>
   );

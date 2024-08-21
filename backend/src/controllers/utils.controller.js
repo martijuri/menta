@@ -31,7 +31,7 @@ export async function getTiposMarcos(req, res) {
   }
 }
 
-//Funcion para obtener el tipo de marco con el id
+// Funcion para obtener el tipo de marco con el id
 export async function getTipoMarco(req, res) {
   try {
     const [rows] = await pool.query(
@@ -48,7 +48,7 @@ export async function getTipoMarco(req, res) {
   }
 }
 
-//Funcion para obtener la cuenta con el id
+// Funcion para obtener la cuenta con el id
 export async function getCuenta(id) {
   try {
     const [rows] = await pool.query(
@@ -62,7 +62,58 @@ export async function getCuenta(id) {
   }
 }
 
-//Funcion para obtener los pedidos (transacciones con ventaTransaccion = 1 y fechaEntrega = NULL)
+// Funcion para obtener las cuentas
+export async function getCuentas(req, res) {
+  try {
+    const [rows] = await pool.query("SELECT * FROM cuentas");
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al obtener las cuentas",
+      error: error.message,
+    });
+  }
+}
+
+// Funcion para actualizar una cuenta
+export async function patchCuenta(req, res) {
+  try {
+    const { id } = req.params;
+    const { cuenta } = req.body;
+    await pool.query(
+      "UPDATE cuentas SET cuentaNombre = ?, cuentaCuit = ?, cuentaTelefono = ?, cuentaDireccion = ? WHERE idCuenta = ?",
+      [cuenta.cuentaNombre, cuenta.cuentaCuit, cuenta.cuentaTelefono, cuenta.cuentaDireccion, id]
+    );
+    res.json({ message: "Cuenta actualizada" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al actualizar la cuenta",
+      error: error.message,
+    });
+  }
+}
+
+// Funcion para crear una cuenta
+export async function postCuenta(req, res) {
+  try {
+    const { cuentaNombre, cuentaCuit, cuentaDireccion, cuentaTelefono } = req.body;
+    await pool.query(
+      "INSERT INTO cuentas (cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion) VALUES (?, ?, ?, ?)",
+      [cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion]
+    );
+    res.json({ message: "Cuenta creada" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al crear la cuenta",
+      error: error.message,
+    });
+  }
+}
+
+// Funcion para obtener los pedidos (transacciones con ventaTransaccion = 1 y fechaEntrega = NULL)
 export async function getPedidos(req, res) {
   try {
     const [rows] = await pool.query(
@@ -86,7 +137,7 @@ export async function getPedidos(req, res) {
   }
 }
 
-//Funcion para obtener las ventas (transacciones con ventaTransaccion = 1 y fechaEntrega != NULL)
+// Funcion para obtener las ventas (transacciones con ventaTransaccion = 1 y fechaEntrega != NULL)
 export async function getVentas(req, res) {
   try {
     const [rows] = await pool.query(
