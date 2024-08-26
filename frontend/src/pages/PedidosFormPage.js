@@ -1,5 +1,5 @@
 import TransaccionesForm from "../components/forms/TransaccionesForm";
-import {useContext} from "react";
+import { useContext } from "react";
 import { TransaccionContext } from "../context/TransaccionContext";
 
 const PedidosFormPage = () => {
@@ -7,7 +7,11 @@ const PedidosFormPage = () => {
   return (
     <div>
       <h1>FormPage</h1>
-      <TransaccionesForm type = {"pedidos"} transaccion={transaccion} handleSubmit={updateTransaccion} />
+      <TransaccionesForm
+        type={"pedidos"}
+        transaccion={transaccion}
+        handleSubmit={updateTransaccion}
+      />
     </div>
   );
 };

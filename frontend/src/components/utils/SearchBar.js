@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const SearchBar = () => {
+const SearchBar = ({ data, onSearch, searchKey }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleInputChange = (event) => {
@@ -8,15 +8,17 @@ const SearchBar = () => {
     };
 
     const handleSearch = () => {
-        // Implement search logic here
-        console.log('Searching for:', searchTerm);
+        const filteredData = data.filter(item =>
+            item[searchKey].toString().toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        onSearch(filteredData);
     };
 
     return (
         <div>
             <input
                 type="text"
-                placeholder="Search..."
+                placeholder={`Search by ${searchKey}...`}
                 value={searchTerm}
                 onChange={handleInputChange}
             />

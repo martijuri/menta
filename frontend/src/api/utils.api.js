@@ -25,6 +25,14 @@ export const authenticate = async (username, password) =>
 export const validate = async (token) =>
   await axios.post(`${BASE_URL}/auth/validate`, { token });
   
+export const updateUser = async (newUserData) =>
+  handleApiCall(() => axiosInstance.patch(`/usuarios/${newUserData.id}`, newUserData));
+
+export const getPerfil = async () =>
+  handleApiCall(() => axiosInstance.get(`/profile`));
+
+export const registerUser = async (userData) =>
+  handleApiCall(() => axiosInstance.post(`/usuarios`, userData));
 
 // Utilidad para manejar llamadas a la API y errores
 export async function handleApiCall(call) {

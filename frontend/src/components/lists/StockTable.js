@@ -1,27 +1,65 @@
-import { useState, useEffect } from "react";
-import { getMarcos } from "../../api/marcos.api";
-import MarcoCard from "../cards/MarcoCard";
+import { useState, useEffect, useContext } from "react";
+import { StockContext } from "../../context/StockContext";
+import SearchBar from "../utils/SearchBar";
+import { EditButton, LinkButton } from "../utils/Buttons";
 
 const StockTable = () => {
   const [marcos, setMarcos] = useState([]);
-  useEffect(() => {
-    async function loadMarcos() {
-      try {
-        const response = await getMarcos();
-        setMarcos(response);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+  const [filteredMarcos, setFilteredMarcos] = useState([]);
+  const { stock } = useContext(StockContext);
 
-    loadMarcos();
-  }, []);
+  useEffect(() => {
+    setMarcos(stock);
+    setFilteredMarcos(stock);
+  }, [stock]);
+
+  const handleStockChange = (id, delta) => {
+    setMarcos((prevMarcos) =>
+      prevMarcos.map((marco) =>
+        marco.idMarco === id ? { ...marco, stockMarco: marco.stockMarco + delta } : marco
+      )
+    );
+  };
+
+  const handleSearch = (results) => {
+    setFilteredMarcos(results);
+  };
+
   return (
-    <ul>
-        {marcos.map((marco) => (
-          <MarcoCard key={marco.idMarco} marco={marco} />
-        ))}
-      </ul>
+    <div>
+      <SearchBar data={marcos} onSearch={handleSearch} searchKey="idMarco" />
+      <LinkButton url="/marcos/new" text="Agregar Stock" />
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo de Marco</th>
+            <th>Cantidad</th>
+            <th>Precio (USD)</th>
+            <th>Imagen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredMarcos.map((marco) => (
+            <tr key={marco.idMarco}>
+              <td>{marco.idMarco}</td>
+              <td>{marco.idTipoMarco}</td>
+              <td>{marco.stockMarco}</td>
+              <td>{marco.precioDolar}</td>
+              <td>
+                <img src={marco.imagenMarco} alt={`Imagen de ${marco.idMarco}`} width="50" />
+              </td>
+              <td>
+                <button onClick={() => handleStockChange(marco.idMarco, 1)}>Sumar</button>
+              </td>
+              <td>
+                <button onClick={() => handleStockChange(marco.idMarco, -1)}>Restar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
