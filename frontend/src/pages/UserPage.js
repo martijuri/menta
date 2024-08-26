@@ -1,13 +1,12 @@
 import { useAuth } from '../context/AuthContext';
-
+import UserProfile from '../components/forms/UserProfile';
 
 const UserPage = () => {
-  const { logout } = useAuth();
-
+  const { logout, user, updateAccount } = useAuth();
+ 
     return (
         <>
-        <h1> User Page</h1>
-        <button onClick={logout}>Logout</button>
+        <UserProfile user={user} updateUser={updateAccount} logout={logout} />
         </>
     )
 }

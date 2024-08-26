@@ -1,30 +1,39 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authenticate, validate } from "../api/utils.api";
+import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  authenticate,
+  validate,
+  updateUser,
+  getPerfil,
+  registerUser
+} from "../api/utils.api";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null); // Estado para almacenar la información del usuario
   const navigate = useNavigate();
 
   useEffect(() => {
     const validateToken = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (token) {
         try {
-          // Aquí podrías agregar una llamada al backend para validar el token si es necesario
           await validate(token);
           setIsAuthenticated(true);
+          const response = await getPerfil();
+          setUser(response);
+          console.log("usuario validado: ", response);
         } catch (error) {
-          console.error('Error validating token:', error);
+          console.error("Error validating token:", error);
           setIsAuthenticated(false);
-          navigate('/login');
+          navigate("/login");
         }
       } else {
         setIsAuthenticated(false);
-        navigate('/login');
+        navigate("/login");
       }
       setLoading(false);
     };
@@ -37,28 +46,57 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authenticate(username, password);
       const token = response.data.accessToken;
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
       setIsAuthenticated(true);
+      setUser(response.data.user);
       navigate("/home");
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error("Error during login:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
-    navigate('/login');
+    setUser(null);
+    navigate("/login");
+  };
+
+  const updateAccount = async (newUserData) => {
+    setLoading(true);
+    try {
+      const { user: updatedUser } = await updateUser(newUserData);
+      setUser(updatedUser); // Actualiza la información del usuario en el estado
+      console.log("usuario actualizado: ", updatedUser);
+    } catch (error) {
+      console.error("Error updating user:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const register = async (username, password, email, administrador) => {
+    setLoading(true);
+    try {
+      await registerUser({ username, password, email, administrador });
+      login(username, password);
+    } catch (error) {
+      console.error("Error during registration:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Puedes mostrar un spinner o algún indicador de carga
+    return <div>Loading...</div>;
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, login, logout, updateAccount, register }}
+    >
       {children}
     </AuthContext.Provider>
   );

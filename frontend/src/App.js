@@ -81,6 +81,7 @@ function App() {
                       </ProtectedRoute>
                     }
                   ></Route>
+                  <Route path="/pedidos/form" element={<PedidosFormPage />} />
                   <Route path="*" element={<Navigate to="/login" />} />
                 </Routes>
               </TransaccionesProvider>

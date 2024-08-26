@@ -21,7 +21,7 @@ export const StockProvider = ({ children }) => {
     }, []);
 
   return (
-    <StockContext.Provider value={{}}>
+    <StockContext.Provider value={{stock}}>
       {children}
     </StockContext.Provider>
   );
