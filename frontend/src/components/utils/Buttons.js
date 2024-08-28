@@ -10,7 +10,7 @@ import { patchCuenta, postCuenta } from "../../api/utils.api";
 // Botones de acción
 
 // Botón que elimina un marco o transacción por id (tipo recibido en props)
-export const DeleteButton = ({ id, type }) => {
+export const DeleteButton = ({ id, type, onDelete }) => {
   const handleDelete = async () => {
     try {
       if (type === "marco") {
@@ -20,6 +20,9 @@ export const DeleteButton = ({ id, type }) => {
         const response = await deleteTransaccion(id);
         console.log(response);
       }
+      if(onDelete){
+        onDelete();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +30,7 @@ export const DeleteButton = ({ id, type }) => {
 
   return (
     <button className="delete-button" onClick={handleDelete}>
-      Delete
+      Eliminar
     </button>
   );
 };
