@@ -1,7 +1,9 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
 
-const BASE_URL = "http://localhost:4000";
+// Usa la variable de entorno REACT_APP_API_URL
+const BACKEND_URL = process.env.REACT_APP_API_URL;
+
 
 export const getTiposMarcos = async () =>
   handleApiCall(() => axiosInstance.get(`/tipos`));
@@ -18,12 +20,12 @@ export const patchCuenta = async (id, data) =>
 export const postCuenta = async (data) =>
   handleApiCall(() => axiosInstance.post(`/cuentas`, data));
 
-// export const getItemsTransacciones = async () => await axios.get(`${BASE_URL}/api/items`);
+// export const getItemsTransacciones = async () => await axios.get(`${BACKEND_URL}/api/items`);
 export const authenticate = async (username, password) =>
-  await axios.post(`${BASE_URL}/auth`, { username, password });
+  await axios.post(`${BACKEND_URL}/auth`, { username, password });
 
 export const validate = async (token) =>
-  await axios.post(`${BASE_URL}/auth/validate`, { token });
+  await axios.post(`${BACKEND_URL}/auth/validate`, { token });
   
 export const updateUser = async (newUserData) =>
   handleApiCall(() => axiosInstance.patch(`/usuarios/${newUserData.id}`, newUserData));

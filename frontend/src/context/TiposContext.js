@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { getTiposMarcos } from "../api/utils.api";
 
 export const TiposContext = createContext();
@@ -25,4 +25,12 @@ export const TiposProvider = ({ children }) => {
       {children}
     </TiposContext.Provider>
   );
+};
+
+export const useTipos = () => {
+  const context = useContext(TiposContext);
+  if (!context) {
+    throw new Error("useTipos must be used within a TiposProvider");
+  }
+  return context;
 };

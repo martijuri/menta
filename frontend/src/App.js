@@ -7,6 +7,7 @@ import StockPage from "./pages/StockPage";
 import PedidosFormPage from "./pages/PedidosFormPage";
 import HomePage from "./pages/HomePage";
 import UserPage from "./pages/UserPage";
+import StockFormPage from "./pages/StockFormPage";
 import "./App.css";
 import { TiposProvider } from "./context/TiposContext";
 import { CuentasProvider } from "./context/CuentasContex";
@@ -62,6 +63,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <StockPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/stock/new"
+                    element={
+                      <ProtectedRoute>
+                        <StockFormPage />
                       </ProtectedRoute>
                     }
                   />

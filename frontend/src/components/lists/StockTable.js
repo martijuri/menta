@@ -1,25 +1,17 @@
-import { useState, useEffect, useContext } from "react";
-import { StockContext } from "../../context/StockContext";
+import { useState, useEffect } from "react";
+import { useStock } from "../../context/StockContext";
 import SearchBar from "../utils/SearchBar";
-import { EditButton, LinkButton } from "../utils/Buttons";
+import { DeleteButton } from "../utils/Buttons";
 
 const StockTable = () => {
   const [marcos, setMarcos] = useState([]);
   const [filteredMarcos, setFilteredMarcos] = useState([]);
-  const { stock } = useContext(StockContext);
+  const { stock, cargarStock } = useStock();
 
   useEffect(() => {
     setMarcos(stock);
     setFilteredMarcos(stock);
   }, [stock]);
-
-  const handleStockChange = (id, delta) => {
-    setMarcos((prevMarcos) =>
-      prevMarcos.map((marco) =>
-        marco.idMarco === id ? { ...marco, stockMarco: marco.stockMarco + delta } : marco
-      )
-    );
-  };
 
   const handleSearch = (results) => {
     setFilteredMarcos(results);
@@ -28,7 +20,6 @@ const StockTable = () => {
   return (
     <div>
       <SearchBar data={marcos} onSearch={handleSearch} searchKey="idMarco" />
-      <LinkButton url="/marcos/new" text="Agregar Stock" />
       <table>
         <thead>
           <tr>
@@ -47,13 +38,14 @@ const StockTable = () => {
               <td>{marco.stockMarco}</td>
               <td>{marco.precioDolar}</td>
               <td>
-                <img src={marco.imagenMarco} alt={`Imagen de ${marco.idMarco}`} width="50" />
+                <img
+                  src={marco.imagenMarco}
+                  alt={`Imagen de ${marco.idMarco}`}
+                  width="50"
+                />
               </td>
               <td>
-                <button onClick={() => handleStockChange(marco.idMarco, 1)}>Sumar</button>
-              </td>
-              <td>
-                <button onClick={() => handleStockChange(marco.idMarco, -1)}>Restar</button>
+                <DeleteButton id={marco.idMarco} type="marco" onDelete={cargarStock}/>
               </td>
             </tr>
           ))}
