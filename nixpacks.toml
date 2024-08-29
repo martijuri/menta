@@ -1,0 +1,18 @@
+[phases.setup]
+commands = [
+  "echo 'Setting up the environment...'"
+]
+
+[phases.build]
+commands = [
+  "cd frontend && npm install && npm run build",
+  "cd backend && npm install"
+]
+
+[phases.start]
+commands = [
+  "cd backend && npm start"
+]
+
+[variables]
+PORT = "4000"
