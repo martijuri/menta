@@ -7,7 +7,7 @@ export const login = (req, res) => {
         <form action="/auth" method="post">
           <label for="username">Username:</label>
           <input type="text" id="username" name="username">
-          <label for="password">Password:</label>
+          <label for="password">Password:</label> 
           <input type="password" id="password" name="password">
           <button type="submit">Login</button>
         </form>
@@ -18,7 +18,7 @@ export const auth = async (req, res) => {
     const { username, password } = req.body;
   
     //consulta a base de datos
-    const confirmation = await confirmUsuario(req, res);
+    const confirmation = await confirmUsuario(username, password);
   
     if (confirmation) {
       const accessToken = generateAccessToken(username);
