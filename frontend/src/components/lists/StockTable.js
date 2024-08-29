@@ -6,7 +6,7 @@ import { DeleteButton } from "../utils/Buttons";
 const StockTable = () => {
   const [marcos, setMarcos] = useState([]);
   const [filteredMarcos, setFilteredMarcos] = useState([]);
-  const { stock, cargarStock } = useStock();
+  const { stock, cargarStock,  } = useStock();
 
   useEffect(() => {
     setMarcos(stock);
@@ -18,7 +18,7 @@ const StockTable = () => {
   };
 
   return (
-    <div>
+    <div className="table-container">
       <SearchBar data={marcos} onSearch={handleSearch} searchKey="idMarco" />
       <table>
         <thead>
@@ -28,6 +28,7 @@ const StockTable = () => {
             <th>Cantidad</th>
             <th>Precio (USD)</th>
             <th>Imagen</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +46,7 @@ const StockTable = () => {
                 />
               </td>
               <td>
+                <button className="edit-button" id={marco.idMarco} onClick={cargarStock}>Editar</button>
                 <DeleteButton id={marco.idMarco} type="marco" onDelete={cargarStock}/>
               </td>
             </tr>

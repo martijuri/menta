@@ -5,7 +5,7 @@ const PedidosPage = () => {
   return (
     <div>
       <h1>Pedidos Page</h1>
-      <LinkButton url="/pedidos/form" text="Nuevo Pedido" />
+      {/* <LinkButton url={`/transacciones/new/edit`}  text="Nuevo Pedido" /> */}
       <br />
       <TransaccionesList type = {"pedidos"} />      
     </div>

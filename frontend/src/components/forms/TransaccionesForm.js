@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import CuentasForm from "../forms/CuentasForm";
 import ItemsForms from "./ItemsForms";
 import { useTransacciones } from "../../context/TransaccionesContext.js";
 import { useItemsTransaccion } from "../../context/ItemsTransaccionContext.js";
 
-
 const TransaccionesForm = ({}) => {
+  const navigate = useNavigate();
   const {
     transacciones,
     getTransaccionPorId,
@@ -17,25 +18,36 @@ const TransaccionesForm = ({}) => {
   const [transaccion, setTransaccion] = useState(null);
   const [items, setItems] = useState([]);
   const { id } = useParams();
-  const {  patchItemTransaccionContext, deleteItemTransaccionContext } = useItemsTransaccion();
+  const { patchItemTransaccionContext, deleteItemTransaccionContext } =
+    useItemsTransaccion();
   const [nuevosItems, setNuevosItems] = useState([]);
   const [deletedItems, setDeletedItems] = useState([]);
   const [updatedItems, setUpdatedItems] = useState([]);
 
+  const transaccionVacia = {
+    ventaTransaccion: true,
+    idTransaccion: null,
+    idCuenta: null,
+    fechaTransaccion: new Date().toISOString().split("T")[0],
+    fechaEntrega: "",
+    itemsTransaccion: [],
+  };
+
   useEffect(() => {
-    if (transacciones.length > 0 && transaccion === null) {
+    if (id === "new") {
+      setTransaccion(transaccionVacia);
+    } else if (transacciones.length > 0 && transaccion === null) {
       const transaccionEncontrada = getTransaccionPorId(id);
       console.log(transaccionEncontrada);
       setTransaccion(transaccionEncontrada);
-      setItems(transaccionEncontrada.itemsTransaccion[0], ...items || []);
+      setItems(transaccionEncontrada.itemsTransaccion[0], ...(items || []));
     }
   }, [transacciones, id]);
-  
+
   useEffect(() => {
     setNuevosItems(items.filter((item) => !item.idItemTransaccion));
     setUpdatedItems(items.filter((item) => item.idItemTransaccion));
   }, [items]);
-    
 
   if (!transaccion) return <h1>Cargando...</h1>;
 
@@ -50,16 +62,17 @@ const TransaccionesForm = ({}) => {
       postItemsTransaccionContext(transaccion.idTransaccion, nuevosItems);
       console.log("Post items:", nuevosItems);
     }
-    if (updatedItems.length > 0){
+    if (updatedItems.length > 0) {
       for (const item of updatedItems) {
         patchItemTransaccionContext(item.idItemTransaccion, item);
         console.log("Updated item:", item);
       }
     }
-    
+
     for (const item of deletedItems) {
       deleteItemTransaccionContext(transaccion.idTransaccion, item);
     }
+    navigate("/pedidos");
   };
 
   const handleItemsChange = (itemsForms) => {
@@ -68,7 +81,8 @@ const TransaccionesForm = ({}) => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <div className="scroll-container">
+    <form className="transacciones-form" onSubmit={onSubmit}>
       <CuentasForm
         cuenta={transaccion.cuenta}
         selectCuenta={(newCuenta) =>
@@ -105,10 +119,15 @@ const TransaccionesForm = ({}) => {
         </>
       )}
       <ItemsForms onFormsChange={handleItemsChange} initialItems={items} />
-      <button className="submit-button" type="submit" disabled={!transaccion.cuenta}>
+      <button
+        className="submit-button"
+        type="submit"
+        disabled={!transaccion.cuenta}
+      >
         Confirmar
       </button>
     </form>
+    </div>
   );
 };
 

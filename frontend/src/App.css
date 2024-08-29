@@ -14,3 +14,9 @@
   margin-top: 60px;
   transition: margin-left 0.5s;
 }
+
+.scroll-container {
+  max-height: 80vh; /* Ajusta la altura máxima según tus necesidades */
+  overflow-y: auto; /* Habilita el scroll vertical */
+  padding: 10px; /* Opcional: agrega padding para mejor apariencia */
+}

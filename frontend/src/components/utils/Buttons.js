@@ -121,8 +121,11 @@ export const PrintButton = ({ id }) => {
 
 // Configuración de botones por tipo
 const buttonConfig = {
-  venta: [EditButton, DeleteButton, PrintButton, IncompleteButton],
-  pedido: [EditButton, DeleteButton, PrintButton, CompleteButton],
+  // venta: [EditButton, DeleteButton, PrintButton, IncompleteButton],
+  // pedido: [EditButton, DeleteButton, PrintButton, CompleteButton],
+  // marco: [EditButton, DeleteButton],
+  venta: [EditButton],
+  pedido: [EditButton],
   marco: [EditButton, DeleteButton],
 };
 

@@ -103,7 +103,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
   };
 
   return (
-    <div>
+    <div className="cuentas-form">
       <FiltroInput
         options={[
           "Nuevo Cliente",
