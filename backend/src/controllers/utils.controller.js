@@ -4,7 +4,7 @@ import { pool } from "../db.js";
 export async function getItemsTransacciones(id) {
   try {
     const items = await pool.query(
-      "SELECT * FROM itemTransacciones WHERE idTransaccionItemTransaccion = ?",
+      "SELECT * FROM itemtransaccion WHERE idTransaccionItemTransaccion = ?",
       [id]
     );
     return items;
@@ -80,7 +80,7 @@ export async function getCuentas(req, res) {
 export async function patchCuenta(req, res) {
   try {
     const { id } = req.params;
-    const { cuenta } = req.body;
+    const  cuenta  = req.body;
     await pool.query(
       "UPDATE cuentas SET cuentaNombre = ?, cuentaCuit = ?, cuentaTelefono = ?, cuentaDireccion = ? WHERE idCuenta = ?",
       [cuenta.cuentaNombre, cuenta.cuentaCuit, cuenta.cuentaTelefono, cuenta.cuentaDireccion, id]

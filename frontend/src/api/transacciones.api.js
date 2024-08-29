@@ -31,8 +31,13 @@ export const getItemsTransaccion = async (id) =>
 export const postItemTransaccion = async (item) =>
   handleApiCall(() => axiosInstance.post(`/item`, item));
 
-export const postItemsTransaccion = async (idTransaccionItemTransaccion, itemsTransaccion) =>
-  handleApiCall(() => axiosInstance.post(`/items`, idTransaccionItemTransaccion, itemsTransaccion));
+export const postItemsTransaccion = async (idTransaccionItemTransaccion, itemsTransaccion) => {
+  const data = {
+    idTransaccionItemTransaccion,
+    itemsTransaccion
+  };
+  return handleApiCall(() => axiosInstance.post(`/items`, data));
+};
 
 export const patchItemTransaccion = async (id, item) =>
   handleApiCall(() => axiosInstance.patch(`/item/${id}`, item));

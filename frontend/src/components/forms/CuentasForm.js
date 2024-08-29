@@ -1,22 +1,30 @@
 import { useState, useContext } from "react";
 import FiltroInput from "../utils/FiltroInput";
-import { CuentasContext, postCuentaContext,patchCuentaContext } from "../../context/CuentasContex";
+import {
+  CuentasContext,
+  postCuentaContext,
+  patchCuentaContext,
+} from "../../context/CuentasContext";
 
 const CuentasForm = ({ cuenta, selectCuenta }) => {
-  // Corrección en el uso de useState
   const [cliente, setCliente] = useState(
-    cuenta.cuentaNombre + " - CUIT: " + cuenta.cuentaCuit
+    cuenta ? `${cuenta.cuentaNombre} - CUIT: ${cuenta.cuentaCuit}` : ""
   );
-  const [cuentaNombre, setCuentaNombre] = useState(cuenta.cuentaNombre);
-  const [cuentaCuit, setCuentaCuit] = useState(cuenta.cuentaCuit);
-  const [cuentaTelefono, setCuentaTelefono] = useState(cuenta.cuentaTelefono);
+  const [cuentaSeleccionada, setCuentaSeleccionada] = useState(null);
+  const [cuentaNombre, setCuentaNombre] = useState(
+    cuenta ? cuenta.cuentaNombre : ""
+  );
+  const [cuentaCuit, setCuentaCuit] = useState(cuenta ? cuenta.cuentaCuit : "");
+  const [cuentaTelefono, setCuentaTelefono] = useState(
+    cuenta ? cuenta.cuentaTelefono : ""
+  );
   const [cuentaDireccion, setCuentaDireccion] = useState(
-    cuenta.cuentaDireccion
+    cuenta ? cuenta.cuentaDireccion : ""
   );
   const [seleccionado, setSeleccionado] = useState(false);
+  const [isEditing, setIsEditing] = useState(true); // Nuevo estado para controlar la edición
   const { cuentas } = useContext(CuentasContext);
 
-  // Función para manejar cambios en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
@@ -45,51 +53,67 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
       setCuentaTelefono("");
       setCuentaDireccion("");
       setSeleccionado(true);
+      setIsEditing(true); // Habilitar edición cuando se selecciona "Nuevo Cliente"
     } else if (
       cuentas.map((cuenta) => cuenta.cuentaNombre).includes(dato.split(" -")[0])
     ) {
-      const cuentaSeleccionada = cuentas.find(
+      const cuentaEncontrada = cuentas.find(
         (cuenta) => cuenta.cuentaNombre === dato.split(" -")[0]
       );
       setCliente(dato);
-      setCuentaNombre(cuentaSeleccionada.cuentaNombre);
-      setCuentaCuit(cuentaSeleccionada.cuentaCuit);
-      setCuentaTelefono(cuentaSeleccionada.cuentaTelefono);
-      setCuentaDireccion(cuentaSeleccionada.cuentaDireccion);
-      setSeleccionado(false);
+      setCuentaNombre(cuentaEncontrada.cuentaNombre);
+      setCuentaCuit(cuentaEncontrada.cuentaCuit);
+      setCuentaTelefono(cuentaEncontrada.cuentaTelefono);
+      setCuentaDireccion(cuentaEncontrada.cuentaDireccion);
+      setSeleccionado(true);
+      setIsEditing(true); // Habilitar edición cuando se selecciona una cuenta existente
+      selectCuenta(cuentaEncontrada);
+      setCuentaSeleccionada(cuentaEncontrada);
     }
   };
 
-  // Función para enviar la cuenta
   const handleSubmitCuenta = () => {
+    if (!cuentaNombre) {
+      alert("El campo del nombre no puede estar vacío");
+      return;
+    }
+
     const cuentaNueva = {
       cuentaNombre,
       cuentaCuit,
       cuentaTelefono,
       cuentaDireccion,
     };
-    console.log("Cuenta: ", cuentaNueva);
     if (cliente === "Nuevo Cliente") {
       console.log("Postear cuenta: ", cuentaNueva);
       postCuentaContext(cuentaNueva);
     } else {
-      console.log("Patchear cuenta: ", cuentaNueva);
-      patchCuentaContext(cuentaNueva);
+      const cuentaActualizada = {
+        ...cuenta,
+        cuentaNombre,
+        cuentaCuit,
+        cuentaTelefono,
+        cuentaDireccion,
+      };
+      console.log("Patchear cuenta: ", cuentaActualizada);
+      patchCuentaContext(cuentaActualizada);
     }
     selectCuenta(cuentaNueva);
+    setIsEditing(false); // Deshabilitar edición después de guardar
   };
 
   return (
     <div>
-      <h1>CuentasForm</h1>
       <FiltroInput
         options={[
           "Nuevo Cliente",
-          ...cuentas.map((cuenta) => `${cuenta.cuentaNombre} - CUIT: ${cuenta.cuentaCuit}`)
+          ...cuentas.map(
+            (cuenta) => `${cuenta.cuentaNombre} - CUIT: ${cuenta.cuentaCuit}`
+          ),
         ]}
         label="Cliente"
         onSelection={handleSelection}
-        placeholder={cliente}
+        placeholder={cliente || "Seleccione o cree una cuenta"}
       />
       <div>
         <label>Nombre</label>
@@ -99,7 +123,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
           onChange={handleInputChange}
           name="nombre"
           placeholder="Ingrese Nombre"
-          disabled={!seleccionado}
+          disabled={!seleccionado || !isEditing}
         />
         <label>CUIT</label>
         <input
@@ -108,7 +132,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
           onChange={handleInputChange}
           name="cuit"
           placeholder="Ingrese CUIT"
-          disabled={!seleccionado}
+          disabled={!seleccionado || !isEditing}
         />
         <label>Telefono</label>
         <input
@@ -117,7 +141,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
           onChange={handleInputChange}
           name="telefono"
           placeholder="Ingrese Telefono"
-          disabled={!seleccionado}
+          disabled={!seleccionado || !isEditing}
         />
         <label>Direccion</label>
         <input
@@ -126,10 +150,15 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
           onChange={handleInputChange}
           name="direccion"
           placeholder="Ingrese Direccion"
-          disabled={!seleccionado}
+          disabled={!seleccionado || !isEditing}
         />
       </div>
-      <button onClick={handleSubmitCuenta}>Guardar</button>
+      <button
+        onClick={handleSubmitCuenta}
+        disabled={!cliente || cliente === "" || !cuentaNombre}
+      >
+        Guardar
+      </button>
     </div>
   );
 };

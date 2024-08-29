@@ -4,7 +4,7 @@ import { useTipos } from "../../context/TiposContext";
 import FiltroInput from "../utils/FiltroInput";
 import { postMarco } from "../../api/marcos.api";
 
-const StockForm = ({ handleSubmit }) => {
+const StockForm = ({ handleSubmit, newOption }) => {
   const [itemTransaccion, setItemTransaccion] = useState({
     idMarcoItemTransaccion: null,
     cantidadItemTransaccion: 0,
