@@ -29,8 +29,8 @@ const TransaccionesList = ({ type }) => {
     console.log("Transacciones cargadas");
   },[] );
   return (
-    <>
-      <SearchBar />
+    <div className="scroll-container">
+      {/* <SearchBar /> */}
       {type === "pedidos" &&
         transacciones.map((pedido) => (
           <PedidoCard key={pedido.idTransaccion} pedido={pedido} />
@@ -39,7 +39,7 @@ const TransaccionesList = ({ type }) => {
         transacciones.map((venta) => (
           <VentaCard key={venta.idTransaccion} venta={venta} />
         ))}
-    </>
+    </div>
   );
 };
 

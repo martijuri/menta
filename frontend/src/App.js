@@ -22,8 +22,9 @@ import './styles/Navbar.css';
 import './styles/Card.css';
 import './styles/SearchBar.css'; 
 import './styles/UserProfile.css';
-
-
+import './styles/StockTable.css';
+import './styles/CuentasForm.css';
+import './styles/TransaccionesForm.css';
 
 
 const ProtectedRoute = ({ children }) => {
