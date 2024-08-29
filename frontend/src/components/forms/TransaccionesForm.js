@@ -105,7 +105,7 @@ const TransaccionesForm = ({}) => {
         </>
       )}
       <ItemsForms onFormsChange={handleItemsChange} initialItems={items} />
-      <button type="submit" disabled={!transaccion.cuenta}>
+      <button className="submit-button" type="submit" disabled={!transaccion.cuenta}>
         Confirmar
       </button>
     </form>

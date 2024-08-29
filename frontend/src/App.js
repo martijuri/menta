@@ -17,6 +17,15 @@ import { TransaccionesProvider } from "./context/TransaccionesContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ItemsTransaccionProvider } from "./context/ItemsTransaccionContext";
 
+import './styles/Buttons.css';
+import './styles/Navbar.css';
+import './styles/Card.css';
+import './styles/SearchBar.css'; 
+import './styles/UserProfile.css';
+
+
+
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -26,82 +35,84 @@ function App() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <>
+    <div className="app-container">
       {isAuthenticated && <Navbar />}
-      <TiposProvider>
-        <CuentasProvider>
-          <StockProvider>
-            <TransaccionProvider>
-              <TransaccionesProvider>
-                <ItemsTransaccionProvider>
-                  <Routes>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route
-                      path="/home"
-                      element={
-                        <ProtectedRoute>
-                          <HomePage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/pedidos"
-                      element={
-                        <ProtectedRoute>
-                          <PedidosPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/ventas"
-                      element={
-                        <ProtectedRoute>
-                          <VentasPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/stock"
-                      element={
-                        <ProtectedRoute>
-                          <StockPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/stock/new"
-                      element={
-                        <ProtectedRoute>
-                          <StockFormPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/transacciones/:id/edit"
-                      element={
-                        <ProtectedRoute>
-                          <PedidosFormPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/user"
-                      element={
-                        <ProtectedRoute>
-                          <UserPage />
-                        </ProtectedRoute>
-                      }
-                    ></Route>
-                    <Route path="/pedidos/form" element={<PedidosFormPage />} />
-                    <Route path="*" element={<Navigate to="/login" />} />
-                  </Routes>
-                </ItemsTransaccionProvider>
-              </TransaccionesProvider>
-            </TransaccionProvider>
-          </StockProvider>
-        </CuentasProvider>
-      </TiposProvider>
-    </>
+      <div className="main-content">
+        <TiposProvider>
+          <CuentasProvider>
+            <StockProvider>
+              <TransaccionProvider>
+                <TransaccionesProvider>
+                  <ItemsTransaccionProvider>
+                    <Routes>
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route
+                        path="/home"
+                        element={
+                          <ProtectedRoute>
+                            <HomePage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/pedidos"
+                        element={
+                          <ProtectedRoute>
+                            <PedidosPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/ventas"
+                        element={
+                          <ProtectedRoute>
+                            <VentasPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/stock"
+                        element={
+                          <ProtectedRoute>
+                            <StockPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/stock/new"
+                        element={
+                          <ProtectedRoute>
+                            <StockFormPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/transacciones/:id/edit"
+                        element={
+                          <ProtectedRoute>
+                            <PedidosFormPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/user"
+                        element={
+                          <ProtectedRoute>
+                            <UserPage />
+                          </ProtectedRoute>
+                        }
+                      ></Route>
+                      <Route path="/pedidos/form" element={<PedidosFormPage />} />
+                      <Route path="*" element={<Navigate to="/login" />} />
+                    </Routes>
+                  </ItemsTransaccionProvider>
+                </TransaccionesProvider>
+              </TransaccionProvider>
+            </StockProvider>
+          </CuentasProvider>
+        </TiposProvider>
+      </div>
+    </div>
   );
 }
 
