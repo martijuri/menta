@@ -30,7 +30,6 @@ export const CuentasProvider = ({ children }) => {
 
 export const postCuentaContext = async (cuenta) => {
   try {
-    console.log("cuenta desde contexto:", cuenta);
     const response = await postCuenta(cuenta);
     console.log(response);
   } catch (error) {
@@ -40,8 +39,7 @@ export const postCuentaContext = async (cuenta) => {
 
 export const patchCuentaContext = async (cuenta) => {
   try {
-    console.log("cuenta patch",cuenta);
-    const response = await patchCuenta(cuenta);
+    const response = await patchCuenta(cuenta.idCuenta,cuenta);
     console.log(response);
   } catch (error) {
     console.error("Error al actualizar la cuenta:", error);

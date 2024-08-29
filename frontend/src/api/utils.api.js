@@ -14,8 +14,8 @@ export const getTipoMarco = async (id) =>
 export const getCuentas = async () =>
   handleApiCall(() => axiosInstance.get(`/cuentas`));
 
-export const patchCuenta = async (id, data) =>
-  handleApiCall(() => axiosInstance.patch(`/cuentas/${id}`, data));
+export const patchCuenta = async (id, cuenta) =>
+  handleApiCall(() => axiosInstance.patch(`/cuentas/${id}`, cuenta));
 
 export const postCuenta = async (data) =>
   handleApiCall(() => axiosInstance.post(`/cuentas`, data));
