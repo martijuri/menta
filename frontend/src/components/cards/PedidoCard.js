@@ -1,6 +1,7 @@
 import { OptionsButton } from "../utils/Buttons";
 import { useContext } from "react";
 import { TransaccionContext } from "../../context/TransaccionContext";
+import { formatDate } from "../utils/Formatos";
 
 const PedidoCard = ({ pedido }) => {
   const { updateTransaccion } = useContext(TransaccionContext);
@@ -8,7 +9,7 @@ const PedidoCard = ({ pedido }) => {
   return (
     <div key={pedido.idTransaccion} className="pedido-card">
       <h3>
-        {pedido.idTransaccion} - {pedido.fechaTransaccion || "Fecha no disponible"}
+        {pedido.idTransaccion} - {pedido.fechaTransaccion ? formatDate(pedido.fechaTransaccion) : "Fecha no disponible"}
       </h3>
       <p>
         <strong>Cuenta:</strong>{" "}

@@ -1,0 +1,61 @@
+/* Estilos para las cartas de pedido y venta */
+.pedido-card, .venta-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pedido-card:hover, .venta-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pedido-card:active, .venta-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pedido-card h3, .venta-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.pedido-card p, .venta-card p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.pedido-card ul, .venta-card ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.pedido-card li, .venta-card li {
+  margin: 5px 0;
+  color: #666;
+}
+
+.pedido-card strong, .venta-card strong {
+  color: #333;
+}
+
+.pedido-card .options-button, .venta-card .options-button {
+  margin-top: 10px;
+}
+
+/* Estilos para las opciones desplegables */
+.options-container {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.options-container.show {
+  display: grid;
+}
