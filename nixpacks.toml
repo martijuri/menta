@@ -11,7 +11,7 @@ commands = [
 
 [phases.start]
 commands = [
-  "cd backend && npm start"
+  "cd backend && npm start",
   "cd frontend && npm start"
 ]
 
