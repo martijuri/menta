@@ -29,7 +29,6 @@ const UserProfile = ({ user, updateUser, logout }) => {
     console.log("User updated:", user);
   }, [user]);
 
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -55,7 +54,7 @@ const UserProfile = ({ user, updateUser, logout }) => {
   };
 
   return (
-    <>
+    <div className="user-profile-container">
       <h1>User Page</h1>
       {isEditing ? (
         <>
@@ -78,6 +77,7 @@ const UserProfile = ({ user, updateUser, logout }) => {
             />
             <button
               type="button"
+              className="toggle-password-button"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? "Ocultar" : "Mostrar"}
@@ -112,6 +112,7 @@ const UserProfile = ({ user, updateUser, logout }) => {
             Contraseña: {showPassword ? user.password : "********"}
             <button
               type="button"
+              className="toggle-password-button"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? "Ocultar" : "Mostrar"}
@@ -122,10 +123,10 @@ const UserProfile = ({ user, updateUser, logout }) => {
             Cuenta:{" "}
             {user.administrador === 1 ? "Administrador" : "Usuario Común"}
           </h3>
-          <button onClick={logout}>Logout</button>
+          <button className="logout-button" onClick={logout}>Logout</button>
         </>
       )}
-    </>
+    </div>
   );
 };
 

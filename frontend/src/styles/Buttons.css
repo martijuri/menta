@@ -1,0 +1,171 @@
+/* Estilos generales para los botones */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+/* Botón de eliminar */
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.delete-button:active {
+  background-color: #a93226;
+  transform: scale(0.98);
+}
+
+.delete-button:focus {
+  outline: 2px solid #c0392b;
+}
+
+/* Botón de editar */
+.edit-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #2980b9;
+}
+
+.edit-button:active {
+  background-color: #2471a3;
+  transform: scale(0.98);
+}
+
+.edit-button:focus {
+  outline: 2px solid #2980b9;
+}
+
+/* Botón de enlace */
+.link-button {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.link-button:hover {
+  background-color: #27ae60;
+}
+
+.link-button:active {
+  background-color: #229954;
+  transform: scale(0.98);
+}
+
+.link-button:focus {
+  outline: 2px solid #27ae60;
+}
+
+/* Botón de completar */
+.complete-button {
+  background-color: #02d630;
+  color: white;
+}
+
+.complete-button:hover {
+  background-color: #2ed40d;
+}
+
+.complete-button:active {
+  background-color: #4ab70b;
+  transform: scale(0.98);
+}
+
+.complete-button:focus {
+  outline: 2px solid #d4ac0d;
+}
+
+/* Botón de incompleto */
+.incomplete-button {
+  background-color: #e67e22;
+  color: white;
+}
+
+.incomplete-button:hover {
+  background-color: #ca6f1e;
+}
+
+.incomplete-button:active {
+  background-color: #af601a;
+  transform: scale(0.98);
+}
+
+.incomplete-button:focus {
+  outline: 2px solid #ca6f1e;
+}
+
+/* Botón de imprimir */
+.print-button {
+  background-color: #9b59b6;
+  color: white;
+}
+
+.print-button:hover {
+  background-color: #884ea0;
+}
+
+.print-button:active {
+  background-color: #76448a;
+  transform: scale(0.98);
+}
+
+.print-button:focus {
+  outline: 2px solid #884ea0;
+}
+
+/* Botón de opciones */
+.options-button {
+  background-color: #34495e;
+  color: white;
+}
+
+.options-button:hover {
+  background-color: #2c3e50;
+}
+
+.options-button:active {
+  background-color: #273746;
+  transform: scale(0.98);
+}
+
+.options-button:focus {
+  outline: 2px solid #2c3e50;
+}
+
+/* Botón de confirmar */
+.confirm-button {
+  background-color: #1abc9c;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #17a589;
+}
+
+.confirm-button:active {
+  background-color: #148f77;
+  transform: scale(0.98);
+}
+
+.confirm-button:focus {
+  outline: 2px solid #17a589;
+}
+
+.submit-button {
+  background-color: #16bb00;
+  color: white;
+}
+
+.submit-button:hover {
+  background-color: #139900;
+}
+

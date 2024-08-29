@@ -15,7 +15,7 @@ const SearchBar = ({ data, onSearch, searchKey }) => {
     };
 
     return (
-        <div>
+        <div className="search-bar-container">
             <input
                 type="text"
                 placeholder={`Search by ${searchKey}...`}
@@ -23,6 +23,9 @@ const SearchBar = ({ data, onSearch, searchKey }) => {
                 onChange={handleInputChange}
             />
             <button onClick={handleSearch}>Search</button>
+            <span className="search-icon" onClick={handleSearch}>
+                🔍 {/* Puedes reemplazar esto con un icono de Font Awesome */}
+            </span>
         </div>
     );
 };
