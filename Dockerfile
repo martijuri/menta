@@ -13,17 +13,20 @@ RUN cd frontend && npm install && npm run build
 # Instala las dependencias del backend
 RUN cd backend && npm install
 
-# Usa una imagen base de Nginx para servir el frontend
-FROM nginx:alpine
+# Usa una imagen base de Node.js para el contenedor final
+FROM node:16
 
-# Copia los archivos construidos al directorio de Nginx
-COPY --from=build /app/frontend/build /usr/share/nginx/html
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia los archivos construidos al directorio de trabajo
+COPY --from=build /app .
+
+# Instala Nginx
+RUN apt-get update && apt-get install -y nginx
 
 # Copia la configuración de Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copia el backend al contenedor de Nginx
-COPY --from=build /app/backend /app/backend
 
 # Exponer el puerto 80 para Nginx
 EXPOSE 80
