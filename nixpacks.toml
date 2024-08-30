@@ -1,22 +1,16 @@
 [phases.setup]
 commands = [
-  "echo 'Setting up the environment...'",
-  "apt-get update",  # Actualizar los paquetes
-  "curl -fsSL https://deb.nodesource.com/setup_16.x | bash -",
-  "apt-get install -y nodejs",
-  "node -v",  # Verificar la instalación de Node.js
-  "npm -v"    # Verificar la instalación de npm
+  "echo 'Setting up the environment...'"
 ]
 
 [phases.build]
 commands = [
-  "cd frontend && npm install && npm run build",
-  "cd backend && npm install"
+  "echo 'Building the project...'"
 ]
 
 [phases.start]
 commands = [
-  "cd backend && npm start"
+  "echo 'Starting the application...'"
 ]
 
 [variables]
