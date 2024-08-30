@@ -1,27 +1,32 @@
-# Usa una imagen base de Ubuntu
-FROM ubuntu:20.04
+# Usa una imagen base de Node.js para construir la aplicación
+FROM node:16 AS build
 
 # Establece el directorio de trabajo
 WORKDIR /app
 
-# Instala Node.js y npm
-RUN apt-get update && \
-    apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
-
-# Verifica la instalación de Node.js y npm
-RUN node -v
-RUN npm -v
-
 # Copia el contenido del proyecto al directorio de trabajo
-COPY . /app
+COPY . .
 
-# Instala dependencias y construye el frontend
+# Instala las dependencias y construye el frontend
 RUN cd frontend && npm install && npm run build
 
-# Instala dependencias del backend
+# Instala las dependencias del backend
 RUN cd backend && npm install
 
-# Comando para iniciar la aplicación
-CMD ["npm", "start", "--prefix", "backend"]
+# Usa una imagen base de Nginx para servir el frontend
+FROM nginx:alpine
+
+# Copia los archivos construidos al directorio de Nginx
+COPY --from=build /app/frontend/build /usr/share/nginx/html
+
+# Copia la configuración de Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copia el backend al contenedor de Nginx
+COPY --from=build /app/backend /app/backend
+
+# Exponer el puerto 80 para Nginx
+EXPOSE 80
+
+# Inicia el backend y Nginx
+CMD ["sh", "-c", "cd /app/backend && npm start & nginx -g 'daemon off;'"]
