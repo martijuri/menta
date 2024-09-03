@@ -28,8 +28,8 @@ COPY --from=build /app/backend /app/backend
 # Instala Node.js en la imagen de Nginx
 RUN apk add --no-cache nodejs npm
 
-# Exponer el puerto 80 para Nginx
-EXPOSE 80
+# Exponer el puerto 4000 para Nginx
+EXPOSE 4000
 
 # Inicia el backend y Nginx
 CMD ["sh", "-c", "cd /app/backend && npm start & nginx -g 'daemon off;'"]
