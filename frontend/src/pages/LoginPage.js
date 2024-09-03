@@ -63,6 +63,7 @@ const LoginPage = () => {
         <br />
         {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
+      {console.log(process.env.REACT_APP_API_URL)}
       {/* Sección de registro oculta */}
       {false && (
         <div>

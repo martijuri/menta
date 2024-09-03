@@ -2,17 +2,17 @@ import axiosInstance from "./axiosInstance";
 import { handleApiCall } from "./utils.api";
 
 export const getMarcos = async () =>
-  handleApiCall(() => axiosInstance.get(`/marcos`));
+  handleApiCall(() => axiosInstance.get(`/api/marcos`));
 
 export const getMarco = async (id) =>
-  handleApiCall(() => axiosInstance.get(`/marcos/${id}`));
+  handleApiCall(() => axiosInstance.get(`/api/marcos/${id}`));
 
 export const postMarco = async (marco) =>
-  handleApiCall(() => axiosInstance.post(`/marcos`, marco));
+  handleApiCall(() => axiosInstance.post(`/api/marcos`, marco));
 
 export const patchMarco = async (id, marco) =>
-  handleApiCall(() => axiosInstance.patch(`/marcos/${id}`, marco));
+  handleApiCall(() => axiosInstance.patch(`/api/marcos/${id}`, marco));
 
 export const deleteMarco = async (id) =>
-  handleApiCall(() => axiosInstance.delete(`/marcos/${id}`));
+  handleApiCall(() => axiosInstance.delete(`/api/marcos/${id}`));
 
