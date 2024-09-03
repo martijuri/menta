@@ -5,14 +5,23 @@ import marcosRouter from "./routes/marcos.routes.js";
 import usuariosRouter from "./routes/usuarios.routes.js";
 import { getUserProfile, validateToken, validateTokenMiddleware, verifyAdmin } from "./controllers/usuarios.controller.js";
 import { login, auth } from "./routes/authentication.routes.js";
-import utilRouter from "./routes/utils.routes.js"
+import utilRouter from "./routes/utils.routes.js";
 import cors from "cors";
+import dotenv from "dotenv";
+
+// Cargar variables de entorno desde el archivo .env
+dotenv.config();
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors( { origin: "http://localhost:3000" }));
+
+// Configurar CORS usando la variable de entorno
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || "*", // Permitir todos los orígenes si no se define CORS_ORIGIN
+};
+app.use(cors(corsOptions));
 
 app.use("/login", login);
 app.post("/auth/validate", validateToken);
