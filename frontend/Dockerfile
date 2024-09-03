@@ -1,7 +1,6 @@
 # Etapa de construcción
 FROM node:18 AS build
 
-# Establecer el directorio de trabajo
 WORKDIR /app
 
 # Copiar los archivos de configuración
@@ -21,6 +20,9 @@ FROM nginx:alpine
 
 # Copiar los archivos de construcción desde la etapa de construcción
 COPY --from=build /app/build /usr/share/nginx/html
+
+# Copiar la configuración de Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exponer el puerto
 EXPOSE 80
