@@ -27,5 +27,5 @@ COPY --from=build /app/build /app/build
 # Exponer el puerto
 EXPOSE 3000
 
-# Comando para ejecutar serve
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Comando para ejecutar serve usando una variable de entorno para el puerto y dominio
+CMD ["sh", "-c", "serve -s build -l ${PORT:-3000} --host ${RAILWAY_PUBLIC_DOMAIN:-0.0.0.0}"]
