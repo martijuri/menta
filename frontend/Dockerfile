@@ -28,4 +28,4 @@ COPY --from=build /app/build /app/build
 EXPOSE 3000
 
 # Comando para ejecutar serve usando una variable de entorno para el puerto
-CMD ["sh", "-c", "serve -s build -l ${PORT:-3000}"]
+CMD ["sh", "-c", "serve -s /app/build -l ${PORT:-3000}"]
