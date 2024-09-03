@@ -7,10 +7,6 @@ import { getUserProfile, validateToken, validateTokenMiddleware, verifyAdmin } f
 import { login, auth } from "./routes/authentication.routes.js";
 import utilRouter from "./routes/utils.routes.js";
 import cors from "cors";
-import dotenv from "dotenv";
-
-// Cargar variables de entorno desde el archivo .env
-dotenv.config();
 
 const app = express();
 

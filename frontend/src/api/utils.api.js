@@ -1,7 +1,4 @@
-
 import axiosInstance from "./axiosInstance";
-
-
 
 export const getTiposMarcos = async () =>
   handleApiCall(() => axiosInstance.get(`/api/tipos`));
