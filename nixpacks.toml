@@ -14,4 +14,4 @@ commands = [
 ]
 
 [variables]
-PORT = "4000"
+PORT = "3000"
