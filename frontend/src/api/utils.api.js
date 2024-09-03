@@ -1,40 +1,38 @@
-import axios from "axios";
+
 import axiosInstance from "./axiosInstance";
 
-// Usa la variable de entorno REACT_APP_API_URL
-const BACKEND_URL = process.env.REACT_APP_API_URL;
 
 
 export const getTiposMarcos = async () =>
-  handleApiCall(() => axiosInstance.get(`/tipos`));
+  handleApiCall(() => axiosInstance.get(`/api/tipos`));
 
 export const getTipoMarco = async (id) =>
-  handleApiCall(() => axiosInstance.get(`/tipos/${id}`));
+  handleApiCall(() => axiosInstance.get(`/api/tipos/${id}`));
 
 export const getCuentas = async () =>
-  handleApiCall(() => axiosInstance.get(`/cuentas`));
+  handleApiCall(() => axiosInstance.get(`/api/cuentas`));
 
 export const patchCuenta = async (id, cuenta) =>
-  handleApiCall(() => axiosInstance.patch(`/cuentas/${id}`, cuenta));
+  handleApiCall(() => axiosInstance.patch(`/api/cuentas/${id}`, cuenta));
 
 export const postCuenta = async (data) =>
-  handleApiCall(() => axiosInstance.post(`/cuentas`, data));
+  handleApiCall(() => axiosInstance.post(`/api/cuentas`, data));
 
 // export const getItemsTransacciones = async () => await axios.get(`${BACKEND_URL}/api/items`);
 export const authenticate = async (username, password) =>
-  await axios.post(`${BACKEND_URL}/auth`, { username, password });
+  handleApiCall(() => axiosInstance.post(`/auth`, { username, password }));
 
 export const validate = async (token) =>
-  await axios.post(`${BACKEND_URL}/auth/validate`, { token });
+  handleApiCall(() => axiosInstance.post(`/auth/validate`, { token }));
   
 export const updateUser = async (newUserData) =>
-  handleApiCall(() => axiosInstance.patch(`/usuarios/${newUserData.id}`, newUserData));
+  handleApiCall(() => axiosInstance.patch(`/api/usuarios/${newUserData.id}`, newUserData));
 
 export const getPerfil = async () =>
-  handleApiCall(() => axiosInstance.get(`/profile`));
+  handleApiCall(() => axiosInstance.get(`/api/profile`));
 
 export const registerUser = async (userData) =>
-  handleApiCall(() => axiosInstance.post(`/usuarios`, userData));
+  handleApiCall(() => axiosInstance.post(`/api/usuarios`, userData));
 
 // Utilidad para manejar llamadas a la API y errores
 export async function handleApiCall(call) {
