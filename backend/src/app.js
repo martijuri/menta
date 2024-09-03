@@ -10,6 +10,23 @@ import cors from "cors";
 
 const app = express();
 
+app.get('/test-db', async (req, res) => {
+  try {
+    const [rows, fields] = await pool.query('SELECT 1 + 1 AS solution');
+    res.send(`Database connection successful: ${rows[0].solution}`);
+  } catch (error) {
+    res.status(500).send(`Database connection failed: ${error.message}`);
+  }
+});
+
+
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_DATABASE:', process.env.DB_DATABASE);
+console.log('DB_PORT:', process.env.DB_PORT);
+
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
