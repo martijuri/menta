@@ -16,16 +16,16 @@ COPY . .
 RUN npm run build
 
 # Etapa de producción
-FROM nginx:alpine
+FROM node:18-alpine
+
+# Instalar serve globalmente
+RUN npm install -g serve
 
 # Copiar los archivos de construcción desde la etapa de construcción
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copiar la configuración de Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/build /app/build
 
 # Exponer el puerto
-EXPOSE 80
+EXPOSE 3000
 
-# Comando para ejecutar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Comando para ejecutar serve
+CMD ["serve", "-s", "build", "-l", "3000"]
