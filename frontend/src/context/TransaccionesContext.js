@@ -26,7 +26,7 @@ export const TransaccionesProvider = ({ children }) => {
 
   // Función para buscar una transacción por ID
   const getTransaccionPorId = (id) => {
-    return transacciones.find((transaccion) => transaccion.idTransaccion == id);
+    return transacciones.find((transaccion) => transaccion.idTransaccion === id);
   };
 
   const postTransaccionContext = async (transaccion) => {
@@ -57,7 +57,7 @@ export const TransaccionesProvider = ({ children }) => {
   };
 
   const postItemsTransaccionContext = async (idTransaccionItemTransaccion, itemsTransaccion) => {
-    if(itemsTransaccion.length == 0) return;
+    if(itemsTransaccion.length === 0) return;
     try {
       const response = await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
       console.log("postItemsTransaccionContext: ", response);

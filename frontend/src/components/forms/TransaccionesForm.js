@@ -42,7 +42,7 @@ const TransaccionesForm = () => {
       setTransaccion(transaccionEncontrada);
       setItems(transaccionEncontrada.itemsTransaccion[0], ...(items || []));
     }
-  }, [transacciones, id]);
+  }, [transacciones, id, getTransaccionPorId, transaccion, transaccionVacia]);
 
   useEffect(() => {
     setNuevosItems(items.filter((item) => !item.idItemTransaccion));
@@ -82,51 +82,51 @@ const TransaccionesForm = () => {
 
   return (
     <div className="scroll-container">
-    <form className="transacciones-form" onSubmit={onSubmit}>
-      <CuentasForm
-        cuenta={transaccion.cuenta}
-        selectCuenta={(newCuenta) =>
-          setTransaccion({ ...transaccion, cuenta: newCuenta })
-        }
-      />
-      {!transaccion.cuenta ? (
-        <p>No hay cuenta asociada. Por favor, seleccione una cuenta.</p>
-      ) : (
-        <>
-          <input
-            type="date"
-            value={
-              new Date(transaccion.fechaTransaccion).toISOString().split("T")[0]
-            }
-            onChange={(e) =>
-              setTransaccion({
-                ...transaccion,
-                fechaTransaccion: e.target.value,
-              })
-            }
-          />
-          <input
-            type="date"
-            value={
-              transaccion.fechaEntrega
-                ? new Date(transaccion.fechaEntrega).toISOString().split("T")[0]
-                : ""
-            }
-            onChange={(e) =>
-              setTransaccion({ ...transaccion, fechaEntrega: e.target.value })
-            }
-          />
-        </>
-      )}
-      <ItemsForms onFormsChange={handleItemsChange} initialItems={items} />
-      <button
-        className="submit-button"
-        type="submit"
-        disabled={!transaccion.cuenta}
-      >
-        Confirmar
-      </button>
-    </form>
+      <form className="transacciones-form" onSubmit={onSubmit}>
+        <CuentasForm
+          cuenta={transaccion.cuenta}
+          selectCuenta={(newCuenta) =>
+            setTransaccion({ ...transaccion, cuenta: newCuenta })
+          }
+        />
+        {!transaccion.cuenta ? (
+          <p>No hay cuenta asociada. Por favor, seleccione una cuenta.</p>
+        ) : (
+          <>
+            <input
+              type="date"
+              value={
+                new Date(transaccion.fechaTransaccion).toISOString().split("T")[0]
+              }
+              onChange={(e) =>
+                setTransaccion({
+                  ...transaccion,
+                  fechaTransaccion: e.target.value,
+                })
+              }
+            />
+            <input
+              type="date"
+              value={
+                transaccion.fechaEntrega
+                  ? new Date(transaccion.fechaEntrega).toISOString().split("T")[0]
+                  : ""
+              }
+              onChange={(e) =>
+                setTransaccion({ ...transaccion, fechaEntrega: e.target.value })
+              }
+            />
+          </>
+        )}
+        <ItemsForms onFormsChange={handleItemsChange} initialItems={items} />
+        <button
+          className="submit-button"
+          type="submit"
+          disabled={!transaccion.cuenta}
+        >
+          Confirmar
+        </button>
+      </form>
     </div>
   );
 };

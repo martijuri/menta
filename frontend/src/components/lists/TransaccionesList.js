@@ -26,7 +26,7 @@ const TransaccionesList = ({ type }) => {
 
     loadTransacciones();
     console.log("Transacciones cargadas");
-  },[] );
+  },[type] );
   return (
     <div className="scroll-container">
       {/* <SearchBar /> */}
