@@ -1,5 +1,4 @@
 import TransaccionesList from "../components/lists/TransaccionesList";
-import { LinkButton } from "../components/utils/Buttons";
 
 const PedidosPage = () => {
   return (

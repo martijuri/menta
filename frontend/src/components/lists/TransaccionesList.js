@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { getPedidos, getVentas } from "../../api/transacciones.api";
 import PedidoCard from "../cards/PedidoCard";
 import VentaCard from "../cards/VentaCard";
-import SearchBar from "../utils/SearchBar";
 
 const TransaccionesList = ({ type }) => {
   const [transacciones, setTransacciones] = useState([]);

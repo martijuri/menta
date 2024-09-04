@@ -6,7 +6,7 @@ import ItemsForms from "./ItemsForms";
 import { useTransacciones } from "../../context/TransaccionesContext.js";
 import { useItemsTransaccion } from "../../context/ItemsTransaccionContext.js";
 
-const TransaccionesForm = ({}) => {
+const TransaccionesForm = () => {
   const navigate = useNavigate();
   const {
     transacciones,
@@ -21,7 +21,7 @@ const TransaccionesForm = ({}) => {
   const { patchItemTransaccionContext, deleteItemTransaccionContext } =
     useItemsTransaccion();
   const [nuevosItems, setNuevosItems] = useState([]);
-  const [deletedItems, setDeletedItems] = useState([]);
+  const [deletedItems] = useState([]);
   const [updatedItems, setUpdatedItems] = useState([]);
 
   const transaccionVacia = {

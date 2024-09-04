@@ -2,12 +2,8 @@ import { useEffect, createContext, useState, useContext } from "react";
 import {
   getTransacciones,
   postTransaccion,
-  postItemTransaccion,
   postItemsTransaccion,
   patchTransaccion,
-  patchItemTransaccion,
-  deleteItemTransaccion,
-  deleteTransaccion,
 } from "../api/transacciones.api";
 
 export const TransaccionesContext = createContext();
@@ -61,7 +57,7 @@ export const TransaccionesProvider = ({ children }) => {
   };
 
   const postItemsTransaccionContext = async (idTransaccionItemTransaccion, itemsTransaccion) => {
-    if(itemsTransaccion.length === 0) return;
+    if(itemsTransaccion.length == 0) return;
     try {
       const response = await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
       console.log("postItemsTransaccionContext: ", response);
