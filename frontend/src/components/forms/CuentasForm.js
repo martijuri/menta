@@ -10,7 +10,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
   const [cliente, setCliente] = useState(
     cuenta ? `${cuenta.cuentaNombre} - CUIT: ${cuenta.cuentaCuit}` : ""
   );
-  const [cuentaSeleccionada, setCuentaSeleccionada] = useState(null);
+  const [setCuentaSeleccionada] = useState(null);
   const [cuentaNombre, setCuentaNombre] = useState(
     cuenta ? cuenta.cuentaNombre : ""
   );

@@ -5,7 +5,6 @@ import {
   patchTransaccion,
 } from "../../api/transacciones.api";
 import { deleteMarco } from "../../api/marcos.api";
-import { patchCuenta, postCuenta } from "../../api/utils.api";
 
 // Botones de acción
 

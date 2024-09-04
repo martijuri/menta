@@ -18,11 +18,12 @@ export const auth = async (req, res) => {
     const { username, password } = req.body;
   
     //consulta a base de datos
-    const confirmation = await confirmUsuario(username, password);
+    const response = await confirmUsuario(username, password);
+    console.log("respuesta al confirmar usuario",response);
   
-    if (confirmation) {
+    if (response) {
       const accessToken = generateAccessToken(username);
-      res.header("Authorization", "Bearer " + accessToken).json({ accessToken });
+      res.header("Authorization", "Bearer " + accessToken).json({ accessToken, response });
     } else {
       res.status(401).send("Usuario incorrecto");
     }

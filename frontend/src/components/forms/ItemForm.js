@@ -10,7 +10,7 @@ const ItemForm = ({ id, data, handleChange }) => {
 
   useEffect(() => {
     handleChange(id, { ...data, cantidadItemTransaccion: cantidad, idMarcoItemTransaccion: option });
-  }, [cantidad, option]);
+  }, [cantidad, option, data, handleChange, id]);
 
   const handleFilterChange = (option) => {
     setOption(option);
@@ -34,7 +34,6 @@ const ItemForm = ({ id, data, handleChange }) => {
       />
       <input
         type="number"
-        placeholder="Cantidad"
         value={cantidad}
         onChange={handleCantidadChange}
       />

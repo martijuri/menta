@@ -22,8 +22,10 @@ const LoginPage = () => {
     setError("");
     try {
       if (isRegister) {
+        console.log("registrar ",credentials.username, credentials.email, credentials.password, credentials.administrador);
         await register(credentials.username, credentials.email, credentials.password, credentials.administrador);
       } else {
+        console.log("loggear ",credentials.username, credentials.password);
         await login(credentials.username, credentials.password);
       }
     } catch (err) {

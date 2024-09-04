@@ -2,12 +2,8 @@ import { useEffect, createContext, useState, useContext } from "react";
 import {
   getTransacciones,
   postTransaccion,
-  postItemTransaccion,
   postItemsTransaccion,
   patchTransaccion,
-  patchItemTransaccion,
-  deleteItemTransaccion,
-  deleteTransaccion,
 } from "../api/transacciones.api";
 
 export const TransaccionesContext = createContext();
@@ -30,7 +26,7 @@ export const TransaccionesProvider = ({ children }) => {
 
   // Función para buscar una transacción por ID
   const getTransaccionPorId = (id) => {
-    return transacciones.find((transaccion) => transaccion.idTransaccion == id);
+    return transacciones.find((transaccion) => transaccion.idTransaccion === id);
   };
 
   const postTransaccionContext = async (transaccion) => {
