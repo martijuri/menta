@@ -124,7 +124,7 @@ const buttonConfig = {
   // pedido: [EditButton, DeleteButton, PrintButton, CompleteButton],
   // marco: [EditButton, DeleteButton],
   venta: [EditButton],
-  pedido: [EditButton],
+  pedido: [EditButton, DeleteButton],
   marco: [EditButton, DeleteButton],
 };
 

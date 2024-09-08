@@ -10,7 +10,7 @@ const ItemForm = ({ id, data, handleChange }) => {
 
   useEffect(() => {
     handleChange(id, { ...data, cantidadItemTransaccion: cantidad, idMarcoItemTransaccion: option });
-  }, [cantidad, option, data, handleChange, id]);
+  }, [cantidad, option]);
 
   const handleFilterChange = (option) => {
     setOption(option);
@@ -19,6 +19,8 @@ const ItemForm = ({ id, data, handleChange }) => {
   const handleCantidadChange = (e) => {
     setCantidad(e.target.value);
   };
+
+  const marco = stock.find((marco) => marco.idMarco === option);
 
   return (
     <div>
@@ -37,6 +39,8 @@ const ItemForm = ({ id, data, handleChange }) => {
         value={cantidad}
         onChange={handleCantidadChange}
       />
+      <h5>Stock disponible: {marco ? marco.stockMarco : ''}</h5>
+      <h5>Reservados: </h5>
     </div>
   );
 };

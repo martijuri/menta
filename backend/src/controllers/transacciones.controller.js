@@ -203,7 +203,8 @@ const postItemsTransaccion = async (req, res) => {
       message: "itemsTransaccion debe ser un array",
     });
   }
-  console.log("items recibidos: ", itemsTransaccion);
+  console.log("body recibido: ", req.body);
+  console.log("items recibidos: ", itemsTransaccion, "idTransaccion: ", idTransaccionItemTransaccion);
   try {
     const results = await Promise.all(
       itemsTransaccion.map(async (item) => {
@@ -219,6 +220,7 @@ const postItemsTransaccion = async (req, res) => {
     );
     res.status(201).json({
       message: "ItemsTransaccion added",
+      data: results,
     });
   } catch (error) {
     console.error(error);

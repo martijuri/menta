@@ -45,7 +45,6 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await authenticate(username, password);
-      console.log("usuario logeado: ", response);
       const token = response.accessToken;
       localStorage.setItem("token", token);
       setIsAuthenticated(true);

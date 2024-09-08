@@ -8,8 +8,10 @@ import { useItemsTransaccion } from "../../context/ItemsTransaccionContext.js";
 
 const TransaccionesForm = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const {
     transacciones,
+    transaccionVacia,
     getTransaccionPorId,
     postTransaccionContext,
     patchTransaccionContext,
@@ -17,32 +19,24 @@ const TransaccionesForm = () => {
   } = useTransacciones();
   const [transaccion, setTransaccion] = useState(null);
   const [items, setItems] = useState([]);
-  const { id } = useParams();
   const { patchItemTransaccionContext, deleteItemTransaccionContext } =
     useItemsTransaccion();
   const [nuevosItems, setNuevosItems] = useState([]);
   const [deletedItems] = useState([]);
   const [updatedItems, setUpdatedItems] = useState([]);
 
-  const transaccionVacia = {
-    ventaTransaccion: true,
-    idTransaccion: null,
-    idCuenta: null,
-    fechaTransaccion: new Date().toISOString().split("T")[0],
-    fechaEntrega: "",
-    itemsTransaccion: [],
-  };
 
   useEffect(() => {
     if (id === "new") {
       setTransaccion(transaccionVacia);
     } else if (transacciones.length > 0 && transaccion === null) {
+      console.log("id ",id)
       const transaccionEncontrada = getTransaccionPorId(id);
       console.log(transaccionEncontrada);
       setTransaccion(transaccionEncontrada);
       setItems(transaccionEncontrada.itemsTransaccion[0], ...(items || []));
     }
-  }, [transacciones, id, getTransaccionPorId, transaccion, transaccionVacia]);
+  }, [id]);
 
   useEffect(() => {
     setNuevosItems(items.filter((item) => !item.idItemTransaccion));
@@ -51,12 +45,20 @@ const TransaccionesForm = () => {
 
   if (!transaccion) return <h1>Cargando...</h1>;
 
-  const onSubmit = (e) => {
+    const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("submit");
     if (id && id !== "new") {
-      patchTransaccionContext(transaccion);
+      await patchTransaccionContext(transaccion);
     } else {
-      postTransaccionContext(transaccion);
+      const res = await postTransaccionContext(transaccion);
+      console.log("respuesta de postear transaccion:", res);
+      if (res && res.id) {
+        setTransaccion({ ...transaccion, idTransaccion: res.id });
+      } else {
+        console.error("Error al crear la transacción");
+        return;
+      }
     }
     if (nuevosItems.length > 0) {
       postItemsTransaccionContext(transaccion.idTransaccion, nuevosItems);
@@ -68,7 +70,7 @@ const TransaccionesForm = () => {
         console.log("Updated item:", item);
       }
     }
-
+  
     for (const item of deletedItems) {
       deleteItemTransaccionContext(transaccion.idTransaccion, item);
     }
@@ -86,7 +88,7 @@ const TransaccionesForm = () => {
         <CuentasForm
           cuenta={transaccion.cuenta}
           selectCuenta={(newCuenta) =>
-            setTransaccion({ ...transaccion, cuenta: newCuenta })
+            setTransaccion({ ...transaccion, cuenta: newCuenta, idCuentaTransaccion: newCuenta.idCuenta })
           }
         />
         {!transaccion.cuenta ? (

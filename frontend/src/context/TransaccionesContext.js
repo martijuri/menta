@@ -10,30 +10,40 @@ export const TransaccionesContext = createContext();
 
 export const TransaccionesProvider = ({ children }) => {
   const [transacciones, setTransacciones] = useState([]);
+  const transaccionVacia = {
+    ventaTransaccion: true,
+    idTransaccion: null,
+    idCuentaTransaccion: null,
+    fechaTransaccion: new Date().toISOString().split("T")[0],
+    fechaEntrega: "",
+    itemsTransaccion: [],
+  };
+
+  // Extraer cargarTransacciones fuera del useEffect
+  const cargarTransacciones = async () => {
+    try {
+      const data = await getTransacciones();
+      setTransacciones(data);
+      console.log("Transacciones cargadas:", data);
+    } catch (error) {
+      console.error("Error al cargar las transacciones:", error);
+    }
+  };
 
   useEffect(() => {
-    const cargarTransacciones = async () => {
-      try {
-        const data = await getTransacciones();
-        setTransacciones(data);
-        console.log("Transacciones cargadas:", data);
-      } catch (error) {
-        console.error("Error al cargar las transacciones:", error);
-      }
-    };
     cargarTransacciones();
   }, []);
 
   // Función para buscar una transacción por ID
   const getTransaccionPorId = (id) => {
-    return transacciones.find((transaccion) => transaccion.idTransaccion === id);
+    return transacciones.find((transaccion) => transaccion.idTransaccion == id);
   };
 
   const postTransaccionContext = async (transaccion) => {
-    
     try {
+      console.log("post; ", transaccion);
       const response = await postTransaccion(transaccion);
-      console.log(response);
+      console.log("respuesta de postear transaccion",response);
     } catch (error) {
       console.error("Error al crear la transacción:", error);
     }
@@ -51,6 +61,8 @@ export const TransaccionesProvider = ({ children }) => {
         nuevaTransaccion
       );
       console.log("patchTransaccionContext: ", response);
+      // Recargar transacciones después de la actualización
+      await cargarTransacciones();
     } catch (error) {
       console.error("Error al actualizar la transacción:", error);
     }
@@ -61,19 +73,23 @@ export const TransaccionesProvider = ({ children }) => {
     try {
       const response = await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
       console.log("postItemsTransaccionContext: ", response);
+      // Recargar transacciones después de la inserción de items
     } catch (error) {
       console.error("Error al crear los items de la transacción:", error);
     }
   };
+
   return (
     <TransaccionesContext.Provider
       value={{
         transacciones,
+        transaccionVacia,
         setTransacciones,
         getTransaccionPorId,
         postTransaccionContext,
         postItemsTransaccionContext,
-        patchTransaccionContext,}}
+        patchTransaccionContext,
+      }}
     >
       {children}
     </TransaccionesContext.Provider>

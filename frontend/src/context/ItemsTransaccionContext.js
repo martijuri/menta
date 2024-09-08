@@ -14,6 +14,7 @@ export const ItemsTransaccionProvider =  ({ children }) => {
   };
 
   const postItemTransaccionContext = async (itemTransaccion) => {
+    itemTransaccion.cantidadItemTransaccion ||= 0; 
     await postItemTransaccion(itemTransaccion);
   };
 
