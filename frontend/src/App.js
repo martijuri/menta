@@ -15,7 +15,6 @@ import { StockProvider } from "./context/StockContext";
 import { TransaccionProvider } from "./context/TransaccionContext";
 import { TransaccionesProvider } from "./context/TransaccionesContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { ItemsTransaccionProvider } from "./context/ItemsTransaccionContext";
 
 import './styles/Buttons.css';
 import './styles/Navbar.css';
@@ -44,7 +43,6 @@ function App() {
             <StockProvider>
               <TransaccionProvider>
                 <TransaccionesProvider>
-                  <ItemsTransaccionProvider>
                     <Routes>
                       <Route path="/login" element={<LoginPage />} />
                       <Route
@@ -106,7 +104,6 @@ function App() {
                       <Route path="/pedidos/form" element={<PedidosFormPage />} />
                       <Route path="*" element={<Navigate to="/login" />} />
                     </Routes>
-                  </ItemsTransaccionProvider>
                 </TransaccionesProvider>
               </TransaccionProvider>
             </StockProvider>

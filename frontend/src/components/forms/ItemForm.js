@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useStock } from "../../context/StockContext";
 import FiltroInput from "../utils/FiltroInput";
 
-const ItemForm = ({ id, data, handleChange }) => {
+const ItemForm = ({ id, data, handleChange, onRemove }) => {
   const { stock } = useStock();
   const marcos = stock.map((marco) => marco.idMarco);
   const [cantidad, setCantidad] = useState(data.cantidadItemTransaccion);
@@ -41,6 +41,9 @@ const ItemForm = ({ id, data, handleChange }) => {
       />
       <h5>Stock disponible: {marco ? marco.stockMarco : ''}</h5>
       <h5>Reservados: </h5>
+      <button type="button" onClick={() => onRemove(id)}>
+        🗑️
+      </button>
     </div>
   );
 };

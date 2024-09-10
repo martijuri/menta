@@ -1,9 +1,17 @@
-import { useEffect, createContext, useState, useContext } from "react";
+import { useEffect, createContext, useState, useContext, useCallback } from "react";
 import {
   getTransacciones,
   postTransaccion,
   postItemsTransaccion,
   patchTransaccion,
+  deleteTransaccion,
+} from "../api/transacciones.api";
+
+import {
+  getItemsTransaccion,
+  postItemTransaccion,
+  patchItemTransaccion,
+  deleteItemTransaccion,
 } from "../api/transacciones.api";
 
 export const TransaccionesContext = createContext();
@@ -19,8 +27,7 @@ export const TransaccionesProvider = ({ children }) => {
     itemsTransaccion: [],
   };
 
-  // Extraer cargarTransacciones fuera del useEffect
-  const cargarTransacciones = async () => {
+  const cargarTransacciones = useCallback(async () => {
     try {
       const data = await getTransacciones();
       setTransacciones(data);
@@ -28,14 +35,18 @@ export const TransaccionesProvider = ({ children }) => {
     } catch (error) {
       console.error("Error al cargar las transacciones:", error);
     }
-  };
-
-  useEffect(() => {
-    cargarTransacciones();
   }, []);
 
+  useEffect(() => {
+    const cargarDatos = async () => {
+      await cargarTransacciones();
+    };
+    cargarDatos();
+  }, [cargarTransacciones]);
+
   // Función para buscar una transacción por ID
-  const getTransaccionPorId = (id) => {
+  const getTransaccionPorId = async (id) => {
+    await cargarTransacciones();
     return transacciones.find((transaccion) => transaccion.idTransaccion == id);
   };
 
@@ -43,9 +54,21 @@ export const TransaccionesProvider = ({ children }) => {
     try {
       console.log("post; ", transaccion);
       const response = await postTransaccion(transaccion);
-      console.log("respuesta de postear transaccion",response);
+      await cargarTransacciones();
+      return response;
     } catch (error) {
       console.error("Error al crear la transacción:", error);
+    }
+  };
+
+  const deleteTransaccionContext = async (idTransaccion) => {
+    try {
+      console.log("deleteTransaccionContext: ", idTransaccion);
+      const response = await deleteTransaccion(idTransaccion);
+      console.log("deleteTransaccionContext: ", response);
+      await cargarTransacciones();
+    } catch (error) {
+      console.error("Error al eliminar la transacción:", error);
     }
   };
 
@@ -69,14 +92,38 @@ export const TransaccionesProvider = ({ children }) => {
   };
 
   const postItemsTransaccionContext = async (idTransaccionItemTransaccion, itemsTransaccion) => {
-    if(itemsTransaccion.length === 0) return;
+    if (itemsTransaccion.length === 0) return;
     try {
-      const response = await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
-      console.log("postItemsTransaccionContext: ", response);
-      // Recargar transacciones después de la inserción de items
+      console.log("postItemsTransaccionContext: ", idTransaccionItemTransaccion, itemsTransaccion);
+      await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
+      await cargarTransacciones();
     } catch (error) {
       console.error("Error al crear los items de la transacción:", error);
     }
+  };
+
+  const getItemsTransaccionContext = async (idTransaccion) => {
+    await getItemsTransaccion(idTransaccion);
+  };
+
+  const postItemTransaccionContext = async (itemTransaccion) => {
+    itemTransaccion.cantidadItemTransaccion ||= 0; 
+    await postItemTransaccion(itemTransaccion);
+    await cargarTransacciones();
+  };
+
+  const patchItemTransaccionContext = async (idItemTransaccion, itemTransaccion) => {
+    await patchItemTransaccion(idItemTransaccion, itemTransaccion);
+    await cargarTransacciones();
+  };
+
+  const deleteItemTransaccionContext = async (idItemTransaccion) => {
+    await deleteItemTransaccion(idItemTransaccion);
+    await cargarTransacciones();
+  };
+
+  const deleteAllItemsTransaccionContext = () => {
+
   };
 
   return (
@@ -87,8 +134,15 @@ export const TransaccionesProvider = ({ children }) => {
         setTransacciones,
         getTransaccionPorId,
         postTransaccionContext,
+        deleteTransaccionContext,
         postItemsTransaccionContext,
         patchTransaccionContext,
+        cargarTransacciones,
+        postItemTransaccionContext,
+        deleteItemTransaccionContext,
+        patchItemTransaccionContext,
+        getItemsTransaccionContext,
+        deleteAllItemsTransaccionContext,
       }}
     >
       {children}

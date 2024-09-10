@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ItemForm from './ItemForm';
 
-const ItemsForms = ({ onFormsChange, initialItems }) => {
+const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
   const [forms, setForms] = useState([]);
 
   useEffect(() => {
@@ -25,15 +25,26 @@ const ItemsForms = ({ onFormsChange, initialItems }) => {
     onFormsChange(updatedForms);
   };
 
+  const removeForm = (id) => {
+    const formToRemove = forms.find((form) => form.id === id);
+    if (formToRemove && formToRemove.data.idItemTransaccion) {
+      onItemRemove(formToRemove.data);
+    }
+    const updatedForms = forms.filter((form) => form.id !== id);
+    setForms(updatedForms);
+    onFormsChange(updatedForms);
+    console.log('Form eliminado');
+  };
+
   return (
     <div>
       {forms.length > 0 ? (
         forms.map((form) => (
-          <ItemForm key={form.id} id={form.id} data={form.data} handleChange={handleFormChange} />
+          <ItemForm key={form.id} id={form.id} data={form.data} handleChange={handleFormChange} onRemove={removeForm} />
         ))
       ) : (
         <p>Agrega un nuevo marco.</p>
-      )} 
+      )}
       <button type="button" onClick={addForm}>Agregar marco</button>
     </div>
   );
