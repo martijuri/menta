@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ItemForm from './ItemForm';
 
-const ItemsForms = ({ onFormsChange, initialItems }) => {
+const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
   const [forms, setForms] = useState([]);
 
   useEffect(() => {
@@ -9,13 +9,14 @@ const ItemsForms = ({ onFormsChange, initialItems }) => {
     setForms(
       initialItems.length > 0
         ? initialItems.map((item, index) => ({ id: index + 1, data: item }))
-        : [{ id: 1, data: { idMarcoItemTransaccion: '', cantidadItemTransaccion: '' } }]
+        : []
     );
     console.log('Forms:', forms);
   }, [initialItems]);
 
   const addForm = () => {
-    setForms([...forms, { id: forms.length + 1, data: { idMarco: '', cantidad: '' } }]);
+    setForms([...forms, { id: forms.length + 1, data: { idMarcoItemTransaccion: '', cantidadItemTransaccion: '' } }]);
+    console.log('Form agregado');
   };
 
   const handleFormChange = (id, data) => {
@@ -24,12 +25,27 @@ const ItemsForms = ({ onFormsChange, initialItems }) => {
     onFormsChange(updatedForms);
   };
 
+  const removeForm = (id) => {
+    const formToRemove = forms.find((form) => form.id === id);
+    if (formToRemove && formToRemove.data.idItemTransaccion) {
+      onItemRemove(formToRemove.data);
+    }
+    const updatedForms = forms.filter((form) => form.id !== id);
+    setForms(updatedForms);
+    onFormsChange(updatedForms);
+    console.log('Form eliminado');
+  };
+
   return (
     <div>
-      {forms.map((form) => (
-        <ItemForm key={form.id} id={form.id} data={form.data} handleChange={handleFormChange} />
-      ))}
-      <button onClick={addForm}>Agregar otro marco</button>
+      {forms.length > 0 ? (
+        forms.map((form) => (
+          <ItemForm key={form.id} id={form.id} data={form.data} handleChange={handleFormChange} onRemove={removeForm} />
+        ))
+      ) : (
+        <p>Agrega un nuevo marco.</p>
+      )}
+      <button type="button" onClick={addForm}>Agregar marco</button>
     </div>
   );
 };

@@ -10,7 +10,6 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
   const [cliente, setCliente] = useState(
     cuenta ? `${cuenta.cuentaNombre} - CUIT: ${cuenta.cuentaCuit}` : ""
   );
-  const [setCuentaSeleccionada] = useState(null);
   const [cuentaNombre, setCuentaNombre] = useState(
     cuenta ? cuenta.cuentaNombre : ""
   );
@@ -66,9 +65,8 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
       setCuentaTelefono(cuentaEncontrada.cuentaTelefono);
       setCuentaDireccion(cuentaEncontrada.cuentaDireccion);
       setSeleccionado(true);
-      setIsEditing(true); // Habilitar edición cuando se selecciona una cuenta existente
+      setIsEditing(true);
       selectCuenta(cuentaEncontrada);
-      setCuentaSeleccionada(cuentaEncontrada);
     }
   };
 

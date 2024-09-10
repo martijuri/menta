@@ -5,19 +5,20 @@ import {
   patchTransaccion,
 } from "../../api/transacciones.api";
 import { deleteMarco } from "../../api/marcos.api";
+import {useTransacciones } from "../../context/TransaccionesContext";
 
 // Botones de acción
 
 // Botón que elimina un marco o transacción por id (tipo recibido en props)
 export const DeleteButton = ({ id, type, onDelete }) => {
+  const { deleteTransaccionContext } = useTransacciones();
   const handleDelete = async () => {
     try {
       if (type === "marco") {
         const response = await deleteMarco(id);
         console.log(response);
       } else if (type === "venta" || type === "pedido") {
-        const response = await deleteTransaccion(id);
-        console.log(response);
+        await deleteTransaccionContext(id);
       }
       if(onDelete){
         onDelete();
@@ -124,7 +125,7 @@ const buttonConfig = {
   // pedido: [EditButton, DeleteButton, PrintButton, CompleteButton],
   // marco: [EditButton, DeleteButton],
   venta: [EditButton],
-  pedido: [EditButton],
+  pedido: [EditButton, DeleteButton],
   marco: [EditButton, DeleteButton],
 };
 
