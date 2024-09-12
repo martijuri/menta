@@ -26,8 +26,9 @@ const StockTable = () => {
             <th>ID</th>
             <th>Tipo de Marco</th>
             <th>Cantidad</th>
+            <th>Reservados</th>
             <th>Precio (USD)</th>
-            <th>Imagen</th>
+            {/* <th>Imagen</th> */}
             <th>Acciones</th>
           </tr>
         </thead>
@@ -37,14 +38,15 @@ const StockTable = () => {
               <td>{marco.idMarco}</td>
               <td>{marco.idTipoMarco}</td>
               <td>{marco.stockMarco}</td>
+              <td>{marco.reservados}</td>
               <td>{marco.precioDolar}</td>
-              <td>
+              {/* <td>
                 <img
                   src={marco.imagenMarco}
                   alt={`Imagen de ${marco.idMarco}`}
                   width="50"
                 />
-              </td>
+              </td> */}
               <td>
                 <button className="edit-button" id={marco.idMarco} onClick={cargarStock}>Editar</button>
                 <DeleteButton id={marco.idMarco} type="marco" onDelete={cargarStock}/>
