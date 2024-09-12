@@ -1,33 +1,18 @@
 import { OptionsButton } from "../utils/Buttons";
-import { useContext } from "react";
-import { TransaccionContext } from "../../context/TransaccionContext";
 import { formatDate } from "../utils/Formatos";
 
 const PedidoCard = ({ pedido }) => {
-  const { updateTransaccion } = useContext(TransaccionContext);
 
   return (
     <div key={pedido.idTransaccion} className="pedido-card">
       <h3>
-        {pedido.idTransaccion} - {pedido.fechaTransaccion ? formatDate(pedido.fechaTransaccion) : "Fecha no disponible"}
+        {pedido.fechaTransaccion ? formatDate(pedido.fechaTransaccion) : "Fecha no disponible"} -{" "}
+        {pedido.cuenta.cuentaNombre || "Nombre no disponible"} 
       </h3>
       <p>
-        <strong>Cuenta:</strong>{" "}
-        {pedido.cuenta ? (
-          <>
-            {pedido.cuenta.cuentaNombre || "Nombre no disponible"} -{" "}
-            {pedido.cuenta.cuentaCuit || "CUIT no disponible"} -{" "}
-            {pedido.cuenta.cuentaDireccion || "Dirección no disponible"} -{" "}
-            {pedido.cuenta.cuentaTelefono || "Teléfono no disponible"}
-          </>
-        ) : (
-          "No hay cuenta asociada"
-        )}
-      </p>
-      <p>
-        <strong>Items:</strong>
         {pedido.itemsTransaccion && pedido.itemsTransaccion.length > 0 ? (
           <ul>
+            <strong>Pedido:</strong>
             {pedido.itemsTransaccion[0].map((item) => (
               <li key={item.idItemTransaccion}>
                 {item.idMarcoItemTransaccion || "ID de Marco no disponible"} x
@@ -36,13 +21,12 @@ const PedidoCard = ({ pedido }) => {
             ))}
           </ul>
         ) : (
-          "No hay items en la transacción"
+          "No hay articulos para mostrar"
         )}
       </p>
       <OptionsButton
         id={pedido.idTransaccion}
         type={"pedido"}
-        onClick={() => updateTransaccion(pedido)}
       />
     </div>
   );

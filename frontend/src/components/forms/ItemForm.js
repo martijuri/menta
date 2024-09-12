@@ -8,6 +8,8 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
   const [cantidad, setCantidad] = useState(data.cantidadItemTransaccion);
   const [option, setOption] = useState(data.idMarcoItemTransaccion);
 
+  const marco = stock.find((marco) => marco.idMarco === option);
+
   useEffect(() => {
     handleChange(id, { ...data, cantidadItemTransaccion: cantidad, idMarcoItemTransaccion: option });
   }, [cantidad, option]);
@@ -19,8 +21,6 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
   const handleCantidadChange = (e) => {
     setCantidad(e.target.value);
   };
-
-  const marco = stock.find((marco) => marco.idMarco === option);
 
   return (
     <div>
@@ -40,7 +40,7 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
         onChange={handleCantidadChange}
       />
       <h5>Stock disponible: {marco ? marco.stockMarco : ''}</h5>
-      <h5>Reservados: </h5>
+      <h5>Reservados: {marco ? marco.reservados : ''}</h5>
       <button type="button" onClick={() => onRemove(id)}>
         🗑️
       </button>

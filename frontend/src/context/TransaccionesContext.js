@@ -14,6 +14,8 @@ import {
   deleteItemTransaccion,
 } from "../api/transacciones.api";
 
+import { useStock } from "./StockContext";
+
 export const TransaccionesContext = createContext();
 
 export const TransaccionesProvider = ({ children }) => {
@@ -26,11 +28,13 @@ export const TransaccionesProvider = ({ children }) => {
     fechaEntrega: "",
     itemsTransaccion: [],
   };
+  const { cargarStock } = useStock();
 
   const cargarTransacciones = useCallback(async () => {
     try {
       const data = await getTransacciones();
       setTransacciones(data);
+      cargarStock();
       console.log("Transacciones cargadas:", data);
     } catch (error) {
       console.error("Error al cargar las transacciones:", error);
