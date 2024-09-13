@@ -4,7 +4,7 @@ import { useTipos } from "../../context/TiposContext";
 import FiltroInput from "../utils/FiltroInput";
 import { postMarco } from "../../api/marcos.api";
 
-const StockForm = ({ handleSubmit, newOption }) => {
+const StockForm = ({ handleSubmit }) => {
   const [itemTransaccion, setItemTransaccion] = useState({
     idMarcoItemTransaccion: null,
     cantidadItemTransaccion: 0,
@@ -12,7 +12,7 @@ const StockForm = ({ handleSubmit, newOption }) => {
   const [marco, setMarco] = useState(null);
   const { stock} = useStock();
   const [marcos, setMarcos] = useState([]);
-  const { tiposDeMarcos } = useTipos();
+  const { tiposDeMarcos, getTipoMarco } = useTipos();
   const [isNuevoMarco, setIsNuevoMarco] = useState(false);
   const [nuevoMarco, setNuevoMarco] = useState({
     idMarco: "",
@@ -78,7 +78,6 @@ const StockForm = ({ handleSubmit, newOption }) => {
 
   return (
     <div>
-      <h1>Agregar Stock de marco</h1>
       <FiltroInput
         options={marcos}
         placeholder="Seleccione el marco"
@@ -88,7 +87,7 @@ const StockForm = ({ handleSubmit, newOption }) => {
 
       {marco && !isNuevoMarco && (
         <div>
-          <p>Tipo: {marco.idTipoMarco}</p>
+          <p>Tipo: {getTipoMarco(marco.idTipoMarco).Tipo }</p>
           <p>Stock actual: {marco.stockMarco}</p>
           <p>Precio unitario en USD: {marco.precioDolar}</p>
           {/* <img src={marco.imagenMarco} alt="Imagen del marco" /> */}

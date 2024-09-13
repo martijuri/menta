@@ -6,7 +6,6 @@ const StockPage = () => {
   return (
     <>
     <StockProvider>
-      <h1>Stock Page</h1>
       <LinkButton url="/stock/new" text="Agregar Stock" />
       <StockTable />
     </StockProvider>

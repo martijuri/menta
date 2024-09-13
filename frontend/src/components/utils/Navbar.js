@@ -18,19 +18,19 @@ function Navbar() {
         &#9776;
       </span>
       <ul>
-        <li>
+        {/* <li>
           <Link to="/home">Home</Link>
-        </li>
+        </li> */}
         {user && user.administrador === 1 && (
           <>
             <li>
-              <Link to="/pedidos">Pedidos</Link>
+              <Link to="/stock">Control de stock</Link>
             </li>
             <li>
-              <Link to="/stock">Stock</Link>
+              <Link to="/pedidos">Administrador de pedidos</Link>
             </li>
             <li>
-              <Link to="/ventas">Ventas</Link>
+              <Link to="/ventas">Historial de ventas</Link>
             </li>
           </>
         )}

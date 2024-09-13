@@ -1,6 +1,7 @@
 import { pool } from "../db.js";
 import { getItemsTransacciones } from "./utils.controller.js";
 import { getCuenta } from "./utils.controller.js";
+import { updateStockMarco } from "./marcos.controller.js";
 
 // Controladores de transacciones
 
@@ -108,6 +109,21 @@ const patchTransaccion = async (req, res) => {
         id,
       ]
     );
+
+    // Si se está agregando una fecha de entrega, actualizar el stock
+    if (fechaEntrega) {
+      const [itemsTransaccion] = await pool.query(
+        "SELECT idMarcoItemTransaccion, cantidadItemTransaccion FROM itemtransaccion WHERE idTransaccionItemTransaccion = ?",
+        [id]
+      );
+
+      await Promise.all(
+        itemsTransaccion.map(async (item) => {
+          await updateStockMarco(item.idMarcoItemTransaccion, -item.cantidadItemTransaccion);
+        })
+      );
+    }
+
     res.json(response);
   } catch (error) {
     console.error(error);
@@ -205,7 +221,14 @@ const postItemsTransaccion = async (req, res) => {
   }
   console.log("body recibido: ", req.body);
   console.log("items recibidos: ", itemsTransaccion, "idTransaccion: ", idTransaccionItemTransaccion);
+
   try {
+    // Obtener la transacción para verificar si es una venta
+    const [transaccion] = await pool.query(
+      "SELECT ventaTransaccion FROM transacciones WHERE idTransaccion = ?",
+      [idTransaccionItemTransaccion]
+    );
+
     const results = await Promise.all(
       itemsTransaccion.map(async (item) => {
         await pool.query(
@@ -216,8 +239,14 @@ const postItemsTransaccion = async (req, res) => {
             item.cantidadItemTransaccion,
           ]
         );
+
+        // Si la transacción no es una venta, actualizar el stock del marco
+        if (transaccion[0].ventaTransaccion === 0) {
+          await updateStockMarco(item.idMarcoItemTransaccion, item.cantidadItemTransaccion);
+        }
       })
     );
+
     res.status(201).json({
       message: "ItemsTransaccion added",
       data: results,

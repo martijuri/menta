@@ -20,8 +20,12 @@ export const TiposProvider = ({ children }) => {
     cargarTiposDeMarcos();
   }, []);
 
+  const getTipoMarco = (id) => {
+    return tiposDeMarcos.find((tipo) => tipo.idTipo === id);
+  };
+
   return (
-    <TiposContext.Provider value={{ tiposDeMarcos }}>
+    <TiposContext.Provider value={{ tiposDeMarcos, getTipoMarco }}>
       {children}
     </TiposContext.Provider>
   );

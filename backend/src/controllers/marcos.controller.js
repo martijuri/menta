@@ -3,7 +3,7 @@ import { pool } from "../db.js";
 const getMarcos = async (req, res) => {
   try {
     const query = `
-      SELECT marcos.idMarco, tipos.Tipo as idTipoMarco, marcos.stockMarco, marcos.precioDolar
+      SELECT marcos.idMarco, idTipoMarco, marcos.stockMarco, marcos.precioDolar
       FROM marcos
       JOIN tipos ON marcos.idTipoMarco = tipos.idTipo
     `;
@@ -102,4 +102,17 @@ const fetchMarcosReservados = async (idMarco) => {
   }
 };
 
-export { getMarcos, postMarco, getMarco, patchMarco, deleteMarco };
+const updateStockMarco = async (idMarco, cantidad) => {
+  try {
+    const [results] = await pool.query(
+      "UPDATE marcos SET stockMarco = stockMarco + ? WHERE idMarco = ?",
+      [cantidad, idMarco]
+    );
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error al actualizar el stock del marco");
+  }
+};
+
+export { getMarcos, postMarco, getMarco, patchMarco, deleteMarco, updateStockMarco };

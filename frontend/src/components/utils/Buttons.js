@@ -126,7 +126,7 @@ const buttonConfig = {
   // venta: [EditButton, DeleteButton, PrintButton, IncompleteButton],
   // pedido: [EditButton, DeleteButton, PrintButton, CompleteButton],
   // marco: [EditButton, DeleteButton],
-  venta: [IncompleteButton],
+  venta: [DeleteButton],
   pedido: [EditButton, DeleteButton, CompleteButton],
   marco: [EditButton, DeleteButton],
 };
