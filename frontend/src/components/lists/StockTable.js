@@ -3,7 +3,7 @@ import { useStock } from "../../context/StockContext";
 import { useTipos } from "../../context/TiposContext";
 import SearchBar from "../utils/SearchBar";
 import { DeleteButton } from "../utils/Buttons";
-import Filter from "../utils/Filter"; 
+import Filter from "../utils/Filter";
 
 const StockTable = () => {
   const [marcos, setMarcos] = useState([]);
@@ -11,7 +11,7 @@ const StockTable = () => {
   const [selectedTipo, setSelectedTipo] = useState("");
   const [editingMarco, setEditingMarco] = useState(null);
   const [editValues, setEditValues] = useState({});
-  const { stock, cargarStock, deleteStock, updateStock } = useStock();
+  const { stock, deleteStock, updateStock } = useStock();
   const { tiposDeMarcos, getTipoMarco } = useTipos();
 
   useEffect(() => {
@@ -25,11 +25,14 @@ const StockTable = () => {
 
   const handleTipoChange = (e) => {
     const tipo = e.target.value;
+    console.log("Selected tipo:", tipo);
     setSelectedTipo(tipo);
     if (tipo === "") {
       setFilteredMarcos(stock);
     } else {
-      setFilteredMarcos(stock.filter((marco) => marco.idTipoMarco === tipo));
+      setFilteredMarcos(
+        stock.filter((marco) => String(marco.idTipoMarco) === String(tipo))
+      );
     }
   };
 
@@ -67,7 +70,12 @@ const StockTable = () => {
 
   return (
     <div className="table-container">
-      <SearchBar data={marcos} onSearch={handleSearch} searchKey="idMarco" searchOnChange={true}  />
+      <SearchBar
+        data={marcos}
+        onSearch={handleSearch}
+        searchKey="idMarco"
+        searchOnChange={true}
+      />
       <Filter
         label="Filtrar por tipo de marco"
         options={tipoOptions}
@@ -118,9 +126,7 @@ const StockTable = () => {
                   marco.stockMarco
                 )}
               </td>
-              <td>
-                {marco.reservados}
-              </td>
+              <td>{marco.reservados}</td>
               <td>
                 {editingMarco === marco.idMarco ? (
                   <input

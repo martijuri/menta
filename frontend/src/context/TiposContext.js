@@ -5,21 +5,21 @@ export const TiposContext = createContext();
 
 export const TiposProvider = ({ children }) => {
   const [tiposDeMarcos, setTiposDeMarcos] = useState([]);
+  
+  const cargarTiposDeMarcos = async () => {
+    try {
+      const response = await getTiposMarcos();
+      setTiposDeMarcos(response);
+      console.log("Tipos de marcos array:", response);
+    } catch (error) {
+      console.error("Error al cargar los tipos de marcos:", error);
+    }
+  };
 
   useEffect(() => {
-    const cargarTiposDeMarcos = async () => {
-      try {
-        const response = await getTiposMarcos();
-        setTiposDeMarcos(response);
-        console.log("Tipos de marcos array:", response);
-      } catch (error) {
-        console.error("Error al cargar los tipos de marcos:", error);
-      }
-    };
-
     cargarTiposDeMarcos();
   }, []);
-
+  
   const getTipoMarco = (id) => {
     return tiposDeMarcos.find((tipo) => tipo.idTipo === id);
   };
