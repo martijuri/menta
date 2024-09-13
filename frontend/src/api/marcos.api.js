@@ -10,8 +10,8 @@ export const getMarco = async (id) =>
 export const postMarco = async (marco) =>
   handleApiCall(() => axiosInstance.post(`/api/marcos`, marco));
 
-export const patchMarco = async (id, marco) =>
-  handleApiCall(() => axiosInstance.patch(`/api/marcos/${id}`, marco));
+export const patchMarco = async (id, data) =>
+  handleApiCall(() => axiosInstance.patch(`/api/marcos/${id}`, data));
 
 export const deleteMarco = async (id) =>
   handleApiCall(() => axiosInstance.delete(`/api/marcos/${id}`));
