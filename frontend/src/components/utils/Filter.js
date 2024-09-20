@@ -1,6 +1,8 @@
+import '../../styles/Filter.css';
+
 const Filter = ({ label, options, selectedValue, handleChange }) => {
   return (
-    <div>
+    <div className="generic-filter">
       <label htmlFor="generic-select">{label}:</label>
       <select id="generic-select" value={selectedValue} onChange={handleChange}>
         <option value="">Todos</option>

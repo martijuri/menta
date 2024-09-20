@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           const response = await getPerfil();
           setUser(response);
-          console.log("usuario validado: ", response);
         } catch (error) {
           console.error("Error validating token:", error);
           setIsAuthenticated(false);
@@ -90,7 +89,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   return (

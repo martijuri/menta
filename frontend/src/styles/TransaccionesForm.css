@@ -33,33 +33,10 @@
   cursor: not-allowed;
 }
 
-/* Estilos responsivos */
-@media (min-width: 600px) {
-  .transacciones-form {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .transacciones-form input[type="date"] {
-    flex: 1 1 calc(48% - 10px);
-  }
-
-  .transacciones-form .submit-button {
-    flex: 1 1 100%;
-  }
-}
-
-@media (min-width: 900px) {
-  .transacciones-form {
-    max-width: 1000px;
-  }
-
-  .transacciones-form input[type="date"] {
-    flex: 1 1 calc(32% - 10px);
-  }
-
-  .transacciones-form .submit-button {
-    flex: 1 1 100%;
-  }
+.fechas-form{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  margin: auto;
 }

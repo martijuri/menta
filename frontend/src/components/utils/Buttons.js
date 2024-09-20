@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { deleteMarco } from "../../api/marcos.api";
 import { useTransacciones } from "../../context/TransaccionesContext";
+import '../../styles/Buttons.css';
 
 // Botones de acción
 
@@ -50,10 +51,10 @@ export const EditButton = ({ id, type }) => {
 };
 
 // Botón que redirige a una URL específica pasada como prop
-export const LinkButton = ({ url, text }) => {
+export const LinkButton = ({ className,url, text }) => {
   return (
     <Link to={url}>
-      <button className="link-button">{text}</button>
+      <button className={className?className:"link-button"}>{text}</button>
     </Link>
   );
 };
@@ -145,7 +146,7 @@ export const OptionsButton = ({ id, type }) => {
   return (
     <>
       <button className="options-button" onClick={handleOptions}>
-        Options
+        Opciones
       </button>
       {showOptions && (
         <>

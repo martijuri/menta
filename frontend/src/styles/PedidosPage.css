@@ -1,0 +1,17 @@
+.pedidos-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Estilos para el contenedor de las cartas */
+.cards-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px 80px; /* Espacio entre las cartas */
+    margin: 20px 0;
+    padding: 0 20px; /* Espacio alrededor del contenedor */
+  }
+  

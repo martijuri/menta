@@ -5,18 +5,15 @@ const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
   const [forms, setForms] = useState([]);
 
   useEffect(() => {
-    console.log('Initial items:', initialItems);
     setForms(
       initialItems.length > 0
         ? initialItems.map((item, index) => ({ id: index + 1, data: item }))
         : []
     );
-    console.log('Forms:', forms);
   }, [initialItems]);
 
   const addForm = () => {
     setForms([...forms, { id: forms.length + 1, data: { idMarcoItemTransaccion: '', cantidadItemTransaccion: '' } }]);
-    console.log('Form agregado');
   };
 
   const handleFormChange = (id, data) => {
@@ -33,7 +30,6 @@ const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
     const updatedForms = forms.filter((form) => form.id !== id);
     setForms(updatedForms);
     onFormsChange(updatedForms);
-    console.log('Form eliminado');
   };
 
   return (

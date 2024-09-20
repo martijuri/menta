@@ -55,7 +55,6 @@ const UserProfile = ({ user, updateUser, logout }) => {
 
   return (
     <div className="user-profile-container">
-      <h1>User Page</h1>
       {isEditing ? (
         <>
           <label>

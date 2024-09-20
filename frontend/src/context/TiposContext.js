@@ -25,7 +25,7 @@ export const TiposProvider = ({ children }) => {
   };
 
   return (
-    <TiposContext.Provider value={{ tiposDeMarcos, getTipoMarco }}>
+    <TiposContext.Provider value={{ tiposDeMarcos, getTipoMarco, cargarTiposDeMarcos }}>
       {children}
     </TiposContext.Provider>
   );

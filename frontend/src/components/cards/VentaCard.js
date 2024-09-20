@@ -1,5 +1,6 @@
 import { OptionsButton } from "../utils/Buttons";
 import { formatDate } from "../utils/Formatos";
+import '../../styles/Card.css';
 
 const VentaCard = ({ venta }) => {
   return (

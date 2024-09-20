@@ -36,36 +36,3 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
-
-/* Estilos responsivos */
-@media (min-width: 600px) {
-  .cuentas-form {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .cuentas-form label,
-  .cuentas-form input {
-    flex: 1 1 calc(48% - 10px);
-  }
-
-  .cuentas-form button {
-    flex: 1 1 100%;
-  }
-}
-
-@media (min-width: 900px) {
-  .cuentas-form {
-    max-width: 800px;
-  }
-
-  .cuentas-form label,
-  .cuentas-form input {
-    flex: 1 1 calc(32% - 10px);
-  }
-
-  .cuentas-form button {
-    flex: 1 1 100%;
-  }
-}

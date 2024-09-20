@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import CuentasForm from "../forms/CuentasForm";
 import ItemsForms from "./ItemsForms";
 import { useTransacciones } from "../../context/TransaccionesContext.js";
+import '../../styles/TransaccionesForm.css';
 
 const TransaccionesForm = () => {
   const navigate = useNavigate();
@@ -30,9 +31,7 @@ const TransaccionesForm = () => {
       if (id === "new") {
         setTransaccion(transaccionVacia);
       } else if (transacciones.length > 0 && transaccion === null) {
-        console.log("id ", id);
         const transaccionEncontrada = await getTransaccionPorId(id);
-        console.log(transaccionEncontrada);
         setTransaccion(transaccionEncontrada);
         setItems(transaccionEncontrada.itemsTransaccion[0], ...(items || []));
       }
@@ -51,7 +50,6 @@ const TransaccionesForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Iniciar la carga
-    console.log("submit");
     let transaccionId = transaccion.idTransaccion;
 
     try {
@@ -62,7 +60,6 @@ const TransaccionesForm = () => {
         if (res && res.id) {
           transaccionId = res.id;
           setTransaccion({ ...transaccion, idTransaccion: res.id });
-          console.log("setear idTransaccion:", res.id);
         } else {
           console.error("Error al crear la transacción");
           setIsLoading(false); // Finalizar la carga en caso de error
@@ -70,19 +67,16 @@ const TransaccionesForm = () => {
         }
       }
 
-      console.log("Post items:", nuevosItems);
       if (nuevosItems.length > 0) {
         await postItemsTransaccionContext(transaccionId, nuevosItems);
       }
 
-      console.log("Updated items:", updatedItems);
       if (updatedItems.length > 0) {
         for (const item of updatedItems) {
           await patchItemTransaccionContext(item.idItemTransaccion, item);
         }
       }
 
-      console.log("Deleted items:", deletedItems);
       for (const item of deletedItems) {
         await deleteItemTransaccionContext(item.idItemTransaccion);
       }
@@ -98,12 +92,10 @@ const TransaccionesForm = () => {
 
   const handleItemsChange = (itemsForms) => {
     setItems(itemsForms.map((form) => form.data));
-    console.log("Items:", items);
   };
 
   const handleItemRemove = (item) => {
     setDeletedItems([...deletedItems, item]);
-    console.log("Deleted items:", deletedItems);
   };
 
   const handleCancel = () => {
@@ -111,7 +103,6 @@ const TransaccionesForm = () => {
   };
 
   return (
-    <div className="scroll-container">
       <form className="transacciones-form" onSubmit={onSubmit}>
         <CuentasForm
           cuenta={transaccion.cuenta}
@@ -127,7 +118,7 @@ const TransaccionesForm = () => {
         {!transaccion.cuenta ? (
           <p>No hay cuenta asociada. Por favor, seleccione una cuenta.</p>
         ) : (
-          <>
+          <div className="fechas-form">
             <input
               type="date"
               value={
@@ -157,7 +148,7 @@ const TransaccionesForm = () => {
               }
               disabled={isLoading} // Deshabilitar input
             />
-          </>
+          </div>
         )}
         <ItemsForms
           onFormsChange={handleItemsChange}
@@ -181,7 +172,6 @@ const TransaccionesForm = () => {
           Cancelar
         </button>
       </form>
-    </div>
   );
 };
 

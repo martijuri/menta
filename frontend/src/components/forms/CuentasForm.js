@@ -5,6 +5,7 @@ import {
   postCuentaContext,
   patchCuentaContext,
 } from "../../context/CuentasContext";
+import '../../styles/CuentasForm.css';
 
 const CuentasForm = ({ cuenta, selectCuenta }) => {
   const [cliente, setCliente] = useState(

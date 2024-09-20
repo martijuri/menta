@@ -7,6 +7,26 @@ button {
   font-size: 16px;
   transition: background-color 0.3s, transform 0.1s;
 }
+.center-button {
+  display: flex;
+  justify-content: center;
+}
+
+.add-stock-button {
+  
+  width: 320px;
+  background-color: #2ecc71;
+  color: white;
+}
+
+.add-stock-button:hover {
+  background-color: #27ae60;
+}
+
+.add-stock-button:active {
+  background-color: #229954;
+  transform: scale(0.98);
+}
 
 /* Botón de eliminar */
 .delete-button {
