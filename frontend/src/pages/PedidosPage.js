@@ -5,7 +5,7 @@ import "../styles/PedidosPage.css";
 const PedidosPage = () => {
   return (
     <div className="pedidos-page-container">
-      <LinkButton url={`/transacciones/new/edit`} text="Nuevo Pedido" />
+      <LinkButton className="add-stock-button" url={`/transacciones/new/edit`} text="Nuevo Pedido" />
       <TransaccionesList type={"pedidos"} />
     </div>
   );

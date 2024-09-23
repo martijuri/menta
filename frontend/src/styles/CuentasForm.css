@@ -3,9 +3,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 20px;
-  max-width: 600px;
-  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .cuentas-form label {
@@ -35,4 +34,10 @@
 .cuentas-form button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.info-cuenta-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }

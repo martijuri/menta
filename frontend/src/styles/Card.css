@@ -1,4 +1,14 @@
 /* Estilos para las cartas de pedido y venta */
+
+/* Estilos para el contenedor de las cartas */
+.cards-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px 80px; /* Espacio entre las cartas */
+  margin: 20px 0;
+  padding: 0 20px; /* Espacio alrededor del contenedor */
+}
+
 .pedido-card, .venta-card {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -7,9 +17,10 @@
   margin: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
-  width: 100%; /* Ajustar el ancho al 100% del contenedor */
   display: flex;
   flex-direction: column;
+  height: 300px;
+  width: 300px; 
 }
 
 .pedido-card:hover, .venta-card:hover {
@@ -22,7 +33,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.pedido-card .card-footer, .venta-card .footer {
+.pedido-card .card-footer, .venta-card .card-footer {
   margin-top: auto; /* Empujar el footer hacia abajo */
   margin-right: auto;
 }
@@ -58,9 +69,9 @@
 /* Estilos para las opciones desplegables */
 .options-container {
   display: none;
-  grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-top: 10px;
+  grid-template-columns: 1fr 1fr;
 }
 
 .options-container.show {

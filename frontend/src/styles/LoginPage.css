@@ -1,20 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
-
+/* Contenedor de la página de login */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5; /* Color de fondo opcional */
+  height: 100vh;
+}
 
 /* Contenedor del formulario */
 .login-container {
-  background-color: #fff;
+  background-color: white;
   border-radius: 8px;
   padding: 15px;
-  margin-top: 30%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
   text-align: center;
-  box-sizing: border-box; /* Asegurarse de que el padding se incluya en el ancho total */
+  box-sizing: border-box; 
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 /* Título */

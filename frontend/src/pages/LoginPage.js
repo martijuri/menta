@@ -35,6 +35,7 @@ const LoginPage = () => {
   };
 
   return (
+    <div className="login-page">
     <div className="login-container">
       <h1>{isRegister ? "Registro" : "Inicio de Sesión"}</h1>
       <form onSubmit={handleSubmit}>
@@ -91,6 +92,7 @@ const LoginPage = () => {
           </button>
         </p>
       )}
+    </div>
     </div>
   );
 };

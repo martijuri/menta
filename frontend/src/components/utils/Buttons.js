@@ -45,7 +45,7 @@ export const EditButton = ({ id, type }) => {
 
   return (
     <button className="edit-button" onClick={handleEdit}>
-      Edit
+      Editar
     </button>
   );
 };
@@ -144,12 +144,9 @@ export const OptionsButton = ({ id, type }) => {
   const ButtonComponents = buttonConfig[type] || [];
 
   return (
-    <>
-      <button className="options-button" onClick={handleOptions}>
-        Opciones
-      </button>
+    <div className="options-buttons-container">
       {showOptions && (
-        <>
+        <div className="options-buttons">
           {ButtonComponents.map((ButtonComponent, index) => (
             // Renderiza cada botón con el id proporcionado y el tipo correspondiente
             <ButtonComponent
@@ -160,9 +157,12 @@ export const OptionsButton = ({ id, type }) => {
               text={"to form"}
             />
           ))}
-        </>
+        </div>
       )}
-    </>
+      <button className="options-button" onClick={handleOptions}>
+        Opciones
+      </button>
+    </div >
   );
 };
 

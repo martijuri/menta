@@ -5,7 +5,7 @@ import {
   postCuentaContext,
   patchCuentaContext,
 } from "../../context/CuentasContext";
-import '../../styles/CuentasForm.css';
+import "../../styles/CuentasForm.css";
 
 const CuentasForm = ({ cuenta, selectCuenta }) => {
   const [cliente, setCliente] = useState(
@@ -114,43 +114,55 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
         onSelection={handleSelection}
         placeholder={cliente || "Seleccione o cree una cuenta"}
       />
-      <div>
-        <label>Nombre</label>
-        <input
-          type="text"
-          value={cuentaNombre}
-          onChange={handleInputChange}
-          name="nombre"
-          placeholder="Ingrese Nombre"
-          disabled={!seleccionado || !isEditing}
-        />
-        <label>CUIT</label>
-        <input
-          type="text"
-          value={cuentaCuit}
-          onChange={handleInputChange}
-          name="cuit"
-          placeholder="Ingrese CUIT"
-          disabled={!seleccionado || !isEditing}
-        />
-        <label>Telefono</label>
-        <input
-          type="text"
-          value={cuentaTelefono}
-          onChange={handleInputChange}
-          name="telefono"
-          placeholder="Ingrese Telefono"
-          disabled={!seleccionado || !isEditing}
-        />
-        <label>Direccion</label>
-        <input
-          type="text"
-          value={cuentaDireccion}
-          onChange={handleInputChange}
-          name="direccion"
-          placeholder="Ingrese Direccion"
-          disabled={!seleccionado || !isEditing}
-        />
+      <div className="info-cuenta-container">
+        <div>
+          <label>Nombre
+          <input
+            type="text"
+            value={cuentaNombre}
+            onChange={handleInputChange}
+            name="nombre"
+            placeholder="Ingrese Nombre"
+            disabled={!seleccionado || !isEditing}
+          />
+          </label>
+        </div>
+        <div>
+          <label>CUIT
+          <input
+            type="text"
+            value={cuentaCuit}
+            onChange={handleInputChange}
+            name="cuit"
+            placeholder="Ingrese CUIT"
+            disabled={!seleccionado || !isEditing}
+          />
+          </label>
+        </div>
+        <div>
+          <label>Telefono
+          <input
+            type="text"
+            value={cuentaTelefono}
+            onChange={handleInputChange}
+            name="telefono"
+            placeholder="Ingrese Telefono"
+            disabled={!seleccionado || !isEditing}
+          />
+          </label>
+        </div>
+        <div>
+          <label>Direccion
+          <input
+            type="text"
+            value={cuentaDireccion}
+            onChange={handleInputChange}
+            name="direccion"
+            placeholder="Ingrese Direccion"
+            disabled={!seleccionado || !isEditing}
+          />
+          </label>
+        </div>
       </div>
       <button
         onClick={handleSubmitCuenta}

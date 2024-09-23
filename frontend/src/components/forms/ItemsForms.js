@@ -33,7 +33,7 @@ const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
   };
 
   return (
-    <div>
+    <div className='items-container'>
       {forms.length > 0 ? (
         forms.map((form) => (
           <ItemForm key={form.id} id={form.id} data={form.data} handleChange={handleFormChange} onRemove={removeForm} />
@@ -41,7 +41,7 @@ const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
       ) : (
         <p>Agrega un nuevo marco.</p>
       )}
-      <button type="button" onClick={addForm}>Agregar marco</button>
+      <button className='new-item-button' type="button" onClick={addForm}>Agregar marco</button>
     </div>
   );
 };

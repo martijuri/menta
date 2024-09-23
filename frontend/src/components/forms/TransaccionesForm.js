@@ -119,6 +119,8 @@ const TransaccionesForm = () => {
           <p>No hay cuenta asociada. Por favor, seleccione una cuenta.</p>
         ) : (
           <div className="fechas-form">
+            <div>
+            <label>Fecha del Pedido:</label>
             <input
               type="date"
               value={
@@ -134,6 +136,9 @@ const TransaccionesForm = () => {
               }
               disabled={isLoading} // Deshabilitar input
             />
+            </div>
+            <div>
+            <label>Fecha de Entrega:</label>
             <input
               type="date"
               value={
@@ -148,6 +153,7 @@ const TransaccionesForm = () => {
               }
               disabled={isLoading} // Deshabilitar input
             />
+            </div>
           </div>
         )}
         <ItemsForms
@@ -156,13 +162,7 @@ const TransaccionesForm = () => {
           onItemRemove={handleItemRemove}
           disabled={isLoading} // Deshabilitar inputs de ItemsForms
         />
-        <button
-          className="submit-button"
-          type="submit"
-          disabled={!transaccion.cuenta || isLoading} // Deshabilitar botón
-        >
-          Confirmar
-        </button>
+        <div className="buttons-container">
         <button
           className="cancel-button"
           type="button"
@@ -171,6 +171,14 @@ const TransaccionesForm = () => {
         >
           Cancelar
         </button>
+        <button
+          className="submit-button"
+          type="submit"
+          disabled={!transaccion.cuenta || isLoading} // Deshabilitar botón
+        >
+          Confirmar
+        </button>
+        </div>
       </form>
   );
 };
