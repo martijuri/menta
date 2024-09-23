@@ -2,8 +2,7 @@ import TransaccionesList from "../components/lists/TransaccionesList";
 
 const VentasPage = () => {
   return (
-    <div>
-      <h1>Ventas Page</h1>
+    <div className="ventas-page-container">
       <TransaccionesList type = {"ventas"} />      
     </div>
   );

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { deleteMarco } from "../../api/marcos.api";
 import { useTransacciones } from "../../context/TransaccionesContext";
+import '../../styles/Buttons.css';
 
 // Botones de acción
 
@@ -44,16 +45,16 @@ export const EditButton = ({ id, type }) => {
 
   return (
     <button className="edit-button" onClick={handleEdit}>
-      Edit
+      Editar
     </button>
   );
 };
 
 // Botón que redirige a una URL específica pasada como prop
-export const LinkButton = ({ url, text }) => {
+export const LinkButton = ({ className,url, text }) => {
   return (
     <Link to={url}>
-      <button className="link-button">{text}</button>
+      <button className={className?className:"link-button"}>{text}</button>
     </Link>
   );
 };
@@ -143,12 +144,9 @@ export const OptionsButton = ({ id, type }) => {
   const ButtonComponents = buttonConfig[type] || [];
 
   return (
-    <>
-      <button className="options-button" onClick={handleOptions}>
-        Options
-      </button>
+    <div className="options-buttons-container">
       {showOptions && (
-        <>
+        <div className="options-buttons">
           {ButtonComponents.map((ButtonComponent, index) => (
             // Renderiza cada botón con el id proporcionado y el tipo correspondiente
             <ButtonComponent
@@ -159,9 +157,12 @@ export const OptionsButton = ({ id, type }) => {
               text={"to form"}
             />
           ))}
-        </>
+        </div>
       )}
-    </>
+      <button className="options-button" onClick={handleOptions}>
+        Opciones
+      </button>
+    </div >
   );
 };
 

@@ -67,7 +67,6 @@ export const TransaccionesProvider = ({ children }) => {
 
   const deleteTransaccionContext = async (idTransaccion) => {
     try {
-      console.log("deleteTransaccionContext: ", idTransaccion);
       const response = await deleteTransaccion(idTransaccion);
       console.log("deleteTransaccionContext: ", response);
       await cargarTransacciones();
@@ -98,7 +97,6 @@ export const TransaccionesProvider = ({ children }) => {
   const postItemsTransaccionContext = async (idTransaccionItemTransaccion, itemsTransaccion) => {
     if (itemsTransaccion.length === 0) return;
     try {
-      console.log("postItemsTransaccionContext: ", idTransaccionItemTransaccion, itemsTransaccion);
       await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
       await cargarTransacciones();
     } catch (error) {

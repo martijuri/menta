@@ -31,7 +31,6 @@ export const CuentasProvider = ({ children }) => {
 export const postCuentaContext = async (cuenta) => {
   try {
     const response = await postCuenta(cuenta);
-    console.log(response);
   } catch (error) {
     console.error("Error al crear la cuenta:", error);
   }
@@ -40,7 +39,6 @@ export const postCuentaContext = async (cuenta) => {
 export const patchCuentaContext = async (cuenta) => {
   try {
     const response = await patchCuenta(cuenta.idCuenta,cuenta);
-    console.log(response);
   } catch (error) {
     console.error("Error al actualizar la cuenta:", error);
   }

@@ -55,7 +55,6 @@ const UserProfile = ({ user, updateUser, logout }) => {
 
   return (
     <div className="user-profile-container">
-      <h1>User Page</h1>
       {isEditing ? (
         <>
           <label>
@@ -77,7 +76,7 @@ const UserProfile = ({ user, updateUser, logout }) => {
             />
             <button
               type="button"
-              className="toggle-password-button"
+              className="toggle-button"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? "Ocultar" : "Mostrar"}
@@ -92,37 +91,30 @@ const UserProfile = ({ user, updateUser, logout }) => {
               onChange={handleChange}
             />
           </label>
-          <label>
-            Administrador:
-            <input
-              type="checkbox"
-              name="administrador"
-              checked={formData.administrador}
-              onChange={handleChange}
-            />
-          </label>
-          <button onClick={handleSave}>Guardar</button>
-          <button onClick={handleCancel}>Cancelar</button>
+          <div className="buttons-container">
+          <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
+          <button className="confirm-button" onClick={handleSave}>Guardar</button>
+          </div>
         </>
       ) : (
         <>
-          <button onClick={() => setIsEditing(true)}>Editar Perfil</button>
+          <button className="edit-button" onClick={() => setIsEditing(true)}>Editar Perfil</button>
           <h2>Bienvenid@ {user.username}</h2>
-          <h3>
+          <div className="info">
             Contraseña: {showPassword ? user.password : "********"}
             <button
               type="button"
-              className="toggle-password-button"
+              className="toggle-button"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? "Ocultar" : "Mostrar"}
             </button>
-          </h3>
-          <h3>Email: {user.email}</h3>
-          <h3>
+          </div>
+          <div className="info">Email: {user.email}</div>
+          <div className="info">
             Cuenta:{" "}
             {user.administrador === 1 ? "Administrador" : "Usuario Común"}
-          </h3>
+          </div>
           <button className="logout-button" onClick={logout}>Logout</button>
         </>
       )}

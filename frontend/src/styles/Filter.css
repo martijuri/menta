@@ -1,0 +1,30 @@
+/* Estilos para el contenedor del filtro */
+.generic-filter {
+  display: flex;
+  width: 40%;
+  justify-content: flex-end;
+}
+
+/* Estilos para la etiqueta */
+.generic-filter label {
+  font-weight: bold;
+  color: #333;
+  margin: 5px;
+  width: 40%;
+
+}
+
+/* Estilos para el select */
+.generic-filter select {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+  width: 50%;
+
+}
+
+.generic-filter select:focus {
+  border-color: #007bff;
+  outline: none;
+}

@@ -1,5 +1,5 @@
-
 import { OptionsButton } from "../utils/Buttons";
+import '../../styles/Card.css';
 
 const MarcoCard = ({ marco }) => {
   

@@ -2,11 +2,12 @@ import { useTransacciones } from "../../context/TransaccionesContext";
 import PedidoCard from "../cards/PedidoCard";
 import VentaCard from "../cards/VentaCard";
 
+
 const TransaccionesList = ({ type }) => {
   const { transacciones} = useTransacciones();
 
     return (
-    <div className="scroll-container">
+    <div className="cards-container">
       {type === "pedidos" &&
         transacciones
           .filter((transaccion) => transaccion.fechaEntrega === null && transaccion.ventaTransaccion === 1)

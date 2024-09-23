@@ -4,6 +4,7 @@ import { useTipos } from "../../context/TiposContext";
 import SearchBar from "../utils/SearchBar";
 import { DeleteButton } from "../utils/Buttons";
 import Filter from "../utils/Filter";
+import '../../styles/StockTable.css';
 
 const StockTable = () => {
   const [marcos, setMarcos] = useState([]);
@@ -12,11 +13,12 @@ const StockTable = () => {
   const [editingMarco, setEditingMarco] = useState(null);
   const [editValues, setEditValues] = useState({});
   const { stock, deleteStock, updateStock } = useStock();
-  const { tiposDeMarcos, getTipoMarco } = useTipos();
+  const { tiposDeMarcos, getTipoMarco, cargarTiposDeMarcos } = useTipos();
 
   useEffect(() => {
     setMarcos(stock);
     setFilteredMarcos(stock);
+    cargarTiposDeMarcos();
   }, [stock]);
 
   const handleSearch = (results) => {
@@ -25,7 +27,6 @@ const StockTable = () => {
 
   const handleTipoChange = (e) => {
     const tipo = e.target.value;
-    console.log("Selected tipo:", tipo);
     setSelectedTipo(tipo);
     if (tipo === "") {
       setFilteredMarcos(stock);
@@ -51,7 +52,6 @@ const StockTable = () => {
       ...editValues,
       [name]: value,
     });
-    console.log("Edit values:", editValues);
   };
 
   const handleAcceptClick = (idMarco) => {
@@ -70,6 +70,7 @@ const StockTable = () => {
 
   return (
     <div className="table-container">
+      <div className="table-filter">
       <SearchBar
         data={marcos}
         onSearch={handleSearch}
@@ -82,10 +83,11 @@ const StockTable = () => {
         selectedValue={selectedTipo}
         handleChange={handleTipoChange}
       />
-      <table>
+      </div>
+      <table className="stock-table">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Código</th>
             <th>Tipo</th>
             <th>Stock</th>
             <th>Reservados</th>

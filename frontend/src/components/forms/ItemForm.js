@@ -23,7 +23,7 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
   };
 
   return (
-    <div>
+    <div className="item-container">
       <FiltroInput
         options={marcos}
         placeholder={
@@ -32,7 +32,6 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
             : "Seleccione el marco"
         }
         onSelection={handleFilterChange}
-        label="Código: "
       />
       <input
         type="number"
@@ -41,8 +40,8 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
       />
       <h5>Stock disponible: {marco ? marco.stockMarco : ''}</h5>
       <h5>Reservados: {marco ? marco.reservados : ''}</h5>
-      <button type="button" onClick={() => onRemove(id)}>
-        🗑️
+      <button className="delete-button" type="button" onClick={() => onRemove(id)}>
+        Eliminar
       </button>
     </div>
   );
