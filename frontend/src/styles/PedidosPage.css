@@ -6,3 +6,10 @@
   margin-top: 20px;
 }
 
+@media screen and (max-width: 425px) {
+  .pedidos-page-container, .ventas-page-container {
+    margin: 0;
+    width: 100%;
+  }
+  
+}

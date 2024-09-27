@@ -56,3 +56,19 @@
 .item-container h5 {
   margin: 10px;
 }
+
+@media screen and (max-width: 425px) {
+  .items-container {
+    grid-template-columns: 1fr;
+  }
+  .item-container {
+    padding: 0px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .fechas-form{
+    grid-template-columns: 1fr;
+  }
+
+}
