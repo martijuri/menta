@@ -23,6 +23,18 @@
   width: 300px; 
 }
 
+@media screen and (max-width: 425px) {
+  .cards-container {
+    grid-template-columns: 1fr; 
+    width: 280px;
+  }
+  .pedido-card, .venta-card {
+    width: 260px;
+    height: 260px;
+    margin: 0px;
+  }
+}
+
 .pedido-card:hover, .venta-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

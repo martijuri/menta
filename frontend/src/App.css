@@ -12,14 +12,13 @@
   padding: 20px;
   box-sizing: border-box; /* Incluye el padding en el cálculo de la altura */
   transition: margin 0.5s;
-  width: 100%;
   margin-left: 0; /* Sin margen izquierdo */
   margin-top: 60px; /* Ajustar para que no se superponga con la navbar horizontal */
   height: calc(100vh - 60px); /* Ajusta la altura para que el contenido ocupe el espacio restante */
 }
 
 /* Ajustes para pantallas pequeñas (navbar lateral) */
-@media (max-width: 1023px) {
+@media (max-width: 768px) {
   .app-container {
     margin-left: 60px; /* Ajustar para que no se superponga con la navbar lateral */
     margin-top: 0; /* Sin margen superior */

@@ -10,7 +10,7 @@ const PedidoCard = ({ pedido }) => {
           {pedido.fechaTransaccion
             ? formatDate(pedido.fechaTransaccion)
             : "Fecha no disponible"}{" "}
-          - {pedido.cuenta.cuentaNombre || "Nombre no disponible"}
+          - {pedido.cuenta?.cuentaNombre || "Nombre no disponible"}
         </h3>
         <p>
           {pedido.itemsTransaccion && pedido.itemsTransaccion.length > 0 ? (
