@@ -4,20 +4,11 @@ import transaccionesRouter from "./routes/transacciones.routes.js";
 import marcosRouter from "./routes/marcos.routes.js";
 import usuariosRouter from "./routes/usuarios.routes.js";
 import { getUserProfile, validateToken, validateTokenMiddleware, verifyAdmin } from "./controllers/usuarios.controller.js";
-import { login, auth } from "./routes/authentication.routes.js";
+import { login } from "./controllers/usuarios.controller.js";
 import utilRouter from "./routes/utils.routes.js";
 import cors from "cors";
 
 const app = express();
-
-app.get('/test-db', async (req, res) => {
-  try {
-    const [rows, fields] = await pool.query('SELECT 1 + 1 AS solution');
-    res.send(`Database connection successful: ${rows[0].solution}`);
-  } catch (error) {
-    res.status(500).send(`Database connection failed: ${error.message}`);
-  }
-});
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -28,9 +19,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use("/login", login);
+app.post("/login", login);
 app.post("/auth/validate", validateToken);
-app.post("/auth", auth);
 
 // Aplicar middleware a todas las rutas que comiencen con '/api'
 app.use("/api", validateTokenMiddleware);

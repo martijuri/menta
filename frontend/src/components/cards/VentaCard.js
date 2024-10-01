@@ -27,7 +27,7 @@ const VentaCard = ({ venta }) => {
           <strong>Items:</strong>
           {venta.itemsTransaccion && venta.itemsTransaccion.length > 0 ? (
             <ul>
-              {venta.itemsTransaccion[0].map((item) => (
+              {venta.itemsTransaccion.map((item) => (
                 <li key={item.idItemTransaccion}>
                   {item.idMarcoItemTransaccion || "ID de Marco no disponible"} x
                   {item.cantidadItemTransaccion || "Cantidad no disponible"}

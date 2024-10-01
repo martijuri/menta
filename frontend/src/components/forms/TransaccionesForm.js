@@ -33,7 +33,7 @@ const TransaccionesForm = () => {
       } else if (transacciones.length > 0 && transaccion === null) {
         const transaccionEncontrada = await getTransaccionPorId(id);
         setTransaccion(transaccionEncontrada);
-        setItems(transaccionEncontrada.itemsTransaccion[0], ...(items || []));
+        setItems(transaccionEncontrada.itemsTransaccion, ...(items || []));
       }
     };
 

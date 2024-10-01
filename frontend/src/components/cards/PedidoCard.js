@@ -16,7 +16,7 @@ const PedidoCard = ({ pedido }) => {
           {pedido.itemsTransaccion && pedido.itemsTransaccion.length > 0 ? (
             <ul>
               <strong>Pedido:</strong>
-              {pedido.itemsTransaccion[0].map((item) => (
+              {pedido.itemsTransaccion.map((item) => (
                 <li key={item.idItemTransaccion}>
                   {item.idMarcoItemTransaccion || "ID de Marco no disponible"} x
                   {item.cantidadItemTransaccion || "Cantidad no disponible"}

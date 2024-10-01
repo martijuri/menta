@@ -15,9 +15,8 @@ export const patchCuenta = async (id, cuenta) =>
 export const postCuenta = async (data) =>
   handleApiCall(() => axiosInstance.post(`/api/cuentas`, data));
 
-// export const getItemsTransacciones = async () => await axios.get(`${BACKEND_URL}/api/items`);
 export const authenticate = async (username, password) =>
-  handleApiCall(() => axiosInstance.post(`/auth`, { username, password }));
+  handleApiCall(() => axiosInstance.post(`/login`, { username, password }));
 
 export const validate = async (token) =>
   handleApiCall(() => axiosInstance.post(`/auth/validate`, { token }));
