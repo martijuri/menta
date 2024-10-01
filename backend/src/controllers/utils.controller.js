@@ -3,7 +3,7 @@ import { pool } from "../db.js";
 // Funcion para obtener los items de una transaccion
 export async function getItemsTransacciones(id) {
   try {
-    const items = await pool.query(
+    const [items] = await pool.query(
       "SELECT * FROM itemtransaccion WHERE idTransaccionItemTransaccion = ?",
       [id]
     );
@@ -80,7 +80,7 @@ export async function getCuentas(req, res) {
 export async function patchCuenta(req, res) {
   try {
     const { id } = req.params;
-    const  cuenta  = req.body;
+    const cuenta = req.body;
     await pool.query(
       "UPDATE cuentas SET cuentaNombre = ?, cuentaCuit = ?, cuentaTelefono = ?, cuentaDireccion = ? WHERE idCuenta = ?",
       [cuenta.cuentaNombre, cuenta.cuentaCuit, cuenta.cuentaTelefono, cuenta.cuentaDireccion, id]
@@ -116,17 +116,39 @@ export async function postCuenta(req, res) {
 // Funcion para obtener los pedidos (transacciones con ventaTransaccion = 1 y fechaEntrega = NULL)
 export async function getPedidos(req, res) {
   try {
-    const [rows] = await pool.query(
-      "SELECT * FROM transacciones WHERE ventaTransaccion = 1 AND fechaEntrega IS NULL"
-    );
+    const [rows] = await pool.query(`
+      SELECT t.*, c.*, it.*
+      FROM transacciones t
+      LEFT JOIN cuentas c ON t.idCuentaTransaccion = c.idCuenta
+      LEFT JOIN itemtransaccion it ON t.idTransaccion = it.idTransaccionItemTransaccion
+      WHERE t.ventaTransaccion = 1 AND t.fechaEntrega IS NULL
+    `);
 
-    const pedidosConCuentas = await Promise.all(
-      rows.map(async (row) => {
-        const cuenta = await getCuenta(row.idCuentaTransaccion);
-        const itemsTransaccion = await getItemsTransacciones(row.idTransaccion);
-        return { ...row, cuenta, itemsTransaccion };
-      })
-    );
+    const pedidosMap = rows.reduce((acc, row) => {
+      const transaccionId = row.idTransaccion;
+      if (!acc[transaccionId]) {
+        acc[transaccionId] = {
+          ...row,
+          cuenta: {
+            idCuenta: row.idCuenta,
+            nombreCuenta: row.nombreCuenta,
+            // Agrega otros campos de la cuenta aquí
+          },
+          itemsTransaccion: [],
+        };
+      }
+      if (row.idItemTransaccion) {
+        acc[transaccionId].itemsTransaccion.push({
+          idItemTransaccion: row.idItemTransaccion,
+          idMarcoItemTransaccion: row.idMarcoItemTransaccion,
+          cantidadItemTransaccion: row.cantidadItemTransaccion,
+          // Agrega otros campos del itemTransaccion aquí
+        });
+      }
+      return acc;
+    }, {});
+
+    const pedidosConCuentas = Object.values(pedidosMap);
     res.json(pedidosConCuentas);
   } catch (error) {
     console.error(error);
@@ -140,22 +162,44 @@ export async function getPedidos(req, res) {
 // Funcion para obtener las ventas (transacciones con ventaTransaccion = 1 y fechaEntrega != NULL)
 export async function getVentas(req, res) {
   try {
-    const [rows] = await pool.query(
-      "SELECT * FROM transacciones WHERE ventaTransaccion = 1 AND fechaEntrega IS NOT NULL"
-    );
+    const [rows] = await pool.query(`
+      SELECT t.*, c.*, it.*
+      FROM transacciones t
+      LEFT JOIN cuentas c ON t.idCuentaTransaccion = c.idCuenta
+      LEFT JOIN itemtransaccion it ON t.idTransaccion = it.idTransaccionItemTransaccion
+      WHERE t.ventaTransaccion = 1 AND t.fechaEntrega IS NOT NULL
+    `);
 
-    const ventasConCuentas = await Promise.all(
-      rows.map(async (row) => {
-        const cuenta = await getCuenta(row.idCuentaTransaccion);
-        const itemsTransaccion = await getItemsTransacciones(row.idTransaccion);
-        return { ...row, cuenta, itemsTransaccion };
-      })
-    );
+    const ventasMap = rows.reduce((acc, row) => {
+      const transaccionId = row.idTransaccion;
+      if (!acc[transaccionId]) {
+        acc[transaccionId] = {
+          ...row,
+          cuenta: {
+            idCuenta: row.idCuenta,
+            nombreCuenta: row.nombreCuenta,
+            // Agrega otros campos de la cuenta aquí
+          },
+          itemsTransaccion: [],
+        };
+      }
+      if (row.idItemTransaccion) {
+        acc[transaccionId].itemsTransaccion.push({
+          idItemTransaccion: row.idItemTransaccion,
+          idMarcoItemTransaccion: row.idMarcoItemTransaccion,
+          cantidadItemTransaccion: row.cantidadItemTransaccion,
+          // Agrega otros campos del itemTransaccion aquí
+        });
+      }
+      return acc;
+    }, {});
+
+    const ventasConCuentas = Object.values(ventasMap);
     res.json(ventasConCuentas);
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Error al obtener los ventas",
+      message: "Error al obtener las ventas",
       error: error.message,
     });
   }

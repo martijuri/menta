@@ -9,10 +9,26 @@ const getMarcos = async (req, res) => {
     `;
     const [rows] = await pool.query(query);
 
-    // Obtener la cantidad reservada para cada marco
-    const marcosConReservados = await Promise.all(rows.map(async (marco) => {
-      const reservados = await fetchMarcosReservados(marco.idMarco);
-      return { ...marco, reservados };
+    // Obtener la cantidad reservada para todos los marcos en una sola consulta
+    const reservadosQuery = `
+      SELECT it.idMarcoItemTransaccion, SUM(it.cantidadItemTransaccion) AS totalReservados
+      FROM itemtransaccion it
+      JOIN transacciones t ON it.idTransaccionItemTransaccion = t.idTransaccion
+      WHERE t.ventaTransaccion = 1 AND t.fechaEntrega IS NULL
+      GROUP BY it.idMarcoItemTransaccion
+    `;
+    const [reservadosRows] = await pool.query(reservadosQuery);
+
+    // Crear un mapa de idMarco a totalReservados
+    const reservadosMap = reservadosRows.reduce((acc, row) => {
+      acc[row.idMarcoItemTransaccion] = row.totalReservados || 0;
+      return acc;
+    }, {});
+
+    // Combinar los resultados
+    const marcosConReservados = rows.map((marco) => ({
+      ...marco,
+      reservados: reservadosMap[marco.idMarco] || 0,
     }));
 
     res.json(marcosConReservados);
@@ -29,7 +45,7 @@ const postMarco = async (req, res) => {
       "INSERT INTO marcos (idMarco, idTipoMarco, stockMarco, precioDolar) VALUES (?, ?, ?, ?)",
       [idMarco, idTipoMarco, stockMarco, precioDolar]
     );
-    res.status(201).send(`Lente added with ID: ${results.idMarco}`);
+    res.status(201).send(`Lente added with ID: ${results.insertId}`);
   } catch (error) {
     console.error(error);
     res
@@ -41,8 +57,8 @@ const postMarco = async (req, res) => {
 const getMarco = async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query("SELECT * FROM marcos WHERE idMarco = ?", [id]);
-    res.json(results);
+    const [results] = await pool.query("SELECT * FROM marcos WHERE idMarco = ?", [id]);
+    res.json(results[0]);
   } catch (error) {
     console.error(error);
     res
@@ -70,35 +86,13 @@ const patchMarco = async (req, res) => {
 const deleteMarco = async (req, res) => {
   const { id } = req.params;
   try {
-    const [results] = await pool.query("DELETE FROM marcos WHERE idMarco = ?", [
-      id,
-    ]);
+    const [results] = await pool.query("DELETE FROM marcos WHERE idMarco = ?", [id]);
     res.json(results);
   } catch (error) {
     console.error(error);
     res
       .status(500)
       .json({ message: "Error al eliminar el marco", error: error.message });
-  }
-};
-
-// Funcion para obtener la sumatoria de marcos reservados
-const fetchMarcosReservados = async (idMarco) => {
-  try {
-    const [rows] = await pool.query(
-      `SELECT SUM(it.cantidadItemTransaccion) AS totalReservados
-       FROM itemtransaccion it
-       JOIN transacciones t ON it.idTransaccionItemTransaccion = t.idTransaccion
-       WHERE it.idMarcoItemTransaccion = ?
-         AND t.ventaTransaccion = 1
-         AND t.fechaEntrega IS NULL;`,
-      [idMarco]
-    );
-    // Verificar si la sumatoria es null y devolver 0 en ese caso
-    return rows[0].totalReservados || 0;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error al obtener los marcos reservados");
   }
 };
 
