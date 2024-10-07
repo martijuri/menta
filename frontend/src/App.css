@@ -22,7 +22,6 @@
   .app-container {
     margin-left: 60px; /* Ajustar para que no se superponga con la navbar lateral */
     margin-top: 0; /* Sin margen superior */
-    height: 100%; /* Ajusta la altura para que el contenido ocupe el espacio restante */
   }
 }
 

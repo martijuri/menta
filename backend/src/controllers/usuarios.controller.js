@@ -6,16 +6,6 @@ import bcrypt from "bcrypt";
 dotenv.config();
 
 
-// Obtener todos los usuarios
-export const getUsuarios = async (req, res) => {
-  try {
-    const [usuarios] = await pool.query("SELECT * FROM usuarios");
-    res.json(usuarios);
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener los usuarios", error });
-  }
-};
-
 // Crear un nuevo usuario
 export const postUsuario = async (req, res) => {
   const { username, password, email, administrador = 0 } = req.body;

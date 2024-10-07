@@ -21,6 +21,20 @@
   flex-direction: column;
   height: 300px;
   width: 300px; 
+  overflow: visible; /* Oculta el desbordamiento */
+}
+
+@media screen and (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: 1fr 1fr; 
+    width: 600px;
+    gap: 20px 20px;
+  }
+  .pedido-card, .venta-card {
+    width: 220px;
+    height: 220px;
+    margin: 10px;
+  }
 }
 
 @media screen and (max-width: 425px) {
@@ -34,7 +48,6 @@
     margin: 0px;
   }
 }
-
 .pedido-card:hover, .venta-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -50,24 +63,25 @@
   margin-right: auto;
 }
 
-.pedido-card h3, .venta-card h3 {
-  margin: 0 0 10px;
-  font-size: 1.5em;
-}
+
 
 .pedido-card p, .venta-card p {
   margin: 5px 0;
   color: #666;
+
 }
 
 .pedido-card ul, .venta-card ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
+
 }
 
 .pedido-card li, .venta-card li {
   margin: 5px 0;
   color: #666;
+
 }
 
 .pedido-card strong, .venta-card strong {
@@ -90,3 +104,22 @@
   display: grid;
 }
 
+.card-body h3 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el desbordamiento */
+  text-overflow: ellipsis; /* Agrega puntos suspensivos al final del texto */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Oculta el desbordamiento */
+}
+
+.card-body p, .card-body ul, .card-body li {
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el desbordamiento */
+  text-overflow: ellipsis; /* Agrega puntos suspensivos al final del texto */
+}
