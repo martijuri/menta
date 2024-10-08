@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const UserProfile = ({ user, updateUser, logout }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     id: user.id,
     username: user.username,
@@ -10,6 +9,7 @@ const UserProfile = ({ user, updateUser, logout }) => {
     email: user.email,
     administrador: user.administrador,
   });
+  const [newPassword, setNewPassword] = useState("");
 
   useEffect(() => {
     setFormData({
@@ -67,28 +67,21 @@ const UserProfile = ({ user, updateUser, logout }) => {
             />
           </label>
           <label>
-            Contraseña:
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            <button
-              type="button"
-              className="toggle-button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "Ocultar" : "Mostrar"}
-            </button>
-          </label>
-          <label>
-            Email:
+            Mail:
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
+            />
+          </label>
+          <label>
+            Nueva contraseña:
+            <input
+              type={ "text" }
+              name="password"
+              value={newPassword}
+              onChange={setNewPassword}
             />
           </label>
           <div className="buttons-container">
@@ -100,17 +93,7 @@ const UserProfile = ({ user, updateUser, logout }) => {
         <>
           <button className="edit-button" onClick={() => setIsEditing(true)}>Editar Perfil</button>
           <h2>Bienvenid@ {user.username}</h2>
-          <div className="info">
-            Contraseña: {showPassword ? user.password : "********"}
-            <button
-              type="button"
-              className="toggle-button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? "Ocultar" : "Mostrar"}
-            </button>
-          </div>
-          <div className="info">Email: {user.email}</div>
+          <div className="info">Mail: {user.email}</div>
           <div className="info">
             Cuenta:{" "}
             {user.administrador === 1 ? "Administrador" : "Usuario Común"}
