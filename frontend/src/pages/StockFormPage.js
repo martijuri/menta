@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StockForm from "../components/forms/StockForm";
-import { patchMarco } from "../api/marcos.api"; // Importar la función para actualizar el stock
 import { useTransacciones } from "../context/TransaccionesContext";
+import "../styles/Stock.css";
 
 const StockFormPage = () => {
   const [stockForms, setStockForms] = useState([
@@ -67,24 +67,40 @@ const StockFormPage = () => {
   };
 
   return (
-    <div>
-      <h1>Cargar stock</h1>
-      {stockForms.map((form) => (
-        <StockForm
-          key={form.id}
-          handleSubmit={(data) => handleFormChange(form.id, data)}
-          disabled={isLoading} // Deshabilitar inputs
-        />
-      ))}
-      <button onClick={addStockForm} disabled={isLoading}>
-        Agregar otro marco
-      </button>
-      <button onClick={handleSubmit} disabled={isLoading}>
-        Cargar Stock
-      </button>
-      <button onClick={() => navigate("/stock")} disabled={isLoading}>
-        Cancelar
-      </button>
+    <div className="container">
+      <div className="content">
+        <h1>Cargar stock</h1>
+        {stockForms.map((form) => (
+          <StockForm
+            key={form.id}
+            handleSubmit={(data) => handleFormChange(form.id, data)}
+            disabled={isLoading} 
+          />
+        ))}
+        <button
+          className="new-item-button"
+          onClick={addStockForm}
+          disabled={isLoading}
+        >
+          Agregar otro marco
+        </button>
+      </div>
+      <div className="buttons-container">
+        <button
+          className="cancel-button"
+          onClick={() => navigate("/stock")}
+          disabled={isLoading}
+        >
+          Cancelar
+        </button>
+        <button
+          className="edit-button"
+          onClick={handleSubmit}
+          disabled={isLoading}
+        >
+          Cargar Stock
+        </button>
+      </div>
     </div>
   );
 };
