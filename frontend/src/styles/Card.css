@@ -1,14 +1,53 @@
 /* Estilos para las cartas de pedido y venta */
+
+/* Estilos para el contenedor de las cartas */
+.cards-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px 80px; /* Espacio entre las cartas */
+  margin: 20px 0;
+  padding: 0 20px; /* Espacio alrededor del contenedor */
+}
+
 .pedido-card, .venta-card {
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  margin: 10px 0;
+  margin: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  width: 300px; 
+  overflow: visible; /* Oculta el desbordamiento */
 }
 
+@media screen and (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: 1fr 1fr; 
+    width: 600px;
+    gap: 20px 20px;
+  }
+  .pedido-card, .venta-card {
+    width: 220px;
+    height: 220px;
+    margin: 10px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .cards-container {
+    grid-template-columns: 1fr; 
+    width: 280px;
+  }
+  .pedido-card, .venta-card {
+    width: 260px;
+    height: 260px;
+    margin: 0px;
+  }
+}
 .pedido-card:hover, .venta-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -19,25 +58,30 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.pedido-card h3, .venta-card h3 {
-  margin: 0 0 10px;
-  font-size: 1.5em;
-  color: #333;
+.pedido-card .card-footer, .venta-card .card-footer {
+  margin-top: auto; /* Empujar el footer hacia abajo */
+  margin-right: auto;
 }
+
+
 
 .pedido-card p, .venta-card p {
   margin: 5px 0;
   color: #666;
+
 }
 
 .pedido-card ul, .venta-card ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
+
 }
 
 .pedido-card li, .venta-card li {
   margin: 5px 0;
   color: #666;
+
 }
 
 .pedido-card strong, .venta-card strong {
@@ -51,11 +95,31 @@
 /* Estilos para las opciones desplegables */
 .options-container {
   display: none;
-  grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-top: 10px;
+  grid-template-columns: 1fr 1fr;
 }
 
 .options-container.show {
   display: grid;
+}
+
+.card-body h3 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el desbordamiento */
+  text-overflow: ellipsis; /* Agrega puntos suspensivos al final del texto */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Oculta el desbordamiento */
+}
+
+.card-body p, .card-body ul, .card-body li {
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el desbordamiento */
+  text-overflow: ellipsis; /* Agrega puntos suspensivos al final del texto */
 }

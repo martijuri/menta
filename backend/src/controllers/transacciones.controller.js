@@ -1,20 +1,44 @@
 import { pool } from "../db.js";
-import { getItemsTransacciones } from "./utils.controller.js";
-import { getCuenta } from "./utils.controller.js";
+import { updateStockMarco } from "./marcos.controller.js";
 
 // Controladores de transacciones
 
 // Funcion para obtener todas las transacciones
 const getTransacciones = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM transacciones");
-    const transaccionesConCuentas = await Promise.all(
-      rows.map(async (row) => {
-        const cuenta = await getCuenta(row.idCuentaTransaccion);
-        const itemsTransaccion = await getItemsTransacciones(row.idTransaccion);
-        return { ...row, cuenta, itemsTransaccion };
-      })
-    );
+    const [rows] = await pool.query(`
+      SELECT t.*, c.*, it.*
+      FROM transacciones t
+      LEFT JOIN cuentas c ON t.idCuentaTransaccion = c.idCuenta
+      LEFT JOIN itemtransaccion it ON t.idTransaccion = it.idTransaccionItemTransaccion
+    `);
+
+    const transaccionesMap = rows.reduce((acc, row) => {
+      const transaccionId = row.idTransaccion;
+      if (!acc[transaccionId]) {
+        acc[transaccionId] = {
+          ...row,
+          cuenta: {
+            idCuenta: row.idCuenta,
+            cuentaNombre: row.cuentaNombre,
+            cuentaCuit: row.cuentaCuit,
+            cuentaTelefono: row.cuentaTelefono,
+            cuentaDireccion: row.cuentaDireccion,
+          },
+          itemsTransaccion: [],
+        };
+      }
+      if (row.idItemTransaccion) {
+        acc[transaccionId].itemsTransaccion.push({
+          idItemTransaccion: row.idItemTransaccion,
+          idMarcoItemTransaccion: row.idMarcoItemTransaccion,
+          cantidadItemTransaccion: row.cantidadItemTransaccion,
+        });
+      }
+      return acc;
+    }, {});
+
+    const transaccionesConCuentas = Object.values(transaccionesMap);
     res.json(transaccionesConCuentas);
   } catch (error) {
     console.error(error);
@@ -29,12 +53,37 @@ const getTransacciones = async (req, res) => {
 const getTransaccion = async (req, res) => {
   const { id } = req.params;
   try {
-    const [results] = await pool.query(
-      "SELECT * FROM transacciones WHERE idTransaccion = ?",
+    const [rows] = await pool.query(
+      `
+      SELECT t.*, c.*, it.*
+      FROM transacciones t
+      LEFT JOIN cuentas c ON t.idCuentaTransaccion = c.idCuenta
+      LEFT JOIN itemtransaccion it ON t.idTransaccion = it.idTransaccionItemTransaccion
+      WHERE t.idTransaccion = ?
+    `,
       [id]
     );
-    const [itemsTransaccion] = await getItemsTransacciones(id);
-    res.json({ results, itemsTransaccion });
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Transacción no encontrada" });
+    }
+
+    const transaccion = {
+      ...rows[0],
+      cuenta: {
+        idCuenta: rows[0].idCuenta,
+        nombreCuenta: rows[0].nombreCuenta,
+        // Agrega otros campos de la cuenta aquí
+      },
+      itemsTransaccion: rows.map((row) => ({
+        idItemTransaccion: row.idItemTransaccion,
+        idMarcoItemTransaccion: row.idMarcoItemTransaccion,
+        cantidadItemTransaccion: row.cantidadItemTransaccion,
+        // Agrega otros campos del itemTransaccion aquí
+      })),
+    };
+
+    res.json(transaccion);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -58,7 +107,7 @@ const postTransaccion = async (req, res) => {
   const formattedFechaEntrega = formatDateTime(fechaEntrega);
 
   try {
-    const results = await pool.query(
+    const [results] = await pool.query(
       "INSERT INTO transacciones (ventaTransaccion, fechaTransaccion, idCuentaTransaccion, fechaEntrega) VALUES (?, ?, ?, ?)",
       [
         ventaTransaccion,
@@ -67,12 +116,10 @@ const postTransaccion = async (req, res) => {
         formattedFechaEntrega,
       ]
     );
-    res
-      .status(201)
-      .json({
-        message: "Transacción creada exitosamente",
-        id: results[0].insertId,
-      });
+    res.status(201).json({
+      message: "Transacción creada exitosamente",
+      id: results.insertId,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -108,6 +155,24 @@ const patchTransaccion = async (req, res) => {
         id,
       ]
     );
+
+    // Si se está agregando una fecha de entrega, actualizar el stock
+    if (fechaEntrega) {
+      const [itemsTransaccion] = await pool.query(
+        "SELECT idMarcoItemTransaccion, cantidadItemTransaccion FROM itemtransaccion WHERE idTransaccionItemTransaccion = ?",
+        [id]
+      );
+
+      await Promise.all(
+        itemsTransaccion.map(async (item) => {
+          await updateStockMarco(
+            item.idMarcoItemTransaccion,
+            -item.cantidadItemTransaccion
+          );
+        })
+      );
+    }
+
     res.json(response);
   } catch (error) {
     console.error(error);
@@ -173,7 +238,7 @@ const getItemTransaccion = async (req, res) => {
 const postItemTransaccion = async (req, res) => {
   const { item } = req.body;
   try {
-    const results = await pool.query(
+    const [results] = await pool.query(
       "INSERT INTO itemtransaccion ( idTransaccionItemTransaccion, 	idMarcoItemTransaccion, cantidadItemTransaccion) VALUES (?, ?, ?)",
       [
         item.idTransaccionItemTransaccion,
@@ -203,8 +268,21 @@ const postItemsTransaccion = async (req, res) => {
       message: "itemsTransaccion debe ser un array",
     });
   }
-  console.log("items recibidos: ", itemsTransaccion);
+  console.log("body recibido: ", req.body);
+  console.log(
+    "items recibidos: ",
+    itemsTransaccion,
+    "idTransaccion: ",
+    idTransaccionItemTransaccion
+  );
+
   try {
+    // Obtener la transacción para verificar si es una venta
+    const [transaccion] = await pool.query(
+      "SELECT ventaTransaccion FROM transacciones WHERE idTransaccion = ?",
+      [idTransaccionItemTransaccion]
+    );
+
     const results = await Promise.all(
       itemsTransaccion.map(async (item) => {
         await pool.query(
@@ -215,10 +293,20 @@ const postItemsTransaccion = async (req, res) => {
             item.cantidadItemTransaccion,
           ]
         );
+
+        // Si la transacción no es una venta, actualizar el stock del marco
+        if (transaccion[0].ventaTransaccion === 0) {
+          await updateStockMarco(
+            item.idMarcoItemTransaccion,
+            item.cantidadItemTransaccion
+          );
+        }
       })
     );
+
     res.status(201).json({
       message: "ItemsTransaccion added",
+      data: results,
     });
   } catch (error) {
     console.error(error);
@@ -270,6 +358,7 @@ const deleteItemTransaccion = async (req, res) => {
 const formatDateTime = (date) => {
   if (!date) return null;
   const d = new Date(date);
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); // Ajustar la fecha para la zona horaria
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");

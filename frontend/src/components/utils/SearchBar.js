@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import '../../styles/SearchBar.css'; 
 
-const SearchBar = ({ data, onSearch, searchKey }) => {
+const SearchBar = ({ data, onSearch, searchKey, searchOnChange = false }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleInputChange = (event) => {
@@ -14,18 +15,28 @@ const SearchBar = ({ data, onSearch, searchKey }) => {
         onSearch(filteredData);
     };
 
+    useEffect(() => {
+        if (searchOnChange) {
+            handleSearch();
+        }
+    }, [searchTerm]);
+
     return (
         <div className="search-bar-container">
             <input
                 type="text"
-                placeholder={`Search by ${searchKey}...`}
+                placeholder={`Buscar por ${searchKey}...`}
                 value={searchTerm}
                 onChange={handleInputChange}
             />
-            <button onClick={handleSearch}>Search</button>
-            <span className="search-icon" onClick={handleSearch}>
-                🔍 {/* Puedes reemplazar esto con un icono de Font Awesome */}
-            </span>
+            {!searchOnChange && (
+                <>
+                    <button onClick={handleSearch}>Buscar</button>
+                    <span className="search-icon" onClick={handleSearch}>
+                        🔍 {/* Puedes reemplazar esto con un icono de Font Awesome */}
+                    </span>
+                </>
+            )}
         </div>
     );
 };

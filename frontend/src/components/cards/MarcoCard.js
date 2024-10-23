@@ -1,7 +1,5 @@
-// import { useState, useEffect } from 'react';
-// import { getTipoMarco } from "../../api/utils.api";
-// import { useContext } from "react";
 import { OptionsButton } from "../utils/Buttons";
+import '../../styles/Card.css';
 
 const MarcoCard = ({ marco }) => {
   

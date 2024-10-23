@@ -22,7 +22,7 @@
 .navbar ul {
   list-style-type: none;
   padding: 0;
-  margin: auto 0; /* Centrar verticalmente */
+  margin-top: 60px; /* Ajustar para que no se superponga con el contenido */
   width: 100%; /* Asegurar que los elementos ul ocupen todo el ancho */
 }
 

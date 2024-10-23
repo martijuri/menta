@@ -1,25 +1,23 @@
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {
-  deleteTransaccion,
-  patchTransaccion,
-} from "../../api/transacciones.api";
 import { deleteMarco } from "../../api/marcos.api";
+import { useTransacciones } from "../../context/TransaccionesContext";
+import '../../styles/Buttons.css';
 
 // Botones de acción
 
 // Botón que elimina un marco o transacción por id (tipo recibido en props)
 export const DeleteButton = ({ id, type, onDelete }) => {
+  const { deleteTransaccionContext } = useTransacciones();
   const handleDelete = async () => {
     try {
       if (type === "marco") {
         const response = await deleteMarco(id);
         console.log(response);
       } else if (type === "venta" || type === "pedido") {
-        const response = await deleteTransaccion(id);
-        console.log(response);
+        await deleteTransaccionContext(id);
       }
-      if(onDelete){
+      if (onDelete) {
         onDelete();
       }
     } catch (error) {
@@ -34,7 +32,6 @@ export const DeleteButton = ({ id, type, onDelete }) => {
   );
 };
 
-
 export const EditButton = ({ id, type }) => {
   let navigate = useNavigate(); // Hook para navegar
 
@@ -48,30 +45,35 @@ export const EditButton = ({ id, type }) => {
 
   return (
     <button className="edit-button" onClick={handleEdit}>
-      Edit
+      Editar
     </button>
   );
 };
 
 // Botón que redirige a una URL específica pasada como prop
-export const LinkButton = ({ url, text}) => {
+export const LinkButton = ({ className,url, text }) => {
   return (
     <Link to={url}>
-      <button className="link-button">
-        {text}
-      </button>
+      <button className={className?className:"link-button"}>{text}</button>
     </Link>
   );
 };
 
 // Botón que marca una transacción como completada
 export const CompleteButton = ({ id }) => {
+  const { patchTransaccionContext, getTransaccionPorId } = useTransacciones();
   const handleComplete = async () => {
     try {
       const newDate = new Date();
-      await patchTransaccion(id, {
-        fechaEntrega: newDate.toISOString().split("T")[0],
-      });
+      const transaccion = await getTransaccionPorId(id);
+      if (transaccion) {
+        await patchTransaccionContext({
+          ...transaccion,
+          fechaEntrega: newDate.toISOString().split("T")[0],
+        });
+      } else {
+        console.log(`Transacción con id ${id} no encontrada.`);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -79,16 +81,18 @@ export const CompleteButton = ({ id }) => {
 
   return (
     <button className="complete-button" onClick={handleComplete}>
-      Complete
+      Entregar
     </button>
   );
 };
 
 // Botón que marca una transacción como incompleta
 export const IncompleteButton = ({ id }) => {
+  const { patchTransaccionContext, getTransaccionPorId } = useTransacciones();
   const handleIncomplete = async () => {
     try {
-      await patchTransaccion(id, { fechaEntrega: null });
+      const transaccion = await getTransaccionPorId(id);
+      await patchTransaccionContext({ ...transaccion, fechaEntrega: null });
     } catch (error) {
       console.log(error);
     }
@@ -96,7 +100,7 @@ export const IncompleteButton = ({ id }) => {
 
   return (
     <button className="incomplete-button" onClick={handleIncomplete}>
-      Incomplete
+      Regresar a pedidos
     </button>
   );
 };
@@ -113,7 +117,7 @@ export const PrintButton = ({ id }) => {
 
   return (
     <button className="print-button" onClick={handlePrint}>
-      Print
+      Imprimir
     </button>
   );
 };
@@ -123,13 +127,13 @@ const buttonConfig = {
   // venta: [EditButton, DeleteButton, PrintButton, IncompleteButton],
   // pedido: [EditButton, DeleteButton, PrintButton, CompleteButton],
   // marco: [EditButton, DeleteButton],
-  venta: [EditButton],
-  pedido: [EditButton],
+  venta: [DeleteButton],
+  pedido: [EditButton, DeleteButton, CompleteButton],
   marco: [EditButton, DeleteButton],
 };
 
 // Botón de opciones que muestra los botones de acción correspondientes al tipo
-export const OptionsButton = ({ id, type , onClick}) => {
+export const OptionsButton = ({ id, type }) => {
   const [showOptions, setShowOptions] = useState(false);
 
   const handleOptions = () => {
@@ -140,28 +144,31 @@ export const OptionsButton = ({ id, type , onClick}) => {
   const ButtonComponents = buttonConfig[type] || [];
 
   return (
-    <>
-      <button className="options-button" onClick={handleOptions}>
-        Options
-      </button>
+    <div className="options-buttons-container">
       {showOptions && (
-        <>
+        <div className="options-buttons">
           {ButtonComponents.map((ButtonComponent, index) => (
             // Renderiza cada botón con el id proporcionado y el tipo correspondiente
-            <ButtonComponent key={index} id={id} type={type} url={"pedidos/form"} text={"to form"} />
+            <ButtonComponent
+              key={index}
+              id={id}
+              type={type}
+              url={"pedidos/form"}
+              text={"to form"}
+            />
           ))}
-        </>
+        </div>
       )}
-    </>
+      <button className="options-button" onClick={handleOptions}>
+        Opciones
+      </button>
+    </div >
   );
 };
 
-
 // Botón para confirmar una cuenta
 export const ConfirmButton = ({ id }) => {
-  const handleConfirm = async () => {
-   
-  };
+  const handleConfirm = async () => {};
 
   return (
     <button className="confirm-button" onClick={handleConfirm}>

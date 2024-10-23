@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           const response = await getPerfil();
           setUser(response);
-          console.log("usuario validado: ", response);
         } catch (error) {
           console.error("Error validating token:", error);
           setIsAuthenticated(false);
@@ -45,12 +44,11 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await authenticate(username, password);
-      console.log("usuario logeado: ", response);
       const token = response.accessToken;
       localStorage.setItem("token", token);
       setIsAuthenticated(true);
       setUser(response.user);
-      navigate("/home");
+      navigate("/stock");
     } catch (error) {
       console.error("Error during login:", error);
     } finally {
@@ -91,7 +89,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   return (

@@ -1,0 +1,64 @@
+/* Contenedor de la página de login */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5; /* Color de fondo opcional */
+  height: 100vh;
+}
+
+/* Contenedor del formulario */
+.login-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-sizing: border-box; 
+  display: flex;
+  flex-direction: column;
+}
+
+/* Título */
+.login-container h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Inputs */
+.login-container input[type="text"],
+.login-container input[type="password"],
+.login-container input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Botón */
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Mensaje de error */
+.login-container p {
+  color: red;
+  margin-top: 10px;
+}

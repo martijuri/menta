@@ -2,17 +2,16 @@ import { useEffect, useState } from "react";
 import { useStock } from "../../context/StockContext";
 import { useTipos } from "../../context/TiposContext";
 import FiltroInput from "../utils/FiltroInput";
-import { postMarco } from "../../api/marcos.api";
 
-const StockForm = ({ handleSubmit, newOption }) => {
+const StockForm = ({ handleSubmit }) => {
   const [itemTransaccion, setItemTransaccion] = useState({
     idMarcoItemTransaccion: null,
     cantidadItemTransaccion: 0,
   });
   const [marco, setMarco] = useState(null);
-  const { stock} = useStock();
+  const { stock, postStock } = useStock();
   const [marcos, setMarcos] = useState([]);
-  const { tiposDeMarcos } = useTipos();
+  const { tiposDeMarcos, getTipoMarco } = useTipos();
   const [isNuevoMarco, setIsNuevoMarco] = useState(false);
   const [nuevoMarco, setNuevoMarco] = useState({
     idMarco: "",
@@ -20,6 +19,7 @@ const StockForm = ({ handleSubmit, newOption }) => {
     stockMarco: 0,
     precioDolar: 0,
   });
+  const [isLoading, setIsLoading] = useState(false); // Estado de carga
 
   useEffect(() => {
     const ids = stock.map((marco) => marco.idMarco);
@@ -67,18 +67,40 @@ const StockForm = ({ handleSubmit, newOption }) => {
     }));
   };
 
-  const handleNuevoMarcoSubmit = () => {
+  const handleNuevoMarcoSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const createdMarco = await postStock(nuevoMarco);
 
-    postMarco(nuevoMarco);
-    handleSubmit({
-      ...itemTransaccion,
-      idMarcoItemTransaccion: nuevoMarco.idMarco,
-    });
+      // Actualizar la lista de marcos
+      setMarcos((prevMarcos) => ["Nuevo Marco", ...prevMarcos, createdMarco.idMarco]);
+
+      // Restablecer el estado
+      setIsNuevoMarco(false);
+      setItemTransaccion({
+        idMarcoItemTransaccion: createdMarco.idMarco,
+        cantidadItemTransaccion: 0,
+      });
+      setNuevoMarco({
+        idMarco: "",
+        idTipoMarco: "",
+        stockMarco: 0,
+        precioDolar: 0,
+      });
+      handleSubmit({
+        ...itemTransaccion,
+        idMarcoItemTransaccion: createdMarco.idMarco,
+      });
+    } catch (error) {
+      console.error("Error al crear el nuevo marco:", error);
+      alert("Hubo un error al crear el nuevo marco");
+    } finally {
+      setIsLoading(false); // Finalizar la carga
+    }
   };
 
   return (
     <div>
-      <h1>Agregar Stock de marco</h1>
       <FiltroInput
         options={marcos}
         placeholder="Seleccione el marco"
@@ -88,7 +110,7 @@ const StockForm = ({ handleSubmit, newOption }) => {
 
       {marco && !isNuevoMarco && (
         <div>
-          <p>Tipo: {marco.idTipoMarco}</p>
+          <p>Tipo: {getTipoMarco(marco.idTipoMarco).Tipo }</p>
           <p>Stock actual: {marco.stockMarco}</p>
           <p>Precio unitario en USD: {marco.precioDolar}</p>
           {/* <img src={marco.imagenMarco} alt="Imagen del marco" /> */}
@@ -108,7 +130,8 @@ const StockForm = ({ handleSubmit, newOption }) => {
       )}
 
       {isNuevoMarco && (
-        <div>
+        <div className="container">
+          <div className="subcontainer">
           <input
             type="text"
             name="idMarco"
@@ -128,6 +151,9 @@ const StockForm = ({ handleSubmit, newOption }) => {
               </option>
             ))}
           </select>
+          </div>
+          <div className="subcontainer">
+          <label>Nuevo stock</label>
           <input
             type="number"
             name="stockMarco"
@@ -135,6 +161,9 @@ const StockForm = ({ handleSubmit, newOption }) => {
             value={itemTransaccion.cantidadItemTransaccion}
             onChange={handleCantidadChange}
           />
+          </div>
+          <div className="subcontainer">
+          <label>Precio en USD</label>
           <input
             type="number"
             name="precioDolar"
@@ -142,7 +171,10 @@ const StockForm = ({ handleSubmit, newOption }) => {
             value={nuevoMarco.precioDolar}
             onChange={handleNuevoMarcoChange}
           />
-          <button onClick={handleNuevoMarcoSubmit}>Guardar Nuevo Marco</button>
+          </div>
+          <button className="submit-button" onClick={handleNuevoMarcoSubmit} disabled={isLoading}>
+            {isLoading ? "Guardando..." : "Guardar nuevo marco"}
+          </button>
         </div>
       )}
     </div>

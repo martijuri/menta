@@ -3,9 +3,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 20px;
-  max-width: 600px;
-  margin: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .cuentas-form label {
@@ -37,35 +36,8 @@
   cursor: not-allowed;
 }
 
-/* Estilos responsivos */
-@media (min-width: 600px) {
-  .cuentas-form {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .cuentas-form label,
-  .cuentas-form input {
-    flex: 1 1 calc(48% - 10px);
-  }
-
-  .cuentas-form button {
-    flex: 1 1 100%;
-  }
-}
-
-@media (min-width: 900px) {
-  .cuentas-form {
-    max-width: 800px;
-  }
-
-  .cuentas-form label,
-  .cuentas-form input {
-    flex: 1 1 calc(32% - 10px);
-  }
-
-  .cuentas-form button {
-    flex: 1 1 100%;
-  }
+.info-cuenta-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }

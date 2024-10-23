@@ -1,20 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
+* {
+  font-family: 'Lato', sans-serif;
+}
+
 /* Estilos para el contenedor principal */
 .app-container {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-    font-family: 'Lato', sans-serif;
+  background-color: #f0f0f0;
+  overflow: scroll;
+  display: block;
+  padding: 20px;
+  box-sizing: border-box; /* Incluye el padding en el cálculo de la altura */
+  transition: margin 0.5s;
+  margin-left: 0; /* Sin margen izquierdo */
+  margin-top: 60px; /* Ajustar para que no se superponga con la navbar horizontal */
+  height: calc(100vh - 60px); /* Ajusta la altura para que el contenido ocupe el espacio restante */
 }
 
-.main-content {
-  flex-grow: 1;
-  margin-left: 60px; /* Ancho de la barra de navegación no expandida */
-  margin-top: 60px;
-  transition: margin-left 0.5s;
+/* Ajustes para pantallas pequeñas (navbar lateral) */
+@media (max-width: 768px) {
+  .app-container {
+    margin-left: 60px; /* Ajustar para que no se superponga con la navbar lateral */
+    margin-top: 0; /* Sin margen superior */
+  }
 }
 
+/* Contenedor con scroll */
 .scroll-container {
   max-height: 80vh; /* Ajusta la altura máxima según tus necesidades */
   overflow-y: auto; /* Habilita el scroll vertical */

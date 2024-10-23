@@ -1,43 +1,25 @@
-import { useState, useEffect } from "react";
-import { getPedidos, getVentas } from "../../api/transacciones.api";
+import { useTransacciones } from "../../context/TransaccionesContext";
 import PedidoCard from "../cards/PedidoCard";
 import VentaCard from "../cards/VentaCard";
 
-const TransaccionesList = ({ type }) => {
-  const [transacciones, setTransacciones] = useState([]);
-  useEffect(() => {
-    async function loadTransacciones() {
-      try {
-        if (type === "pedidos") {
-          const response = await getPedidos();
-          console.log(response);
-          setTransacciones(response);
-        } else if (type === "ventas") {
-          const response = await getVentas();
-          setTransacciones(response);
-        } else {
-          const response = [];
-          setTransacciones(response);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
 
-    loadTransacciones();
-    console.log("Transacciones cargadas");
-  },[type] );
-  return (
-    <div className="scroll-container">
-      {/* <SearchBar /> */}
+const TransaccionesList = ({ type }) => {
+  const { transacciones} = useTransacciones();
+
+    return (
+    <div className="cards-container">
       {type === "pedidos" &&
-        transacciones.map((pedido) => (
-          <PedidoCard key={pedido.idTransaccion} pedido={pedido} />
-        ))}
+        transacciones
+          .filter((transaccion) => transaccion.fechaEntrega === null && transaccion.ventaTransaccion === 1)
+          .map((pedido) => (
+            <PedidoCard key={pedido.idTransaccion} pedido={pedido} />
+          ))}
       {type === "ventas" &&
-        transacciones.map((venta) => (
-          <VentaCard key={venta.idTransaccion} venta={venta} />
-        ))}
+        transacciones
+          .filter((transaccion) => transaccion.ventaTransaccion === 1 && transaccion.fechaEntrega !== null)
+          .map((venta) => (
+            <VentaCard key={venta.idTransaccion} venta={venta} />
+          ))}
     </div>
   );
 };
