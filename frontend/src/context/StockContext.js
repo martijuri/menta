@@ -1,6 +1,6 @@
 import { createContext, useEffect } from "react";
 import { useState, useContext } from "react";
-import { getMarcos, deleteMarco, patchMarco } from "../api/marcos.api";
+import { getMarcos, deleteMarco, patchMarco, postMarco } from "../api/marcos.api";
 
 export const StockContext = createContext();
 
@@ -20,6 +20,16 @@ export const StockProvider = ({ children }) => {
     cargarStock();
   }, []);
 
+  const postStock = async (data) => {
+    try {
+      await postMarco(data);
+      cargarStock();
+      return data;
+    } catch (error) {
+      console.error("Error al crear el marco:", error);
+    }
+  }
+
   const deleteStock = async (id) => {
     try {
       await deleteMarco(id);
@@ -38,8 +48,9 @@ export const StockProvider = ({ children }) => {
     }
   };
 
+
   return (
-    <StockContext.Provider value={{ stock, cargarStock, deleteStock, updateStock }}>
+    <StockContext.Provider value={{ stock, cargarStock, deleteStock, updateStock, postStock }}>
       {children}
     </StockContext.Provider>
   );

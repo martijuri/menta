@@ -277,3 +277,8 @@ button {
   outline: 2px solid #d68910;
 }
 
+.new-item-button {
+  background-color: #2ecc71;
+  color: white;
+  margin: 20px;
+}
