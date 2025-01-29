@@ -1,10 +1,6 @@
 import { useState, useContext } from "react";
 import FiltroInput from "../utils/FiltroInput";
-import {
-  CuentasContext,
-  postCuentaContext,
-  patchCuentaContext,
-} from "../../context/CuentasContext";
+import { CuentasContext } from "../../context/CuentasContext";
 import "../../styles/CuentasForm.css";
 
 const CuentasForm = ({ cuenta, selectCuenta }) => {
@@ -23,7 +19,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
   );
   const [seleccionado, setSeleccionado] = useState(false);
   const [isEditing, setIsEditing] = useState(true); // Nuevo estado para controlar la edición
-  const { cuentas } = useContext(CuentasContext);
+  const { cuentas, postCuentaContext, patchCuentaContext } = useContext(CuentasContext);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
