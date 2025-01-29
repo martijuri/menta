@@ -145,6 +145,7 @@ const patchTransaccion = async (req, res) => {
   console.log("transaccion a actualizar: ", req.body);
 
   try {
+    // Actualizar la transaccion solo si hay cambios
     const response = await pool.query(
       "UPDATE transacciones SET ventaTransaccion = ?, fechaTransaccion = ?, idCuentaTransaccion = ?, fechaEntrega = ? WHERE idTransaccion = ?",
       [
@@ -163,14 +164,15 @@ const patchTransaccion = async (req, res) => {
         [id]
       );
 
-      await Promise.all(
-        itemsTransaccion.map(async (item) => {
-          await updateStockMarco(
-            item.idMarcoItemTransaccion,
-            -item.cantidadItemTransaccion
-          );
-        })
-      );
+      // Crear una sola consulta para actualizar el stock
+      const updateStockQueries = itemsTransaccion.map((item) => {
+        return pool.query(
+          "UPDATE marcos SET stockMarco = stockMarco - ? WHERE idMarco = ?",
+          [item.cantidadItemTransaccion, item.idMarcoItemTransaccion]
+        );
+      });
+
+      await Promise.all(updateStockQueries);
     }
 
     res.json(response);

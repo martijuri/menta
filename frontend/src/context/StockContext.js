@@ -1,5 +1,4 @@
-import { createContext, useEffect } from "react";
-import { useState, useContext } from "react";
+import { createContext, useEffect, useState, useContext, useCallback } from "react";
 import { getMarcos, deleteMarco, patchMarco, postMarco } from "../api/marcos.api";
 
 export const StockContext = createContext();
@@ -7,7 +6,7 @@ export const StockContext = createContext();
 export const StockProvider = ({ children }) => {
   const [stock, setStock] = useState([]);
 
-  const cargarStock = async () => {
+  const cargarStock = useCallback(async () => {
     try {
       const data = await getMarcos();
       console.log("Stock:", data);
@@ -15,25 +14,26 @@ export const StockProvider = ({ children }) => {
     } catch (error) {
       console.error("Error al cargar el stock:", error);
     }
-  };
+  }, []);
+
   useEffect(() => {
     cargarStock();
-  }, []);
+  }, [cargarStock]);
 
   const postStock = async (data) => {
     try {
-      await postMarco(data);
-      cargarStock();
-      return data;
+      const newMarco = await postMarco(data);
+      setStock((prevStock) => [...prevStock, newMarco]);
+      return newMarco;
     } catch (error) {
       console.error("Error al crear el marco:", error);
     }
-  }
+  };
 
   const deleteStock = async (id) => {
     try {
       await deleteMarco(id);
-      cargarStock();
+      setStock((prevStock) => prevStock.filter((marco) => marco.id !== id));
     } catch (error) {
       console.error("Error al eliminar el marco:", error);
     }
@@ -41,13 +41,14 @@ export const StockProvider = ({ children }) => {
 
   const updateStock = async (id, data) => {
     try {
-      await patchMarco(id, data);
-      cargarStock();
+      const updatedMarco = await patchMarco(id, data);
+      setStock((prevStock) =>
+        prevStock.map((marco) => (marco.id === id ? updatedMarco : marco))
+      );
     } catch (error) {
       console.error("Error al actualizar el marco:", error);
     }
   };
-
 
   return (
     <StockContext.Provider value={{ stock, cargarStock, deleteStock, updateStock, postStock }}>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   authenticate,
@@ -88,14 +88,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const contextValue = useMemo(() => ({
+    isAuthenticated,
+    user,
+    login,
+    logout,
+    updateAccount,
+    register
+  }), [isAuthenticated, user]);
+
   if (loading) {
     return <div>Cargando...</div>;
   }
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, user, login, logout, updateAccount, register }}
-    >
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

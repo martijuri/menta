@@ -7,9 +7,6 @@ const getMarcos = async (req, res) => {
       FROM marcos
       JOIN tipos ON marcos.idTipoMarco = tipos.idTipo
     `;
-    const [rows] = await pool.query(query);
-
-    // Obtener la cantidad reservada para todos los marcos en una sola consulta
     const reservadosQuery = `
       SELECT it.idMarcoItemTransaccion, SUM(it.cantidadItemTransaccion) AS totalReservados
       FROM itemtransaccion it
@@ -17,16 +14,21 @@ const getMarcos = async (req, res) => {
       WHERE t.ventaTransaccion = 1 AND t.fechaEntrega IS NULL
       GROUP BY it.idMarcoItemTransaccion
     `;
-    const [reservadosRows] = await pool.query(reservadosQuery);
+
+    // Ejecutar ambas consultas en paralelo
+    const [rows, reservadosRows] = await Promise.all([
+      pool.query(query),
+      pool.query(reservadosQuery)
+    ]);
 
     // Crear un mapa de idMarco a totalReservados
-    const reservadosMap = reservadosRows.reduce((acc, row) => {
+    const reservadosMap = reservadosRows[0].reduce((acc, row) => {
       acc[row.idMarcoItemTransaccion] = row.totalReservados || 0;
       return acc;
     }, {});
 
     // Combinar los resultados
-    const marcosConReservados = rows.map((marco) => ({
+    const marcosConReservados = rows[0].map((marco) => ({
       ...marco,
       reservados: reservadosMap[marco.idMarco] || 0,
     }));

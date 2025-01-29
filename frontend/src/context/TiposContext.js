@@ -1,25 +1,29 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useCallback } from "react";
 import { getTiposMarcos } from "../api/utils.api";
 
 export const TiposContext = createContext();
 
 export const TiposProvider = ({ children }) => {
   const [tiposDeMarcos, setTiposDeMarcos] = useState([]);
-  
-  const cargarTiposDeMarcos = async () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const cargarTiposDeMarcos = useCallback(async () => {
     try {
       const response = await getTiposMarcos();
       setTiposDeMarcos(response);
+      setIsLoaded(true);
       console.log("Tipos de marcos array:", response);
     } catch (error) {
       console.error("Error al cargar los tipos de marcos:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    cargarTiposDeMarcos();
-  }, []);
-  
+    if (!isLoaded) {
+      cargarTiposDeMarcos();
+    }
+  }, [isLoaded, cargarTiposDeMarcos]);
+
   const getTipoMarco = (id) => {
     return tiposDeMarcos.find((tipo) => tipo.idTipo === id);
   };

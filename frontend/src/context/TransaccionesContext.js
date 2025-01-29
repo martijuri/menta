@@ -5,15 +5,11 @@ import {
   postItemsTransaccion,
   patchTransaccion,
   deleteTransaccion,
-} from "../api/transacciones.api";
-
-import {
   getItemsTransaccion,
   postItemTransaccion,
   patchItemTransaccion,
   deleteItemTransaccion,
 } from "../api/transacciones.api";
-
 import { useStock } from "./StockContext";
 
 export const TransaccionesContext = createContext();
@@ -39,26 +35,23 @@ export const TransaccionesProvider = ({ children }) => {
     } catch (error) {
       console.error("Error al cargar las transacciones:", error);
     }
-  }, []);
+  }, [cargarStock]);
 
   useEffect(() => {
-    const cargarDatos = async () => {
-      await cargarTransacciones();
-    };
-    cargarDatos();
+    cargarTransacciones();
   }, [cargarTransacciones]);
 
   // Función para buscar una transacción por ID
-  const getTransaccionPorId = async (id) => {
-    await cargarTransacciones();
-    return transacciones.find((transaccion) => transaccion.idTransaccion == id);
+  const getTransaccionPorId = (id) => {
+    return transacciones.find((transaccion) => transaccion.idTransaccion === id);
   };
 
   const postTransaccionContext = async (transaccion) => {
     try {
       console.log("post; ", transaccion);
       const response = await postTransaccion(transaccion);
-      await cargarTransacciones();
+      setTransacciones((prevTransacciones) => [...prevTransacciones, response]);
+      cargarStock();
       return response;
     } catch (error) {
       console.error("Error al crear la transacción:", error);
@@ -67,9 +60,11 @@ export const TransaccionesProvider = ({ children }) => {
 
   const deleteTransaccionContext = async (idTransaccion) => {
     try {
-      const response = await deleteTransaccion(idTransaccion);
-      console.log("deleteTransaccionContext: ", response);
-      await cargarTransacciones();
+      await deleteTransaccion(idTransaccion);
+      setTransacciones((prevTransacciones) =>
+        prevTransacciones.filter((transaccion) => transaccion.idTransaccion !== idTransaccion)
+      );
+      cargarStock();
     } catch (error) {
       console.error("Error al eliminar la transacción:", error);
     }
@@ -82,13 +77,13 @@ export const TransaccionesProvider = ({ children }) => {
         ...transaccion,
         idCuentaTransaccion: transaccion.cuenta ? transaccion.cuenta.idCuenta : null,
       };
-      const response = await patchTransaccion(
-        nuevaTransaccion.idTransaccion,
-        nuevaTransaccion
+      const response = await patchTransaccion(nuevaTransaccion.idTransaccion, nuevaTransaccion);
+      setTransacciones((prevTransacciones) =>
+        prevTransacciones.map((t) =>
+          t.idTransaccion === nuevaTransaccion.idTransaccion ? response : t
+        )
       );
-      console.log("patchTransaccionContext: ", response);
-      // Recargar transacciones después de la actualización
-      await cargarTransacciones();
+      cargarStock();
     } catch (error) {
       console.error("Error al actualizar la transacción:", error);
     }
@@ -98,34 +93,30 @@ export const TransaccionesProvider = ({ children }) => {
     if (itemsTransaccion.length === 0) return;
     try {
       await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
-      await cargarTransacciones();
+      cargarStock();
     } catch (error) {
       console.error("Error al crear los items de la transacción:", error);
     }
   };
 
   const getItemsTransaccionContext = async (idTransaccion) => {
-    await getItemsTransaccion(idTransaccion);
+    return await getItemsTransaccion(idTransaccion);
   };
 
   const postItemTransaccionContext = async (itemTransaccion) => {
-    itemTransaccion.cantidadItemTransaccion ||= 0; 
+    itemTransaccion.cantidadItemTransaccion ||= 0;
     await postItemTransaccion(itemTransaccion);
-    await cargarTransacciones();
+    cargarStock();
   };
 
   const patchItemTransaccionContext = async (idItemTransaccion, itemTransaccion) => {
     await patchItemTransaccion(idItemTransaccion, itemTransaccion);
-    await cargarTransacciones();
+    cargarStock();
   };
 
   const deleteItemTransaccionContext = async (idItemTransaccion) => {
     await deleteItemTransaccion(idItemTransaccion);
-    await cargarTransacciones();
-  };
-
-  const deleteAllItemsTransaccionContext = () => {
-
+    cargarStock();
   };
 
   return (
@@ -144,7 +135,6 @@ export const TransaccionesProvider = ({ children }) => {
         deleteItemTransaccionContext,
         patchItemTransaccionContext,
         getItemsTransaccionContext,
-        deleteAllItemsTransaccionContext,
       }}
     >
       {children}
@@ -155,9 +145,7 @@ export const TransaccionesProvider = ({ children }) => {
 export const useTransacciones = () => {
   const context = useContext(TransaccionesContext);
   if (!context) {
-    throw new Error(
-      "useTransacciones debe estar dentro del proveedor TransaccionesProvider"
-    );
+    throw new Error("useTransacciones debe estar dentro del proveedor TransaccionesProvider");
   }
   return context;
 };
