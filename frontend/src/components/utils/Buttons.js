@@ -1,27 +1,30 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { deleteMarco } from "../../api/marcos.api";
 import { useTransacciones } from "../../context/TransaccionesContext";
+import { useStock } from "../../context/StockContext";
 import '../../styles/Buttons.css';
 
 // Botones de acción
 
 // Botón que elimina un marco o transacción por id (tipo recibido en props)
 export const DeleteButton = ({ id, type, onDelete }) => {
+  const { deleteStock } = useStock();
   const { deleteTransaccionContext } = useTransacciones();
+
   const handleDelete = async () => {
-    try {
-      if (type === "marco") {
-        const response = await deleteMarco(id);
-        console.log(response);
-      } else if (type === "venta" || type === "pedido") {
-        await deleteTransaccionContext(id);
+    if (window.confirm("¿Estás seguro de que deseas eliminar este elemento?")) {
+      try {
+        if (type === "marco") {
+          await deleteStock(id);
+        } else if (type === "venta" || type === "pedido") {
+          await deleteTransaccionContext(id);
+        }
+        if (onDelete) {
+          onDelete();
+        }
+      } catch (error) {
+        console.log(error);
       }
-      if (onDelete) {
-        onDelete();
-      }
-    } catch (error) {
-      console.log(error);
     }
   };
 

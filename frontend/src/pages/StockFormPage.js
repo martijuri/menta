@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StockForm from "../components/forms/StockForm";
+import { useStock } from "../context/StockContext";
 import { useTransacciones } from "../context/TransaccionesContext";
 import "../styles/Stock.css";
 
@@ -9,6 +10,7 @@ const StockFormPage = () => {
     { id: 1, data: { idMarco: "", cantidad: "" } },
   ]);
   const [isLoading, setIsLoading] = useState(false); // Estado para controlar la carga
+  const { postStock } = useStock();
   const { postTransaccionContext, postItemsTransaccionContext } =
     useTransacciones();
   const navigate = useNavigate();
@@ -29,32 +31,47 @@ const StockFormPage = () => {
   const handleSubmit = async () => {
     setIsLoading(true); // Iniciar la carga
     try {
-      const response = await postTransaccionContext({
-        ventaTransaccion: 0,
-        idCuentaTransaccion: null,
-        fechaTransaccion: new Date().toISOString(),
-      });
+      const itemsTransaccion = [];
+      const newMarcos = [];
 
-      const idTransaccion = response.id;
+      for (const form of stockForms) {
+        if (form.data.idMarcoItemTransaccion && form.data.cantidadItemTransaccion) {
+          itemsTransaccion.push({
+            idMarcoItemTransaccion: form.data.idMarcoItemTransaccion,
+            cantidadItemTransaccion: form.data.cantidadItemTransaccion,
+          });
+        } else if (form.data.idMarco && form.data.idTipoMarco) {
+          newMarcos.push(form.data);
+        }
+      }
 
-      const itemsTransaccion = stockForms
-        .filter(
-          (form) =>
-            form.data.idMarcoItemTransaccion &&
-            form.data.cantidadItemTransaccion
-        ) // Filtrar formularios vacíos
-        .map((form) => ({
-          idMarcoItemTransaccion: form.data.idMarcoItemTransaccion,
-          cantidadItemTransaccion: form.data.cantidadItemTransaccion,
-        }));
+      if (newMarcos.length > 0) {
+        for (const newMarco of newMarcos) {
+          await postStock({
+            idMarco: newMarco.idMarco,
+            idTipoMarco: newMarco.idTipoMarco,
+            stockMarco: newMarco.cantidadItemTransaccion,
+            precioDolar: newMarco.precioDolar,
+          });
+        }
+      }
 
-      if (itemsTransaccion.length === 0) {
+      if (itemsTransaccion.length > 0) {
+        const response = await postTransaccionContext({
+          ventaTransaccion: 0,
+          idCuentaTransaccion: null,
+          fechaTransaccion: new Date().toISOString(),
+        });
+
+        const idTransaccion = response.id;
+        await postItemsTransaccionContext(idTransaccion, itemsTransaccion);
+      }
+
+      if (newMarcos.length === 0 && itemsTransaccion.length === 0) {
         alert("No hay datos válidos para enviar");
         setIsLoading(false); // Finalizar la carga
         return;
       }
-
-      await postItemsTransaccionContext(idTransaccion, itemsTransaccion);
 
       alert("Stock cargado exitosamente");
       navigate("/stock");

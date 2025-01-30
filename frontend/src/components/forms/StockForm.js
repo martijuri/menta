@@ -2,24 +2,23 @@ import { useEffect, useState } from "react";
 import { useStock } from "../../context/StockContext";
 import { useTipos } from "../../context/TiposContext";
 import FiltroInput from "../utils/FiltroInput";
+import "../../styles/Stock.css";
 
 const StockForm = ({ handleSubmit }) => {
-  const [itemTransaccion, setItemTransaccion] = useState({
+  const [formState, setFormState] = useState({
     idMarcoItemTransaccion: null,
     cantidadItemTransaccion: 0,
-  });
-  const [marco, setMarco] = useState(null);
-  const { stock, postStock } = useStock();
-  const [marcos, setMarcos] = useState([]);
-  const { tiposDeMarcos, getTipoMarco } = useTipos();
-  const [isNuevoMarco, setIsNuevoMarco] = useState(false);
-  const [nuevoMarco, setNuevoMarco] = useState({
     idMarco: "",
     idTipoMarco: "",
     stockMarco: 0,
     precioDolar: 0,
   });
-  const [isLoading, setIsLoading] = useState(false); // Estado de carga
+  const [errors, setErrors] = useState({});
+  const [marco, setMarco] = useState(null);
+  const { stock } = useStock();
+  const [marcos, setMarcos] = useState([]);
+  const { tiposDeMarcos, getTipoMarco } = useTipos();
+  const [isNuevoMarco, setIsNuevoMarco] = useState(false);
 
   useEffect(() => {
     const ids = stock.map((marco) => marco.idMarco);
@@ -30,7 +29,7 @@ const StockForm = ({ handleSubmit }) => {
     if (marcoId === "Nuevo Marco") {
       setIsNuevoMarco(true);
       setMarco(null);
-      setItemTransaccion((prev) => ({
+      setFormState((prev) => ({
         ...prev,
         idMarcoItemTransaccion: null,
       }));
@@ -38,69 +37,41 @@ const StockForm = ({ handleSubmit }) => {
       setIsNuevoMarco(false);
       const newMarco = stock.find((m) => m.idMarco === marcoId);
       setMarco(newMarco);
-      setItemTransaccion((prev) => ({
+      setFormState((prev) => ({
         ...prev,
         idMarcoItemTransaccion: marcoId,
       }));
-      handleSubmit({
-        ...itemTransaccion,
-        idMarcoItemTransaccion: marcoId,
-      });
     }
   };
 
-  const handleCantidadChange = (e) => {
-    const cantidad = e.target.value;
-    const updatedItemTransaccion = {
-      ...itemTransaccion,
-      cantidadItemTransaccion: cantidad,
-    };
-    setItemTransaccion(updatedItemTransaccion);
-    handleSubmit(updatedItemTransaccion); // Llamar a handleSubmit automáticamente
+  const validate = (name, value) => {
+    let error = "";
+    if (name === "cantidadItemTransaccion" || name === "precioDolar") {
+      if (value <= 0) {
+        error = "Debe ser mayor que 0";
+      }
+    } else if (name === "idMarco") {
+      if (stock.some((marco) => marco.idMarco === value)) {
+        error = "Este código ya existe";
+      }
+    } else if (name === "idTipoMarco" && value === "") {
+      error = "Debe seleccionar un tipo de marco";
+    }
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
-  const handleNuevoMarcoChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNuevoMarco((prev) => ({
+    validate(name, value);
+    setFormState((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
-
-  const handleNuevoMarcoSubmit = async () => {
-    setIsLoading(true);
-    try {
-      const createdMarco = await postStock(nuevoMarco);
-
-      // Actualizar la lista de marcos
-      setMarcos((prevMarcos) => ["Nuevo Marco", ...prevMarcos, createdMarco.idMarco]);
-
-      // Restablecer el estado
-      setIsNuevoMarco(false);
-      setItemTransaccion({
-        idMarcoItemTransaccion: createdMarco.idMarco,
-        cantidadItemTransaccion: 0,
-      });
-      setNuevoMarco({
-        idMarco: "",
-        idTipoMarco: "",
-        stockMarco: 0,
-        precioDolar: 0,
-      });
-      handleSubmit({
-        ...itemTransaccion,
-        idMarcoItemTransaccion: createdMarco.idMarco,
-      });
-    } catch (error) {
-      console.error("Error al crear el nuevo marco:", error);
-      alert("Hubo un error al crear el nuevo marco");
-    } finally {
-      setIsLoading(false); // Finalizar la carga
-    }
+    handleSubmit({ ...formState, [name]: value });
   };
 
   return (
-    <div>
+    <div className="stock-form">
       <FiltroInput
         options={marcos}
         placeholder="Seleccione el marco"
@@ -109,72 +80,85 @@ const StockForm = ({ handleSubmit }) => {
       />
 
       {marco && !isNuevoMarco && (
-        <div>
-          <p>Tipo: {getTipoMarco(marco.idTipoMarco).Tipo }</p>
+        <div className="marco-info">
+          <p>Tipo: {getTipoMarco(marco.idTipoMarco).Tipo}</p>
           <p>Stock actual: {marco.stockMarco}</p>
           <p>Precio unitario en USD: {marco.precioDolar}</p>
-          {/* <img src={marco.imagenMarco} alt="Imagen del marco" /> */}
-          <button
-            onClick={() => {
-              /* Lógica para editar el marco */
-            }}
-          >
-            Editar
-          </button>
           <input
             type="number"
+            name="cantidadItemTransaccion"
             placeholder="Cantidad"
-            onChange={handleCantidadChange}
+            value={formState.cantidadItemTransaccion}
+            onChange={handleInputChange}
+            className={errors.cantidadItemTransaccion ? "error" : ""}
           />
+          {errors.cantidadItemTransaccion && (
+            <span className="error-message">{errors.cantidadItemTransaccion}</span>
+          )}
         </div>
       )}
 
       {isNuevoMarco && (
         <div className="container">
           <div className="subcontainer">
-          <input
-            type="text"
-            name="idMarco"
-            placeholder="ID del Marco"
-            value={nuevoMarco.idMarco}
-            onChange={handleNuevoMarcoChange}
-          />
-          <select
-            name="idTipoMarco"
-            value={nuevoMarco.idTipoMarco}
-            onChange={handleNuevoMarcoChange}
-          >
-            <option value="">Seleccione el tipo de marco</option>
-            {tiposDeMarcos.map((tipo) => (
-              <option key={tipo.idTipo} value={tipo.idTipo}>
-                {tipo.Tipo}
-              </option>
-            ))}
-          </select>
+            <label>ID del Marco</label>
+            <input
+              type="text"
+              name="idMarco"
+              placeholder="ID del Marco"
+              value={formState.idMarco}
+              onChange={handleInputChange}
+              className={errors.idMarco ? "error" : ""}
+            />
+            {errors.idMarco && (
+              <span className="error-message">{errors.idMarco}</span>
+            )}
+            <label>Tipo de Marco</label>
+            <select
+              name="idTipoMarco"
+              value={formState.idTipoMarco}
+              onChange={handleInputChange}
+              className={errors.idTipoMarco ? "error" : ""}
+            >
+              <option value="">Seleccione el tipo de marco</option>
+              {tiposDeMarcos.map((tipo) => (
+                <option key={tipo.idTipo} value={tipo.idTipo}>
+                  {tipo.Tipo}
+                </option>
+              ))}
+            </select>
+            {errors.idTipoMarco && (
+              <span className="error-message">{errors.idTipoMarco}</span>
+            )}
           </div>
           <div className="subcontainer">
-          <label>Nuevo stock</label>
-          <input
-            type="number"
-            name="stockMarco"
-            placeholder="Cantidad"
-            value={itemTransaccion.cantidadItemTransaccion}
-            onChange={handleCantidadChange}
-          />
+            <label>Nuevo stock</label>
+            <input
+              type="number"
+              name="cantidadItemTransaccion"
+              placeholder="Cantidad"
+              value={formState.cantidadItemTransaccion}
+              onChange={handleInputChange}
+              className={errors.cantidadItemTransaccion ? "error" : ""}
+            />
+            {errors.cantidadItemTransaccion && (
+              <span className="error-message">{errors.cantidadItemTransaccion}</span>
+            )}
           </div>
           <div className="subcontainer">
-          <label>Precio en USD</label>
-          <input
-            type="number"
-            name="precioDolar"
-            placeholder="Precio en USD"
-            value={nuevoMarco.precioDolar}
-            onChange={handleNuevoMarcoChange}
-          />
+            <label>Precio en USD</label>
+            <input
+              type="number"
+              name="precioDolar"
+              placeholder="Precio en USD"
+              value={formState.precioDolar}
+              onChange={handleInputChange}
+              className={errors.precioDolar ? "error" : ""}
+            />
+            {errors.precioDolar && (
+              <span className="error-message">{errors.precioDolar}</span>
+            )}
           </div>
-          <button className="submit-button" onClick={handleNuevoMarcoSubmit} disabled={isLoading}>
-            {isLoading ? "Guardando..." : "Guardar nuevo marco"}
-          </button>
         </div>
       )}
     </div>

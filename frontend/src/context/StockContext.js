@@ -33,7 +33,7 @@ export const StockProvider = ({ children }) => {
   const deleteStock = async (id) => {
     try {
       await deleteMarco(id);
-      setStock((prevStock) => prevStock.filter((marco) => marco.id !== id));
+      setStock((prevStock) => prevStock.filter((marco) => marco.idMarco !== id));
     } catch (error) {
       console.error("Error al eliminar el marco:", error);
     }
@@ -41,9 +41,9 @@ export const StockProvider = ({ children }) => {
 
   const updateStock = async (id, data) => {
     try {
-      const updatedMarco = await patchMarco(id, data);
+      await patchMarco(id, data);
       setStock((prevStock) =>
-        prevStock.map((marco) => (marco.id === id ? updatedMarco : marco))
+        prevStock.map((marco) => (marco.idMarco === id ? { ...marco, ...data } : marco))
       );
     } catch (error) {
       console.error("Error al actualizar el marco:", error);

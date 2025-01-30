@@ -12,14 +12,14 @@ const StockTable = () => {
   const [selectedTipo, setSelectedTipo] = useState("");
   const [editingMarco, setEditingMarco] = useState(null);
   const [editValues, setEditValues] = useState({});
-  const { stock, deleteStock, updateStock } = useStock();
+  const { stock, updateStock } = useStock();
   const { tiposDeMarcos, getTipoMarco, cargarTiposDeMarcos } = useTipos();
 
   useEffect(() => {
     setMarcos(stock);
     setFilteredMarcos(stock);
     cargarTiposDeMarcos();
-  }, [stock]);
+  }, [stock, cargarTiposDeMarcos]);
 
   const handleSearch = (results) => {
     setFilteredMarcos(results);
@@ -55,8 +55,10 @@ const StockTable = () => {
   };
 
   const handleAcceptClick = (idMarco) => {
-    updateStock(idMarco, editValues);
-    setEditingMarco(null);
+    if (window.confirm("¿Estás seguro de que deseas actualizar este marco?")) {
+      updateStock(idMarco, editValues);
+      setEditingMarco(null);
+    }
   };
 
   const handleCancelClick = () => {
@@ -71,18 +73,18 @@ const StockTable = () => {
   return (
     <div className="table-container">
       <div className="table-filter">
-      <SearchBar
-        data={marcos}
-        onSearch={handleSearch}
-        searchKey="idMarco"
-        searchOnChange={true}
-      />
-      <Filter
-        label="Filtrar por tipo de marco"
-        options={tipoOptions}
-        selectedValue={selectedTipo}
-        handleChange={handleTipoChange}
-      />
+        <SearchBar
+          data={marcos}
+          onSearch={handleSearch}
+          searchKey="idMarco"
+          searchOnChange={true}
+        />
+        <Filter
+          label="Filtrar por tipo de marco"
+          options={tipoOptions}
+          selectedValue={selectedTipo}
+          handleChange={handleTipoChange}
+        />
       </div>
       <table className="stock-table">
         <thead>
@@ -168,7 +170,7 @@ const StockTable = () => {
                     <DeleteButton
                       id={marco.idMarco}
                       type="marco"
-                      onDelete={() => deleteStock(marco.idMarco)}
+                      onDelete={() => setFilteredMarcos(filteredMarcos.filter((m) => m.idMarco !== marco.idMarco))}
                     />
                   </>
                 )}
