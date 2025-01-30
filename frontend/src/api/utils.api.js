@@ -30,6 +30,33 @@ export const getPerfil = async () =>
 export const registerUser = async (userData) =>
   handleApiCall(() => axiosInstance.post(`/api/usuarios`, userData));
 
+// Nueva función para generar el archivo Excel
+export const generarPresupuestoExcel = async (data) => {
+  try {
+    const response = await axiosInstance.post(`/api/presupuesto`, data, {
+      responseType: 'blob', // Importante para recibir el archivo como blob
+    });
+
+    // Generar el nombre del archivo dinámicamente
+    const cliente = data.cliente.replace(/\s+/g, '_'); // Reemplazar espacios por guiones bajos
+    const fecha = new Date();
+    const mes = fecha.toLocaleString('default', { month: 'long' });
+    const año = fecha.getFullYear();
+    const fileName = `Presupuesto_${cliente}_${mes}_${año}.xlsx`;
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName); // Nombre del archivo dinámico
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    console.error('Error al generar el archivo Excel:', error);
+    throw error;
+  }
+};
+
 // Utilidad para manejar llamadas a la API y errores
 export async function handleApiCall(call) {
   try {

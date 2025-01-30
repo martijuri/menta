@@ -50,8 +50,13 @@ export const StockProvider = ({ children }) => {
     }
   };
 
+  const getPrecioDolarPorId = (id) => {
+    const marco = stock.find((marco) => marco.idMarco === id);
+    return marco ? marco.precioDolar : null;
+  };
+
   return (
-    <StockContext.Provider value={{ stock, cargarStock, deleteStock, updateStock, postStock }}>
+    <StockContext.Provider value={{ stock, cargarStock, deleteStock, updateStock, postStock, getPrecioDolarPorId }}>
       {children}
     </StockContext.Provider>
   );

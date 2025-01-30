@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { getTiposMarcos, getPedidos, getVentas, getTipoMarco, getCuentas, patchCuenta, postCuenta } from "../controllers/utils.controller.js";
 import { getItemsTransaccion, getItemTransaccion ,postItemTransaccion, deleteItemTransaccion, patchItemTransaccion, postItemsTransaccion } from "../controllers/transacciones.controller.js";
+import { generarPresupuestoExcel } from '../controllers/excel.controller.js';
 
 const router = Router();
 
+router.post("/presupuesto", generarPresupuestoExcel);
 router.get("/tipos", getTiposMarcos);
 router.get("/tipos/:id", getTipoMarco);
 router.get("/pedidos", getPedidos);
@@ -17,6 +19,5 @@ router.post("/item", postItemTransaccion);
 router.post("/items", postItemsTransaccion);
 router.delete("/item/:id", deleteItemTransaccion);
 router.patch("/item/:id", patchItemTransaccion);
-
 
 export default router;

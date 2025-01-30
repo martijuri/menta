@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useTransacciones } from "../../context/TransaccionesContext";
 import { useStock } from "../../context/StockContext";
+import { generarPresupuestoExcel } from '../../api/utils.api';
 import '../../styles/Buttons.css';
 
 // Botones de acción
@@ -125,17 +126,35 @@ export const IncompleteButton = ({ id }) => {
 
 // Botón que imprime una transacción
 export const PrintButton = ({ id }) => {
-  const handlePrint = async () => {
-    return (
-      <>
-        <Link to={`/transacciones/${id}/print`} />;
-      </>
-    );
+  const { getTransaccionPorId } = useTransacciones();
+  const {getPrecioDolarPorId}= useStock();
+
+  const handleGenerateBudget = async () => {
+    try {
+      const transaccion = await getTransaccionPorId(id);
+      if (transaccion) {
+        const data = {
+          cliente: transaccion.cuenta.cuentaNombre,
+          productos: transaccion.itemsTransaccion.map(item => ({
+            descripcion: item.idMarcoItemTransaccion,
+            cantidad: item.cantidadItemTransaccion,
+            precioUnitario: getPrecioDolarPorId(item.idMarcoItemTransaccion),
+          })),
+          subtotal: transaccion.itemsTransaccion.reduce((acc, item) => acc + (item.cantidadItemTransaccion * getPrecioDolarPorId(item.idMarcoItemTransaccion)), 0),
+        };
+        await generarPresupuestoExcel(data);
+        console.log('Presupuesto generado y descargado exitosamente');
+      } else {
+        console.error(`Transacción con id ${id} no encontrada.`);
+      }
+    } catch (error) {
+      console.error('Error al generar el presupuesto:', error);
+    }
   };
 
   return (
-    <button className="print-button" onClick={handlePrint}>
-      Imprimir
+    <button className="print-button" onClick={handleGenerateBudget}>
+      Generar Presupuesto
     </button>
   );
 };
@@ -145,7 +164,7 @@ const buttonConfig = {
   // venta: [EditButton, DeleteButton, PrintButton, IncompleteButton],
   // pedido: [EditButton, DeleteButton, PrintButton, CompleteButton],
   // marco: [EditButton, DeleteButton],
-  venta: [DeleteButton],
+  venta: [DeleteButton, PrintButton],
   pedido: [EditButton, DeleteButton, CompleteButton],
   marco: [EditButton, DeleteButton],
 };
