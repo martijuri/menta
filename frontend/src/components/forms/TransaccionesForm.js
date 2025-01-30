@@ -31,14 +31,18 @@ const TransaccionesForm = () => {
       if (id === "new") {
         setTransaccion(transaccionVacia);
       } else if (transacciones.length > 0 && transaccion === null) {
-        const transaccionEncontrada = await getTransaccionPorId(id);
-        setTransaccion(transaccionEncontrada);
-        setItems(transaccionEncontrada.itemsTransaccion, ...(items || []));
+        const transaccionEncontrada = await getTransaccionPorId(Number(id));
+        if (transaccionEncontrada) {
+          setTransaccion(transaccionEncontrada);
+          setItems(transaccionEncontrada.itemsTransaccion || []);
+        } else {
+          console.error("Transacción no encontrada");
+        }
       }
     };
 
     fetchTransaccion();
-  }, [id]);
+  }, [id, transacciones, transaccion, getTransaccionPorId, transaccionVacia]);
 
   useEffect(() => {
     setNuevosItems(items.filter((item) => !item.idItemTransaccion));
@@ -50,6 +54,7 @@ const TransaccionesForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Iniciar la carga
+
     let transaccionId = transaccion.idTransaccion;
 
     try {
@@ -103,23 +108,23 @@ const TransaccionesForm = () => {
   };
 
   return (
-      <form className="transacciones-form" onSubmit={onSubmit}>
-        <CuentasForm
-          cuenta={transaccion.cuenta}
-          selectCuenta={(newCuenta) =>
-            setTransaccion({
-              ...transaccion,
-              cuenta: newCuenta,
-              idCuentaTransaccion: newCuenta.idCuenta,
-            })
-          }
-          disabled={isLoading} // Deshabilitar inputs de CuentasForm
-        />
-        {!transaccion.cuenta ? (
-          <p>No hay cuenta asociada. Por favor, seleccione una cuenta.</p>
-        ) : (
-          <div className="fechas-form">
-            <div>
+    <form className="transacciones-form" onSubmit={onSubmit}>
+      <CuentasForm
+        cuenta={transaccion.cuenta}
+        selectCuenta={(newCuenta) =>
+          setTransaccion({
+            ...transaccion,
+            cuenta: newCuenta,
+            idCuentaTransaccion: newCuenta.idCuenta,
+          })
+        }
+        disabled={isLoading} // Deshabilitar inputs de CuentasForm
+      />
+      {!transaccion.cuenta ? (
+        <p>No hay cuenta asociada. Por favor, seleccione una cuenta.</p>
+      ) : (
+        <div className="fechas-form">
+          <div>
             <label>Fecha del Pedido:</label>
             <input
               type="date"
@@ -136,8 +141,8 @@ const TransaccionesForm = () => {
               }
               disabled={isLoading} // Deshabilitar input
             />
-            </div>
-            <div>
+          </div>
+          <div>
             <label>Fecha de Entrega:</label>
             <input
               type="date"
@@ -153,16 +158,16 @@ const TransaccionesForm = () => {
               }
               disabled={isLoading} // Deshabilitar input
             />
-            </div>
           </div>
-        )}
-        <ItemsForms
-          onFormsChange={handleItemsChange}
-          initialItems={items}
-          onItemRemove={handleItemRemove}
-          disabled={isLoading} // Deshabilitar inputs de ItemsForms
-        />
-        <div className="buttons-container">
+        </div>
+      )}
+      <ItemsForms
+        onFormsChange={handleItemsChange}
+        initialItems={items}
+        onItemRemove={handleItemRemove}
+        disabled={isLoading} // Deshabilitar inputs de ItemsForms
+      />
+      <div className="buttons-container">
         <button
           className="cancel-button"
           type="button"
@@ -178,8 +183,8 @@ const TransaccionesForm = () => {
         >
           Confirmar
         </button>
-        </div>
-      </form>
+      </div>
+    </form>
   );
 };
 
