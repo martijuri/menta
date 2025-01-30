@@ -5,7 +5,6 @@ const UserProfile = ({ user, updateUser, logout }) => {
   const [formData, setFormData] = useState({
     id: user.id,
     username: user.username,
-    password: user.password,
     email: user.email,
     administrador: user.administrador,
   });
@@ -15,7 +14,6 @@ const UserProfile = ({ user, updateUser, logout }) => {
     setFormData({
       id: user.id,
       username: user.username,
-      password: user.password,
       email: user.email,
       administrador: user.administrador,
     });
@@ -37,8 +35,16 @@ const UserProfile = ({ user, updateUser, logout }) => {
     });
   };
 
+  const handlePasswordChange = (e) => {
+    setNewPassword(e.target.value);
+  };
+
   const handleSave = () => {
-    updateUser(formData);
+    const updatedData = { ...formData };
+    if (newPassword) {
+      updatedData.password = newPassword;
+    }
+    updateUser(updatedData);
     setIsEditing(false);
   };
 
@@ -46,10 +52,10 @@ const UserProfile = ({ user, updateUser, logout }) => {
     setFormData({
       id: user.id,
       username: user.username,
-      password: user.password,
       email: user.email,
       administrador: user.administrador,
     });
+    setNewPassword("");
     setIsEditing(false);
   };
 
@@ -78,15 +84,15 @@ const UserProfile = ({ user, updateUser, logout }) => {
           <label>
             Nueva contraseña:
             <input
-              type={ "text" }
-              name="password"
+              type="text" // Cambiar el tipo a "text" para que la contraseña se vea mientras se escribe
+              name="newPassword"
               value={newPassword}
-              onChange={setNewPassword}
+              onChange={handlePasswordChange}
             />
           </label>
           <div className="buttons-container">
-          <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
-          <button className="confirm-button" onClick={handleSave}>Guardar</button>
+            <button className="cancel-button" onClick={handleCancel}>Cancelar</button>
+            <button className="confirm-button" onClick={handleSave}>Guardar</button>
           </div>
         </>
       ) : (
