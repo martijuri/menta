@@ -65,7 +65,11 @@ export const LinkButton = ({ className,url, text }) => {
 // Botón que marca una transacción como completada
 export const CompleteButton = ({ id }) => {
   const { patchTransaccionContext, getTransaccionPorId } = useTransacciones();
+
   const handleComplete = async () => {
+    const confirm = window.confirm("¿Está seguro de que desea marcar esta transacción como entregada?");
+    if (!confirm) return;
+
     try {
       const newDate = new Date();
       const transaccion = await getTransaccionPorId(id);
@@ -92,10 +96,21 @@ export const CompleteButton = ({ id }) => {
 // Botón que marca una transacción como incompleta
 export const IncompleteButton = ({ id }) => {
   const { patchTransaccionContext, getTransaccionPorId } = useTransacciones();
+
   const handleIncomplete = async () => {
+    const confirm = window.confirm("¿Está seguro de que desea marcar esta transacción como no entregada?");
+    if (!confirm) return;
+
     try {
       const transaccion = await getTransaccionPorId(id);
-      await patchTransaccionContext({ ...transaccion, fechaEntrega: null });
+      if (transaccion) {
+        await patchTransaccionContext({
+          ...transaccion,
+          fechaEntrega: null,
+        });
+      } else {
+        console.log(`Transacción con id ${id} no encontrada.`);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +118,7 @@ export const IncompleteButton = ({ id }) => {
 
   return (
     <button className="incomplete-button" onClick={handleIncomplete}>
-      Regresar a pedidos
+      Desmarcar Entrega
     </button>
   );
 };

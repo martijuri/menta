@@ -2,11 +2,10 @@ import { useTransacciones } from "../../context/TransaccionesContext";
 import PedidoCard from "../cards/PedidoCard";
 import VentaCard from "../cards/VentaCard";
 
-
 const TransaccionesList = ({ type }) => {
-  const { transacciones} = useTransacciones();
+  const { transacciones } = useTransacciones();
 
-    return (
+  return (
     <div className="cards-container">
       {type === "pedidos" &&
         transacciones

@@ -31,7 +31,6 @@ export const TransaccionesProvider = ({ children }) => {
       const data = await getTransacciones();
       setTransacciones(data);
       cargarStock();
-      console.log("Transacciones cargadas:", data);
     } catch (error) {
       console.error("Error al cargar las transacciones:", error);
     }
@@ -48,10 +47,9 @@ export const TransaccionesProvider = ({ children }) => {
 
   const postTransaccionContext = async (transaccion) => {
     try {
-      console.log("post; ", transaccion);
       const response = await postTransaccion(transaccion);
       setTransacciones((prevTransacciones) => [...prevTransacciones, response]);
-      cargarStock();
+      await cargarTransacciones(); // Forzar la recarga de transacciones
       return response;
     } catch (error) {
       console.error("Error al crear la transacción:", error);
@@ -64,7 +62,7 @@ export const TransaccionesProvider = ({ children }) => {
       setTransacciones((prevTransacciones) =>
         prevTransacciones.filter((transaccion) => transaccion.idTransaccion !== idTransaccion)
       );
-      cargarStock();
+      await cargarTransacciones(); // Forzar la recarga de transacciones
     } catch (error) {
       console.error("Error al eliminar la transacción:", error);
     }
@@ -83,7 +81,7 @@ export const TransaccionesProvider = ({ children }) => {
           t.idTransaccion === nuevaTransaccion.idTransaccion ? response : t
         )
       );
-      cargarStock();
+      await cargarTransacciones(); // Forzar la recarga de transacciones
     } catch (error) {
       console.error("Error al actualizar la transacción:", error);
     }
@@ -93,7 +91,7 @@ export const TransaccionesProvider = ({ children }) => {
     if (itemsTransaccion.length === 0) return;
     try {
       await postItemsTransaccion(idTransaccionItemTransaccion, itemsTransaccion);
-      cargarStock();
+      await cargarTransacciones(); // Forzar la recarga de transacciones
     } catch (error) {
       console.error("Error al crear los items de la transacción:", error);
     }
@@ -106,17 +104,17 @@ export const TransaccionesProvider = ({ children }) => {
   const postItemTransaccionContext = async (itemTransaccion) => {
     itemTransaccion.cantidadItemTransaccion ||= 0;
     await postItemTransaccion(itemTransaccion);
-    cargarStock();
+    await cargarTransacciones(); // Forzar la recarga de transacciones
   };
 
   const patchItemTransaccionContext = async (idItemTransaccion, itemTransaccion) => {
     await patchItemTransaccion(idItemTransaccion, itemTransaccion);
-    cargarStock();
+    await cargarTransacciones(); // Forzar la recarga de transacciones
   };
 
   const deleteItemTransaccionContext = async (idItemTransaccion) => {
     await deleteItemTransaccion(idItemTransaccion);
-    cargarStock();
+    await cargarTransacciones(); // Forzar la recarga de transacciones
   };
 
   return (
