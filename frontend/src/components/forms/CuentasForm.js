@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import FiltroInput from "../utils/FiltroInput";
 import { CuentasContext } from "../../context/CuentasContext";
 import "../../styles/CuentasForm.css";
 
-const CuentasForm = ({ cuenta, selectCuenta }) => {
+const CuentasForm = ({ cuenta, selectCuenta, disabled }) => {
   const [cliente, setCliente] = useState(
     cuenta ? `${cuenta.cuentaNombre} - CUIT: ${cuenta.cuentaCuit}` : ""
   );
@@ -18,8 +18,21 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
     cuenta ? cuenta.cuentaDireccion : ""
   );
   const [seleccionado, setSeleccionado] = useState(false);
-  const [isEditing, setIsEditing] = useState(true); // Nuevo estado para controlar la edición
+  const [isEditing, setIsEditing] = useState(false); // Estado para controlar la edición
+  const [isLoading, setIsLoading] = useState(false); // Estado para controlar la carga
   const { cuentas, postCuentaContext, patchCuentaContext } = useContext(CuentasContext);
+
+  useEffect(() => {
+    if (cuenta) {
+      setCliente(`${cuenta.cuentaNombre} - CUIT: ${cuenta.cuentaCuit}`);
+      setCuentaNombre(cuenta.cuentaNombre);
+      setCuentaCuit(cuenta.cuentaCuit);
+      setCuentaTelefono(cuenta.cuentaTelefono);
+      setCuentaDireccion(cuenta.cuentaDireccion);
+      setSeleccionado(true);
+      setIsEditing(false);
+    }
+  }, [cuenta]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +75,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
       setCuentaTelefono(cuentaEncontrada.cuentaTelefono);
       setCuentaDireccion(cuentaEncontrada.cuentaDireccion);
       setSeleccionado(true);
-      setIsEditing(true);
+      setIsEditing(false);
       selectCuenta(cuentaEncontrada);
     }
   };
@@ -73,6 +86,8 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
       return;
     }
 
+    setIsLoading(true); // Iniciar la carga
+
     const cuentaNueva = {
       cuentaNombre,
       cuentaCuit,
@@ -80,9 +95,21 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
       cuentaDireccion,
     };
     if (cliente === "Nuevo Cliente") {
-      console.log("Postear cuenta: ", cuentaNueva);
-      postCuentaContext(cuentaNueva);
+      postCuentaContext(cuentaNueva).then((nuevaCuenta) => {
+        if (nuevaCuenta && nuevaCuenta.length > 0) {
+          selectCuenta(nuevaCuenta[0]); // Asegurarse de pasar el objeto de cuenta
+          setCliente(`${nuevaCuenta[0].cuentaNombre} - CUIT: ${nuevaCuenta[0].cuentaCuit}`);
+        } else {
+          console.error("Error al crear la nueva cuenta");
+        }
+        setIsLoading(false); // Finalizar la carga
+      });
     } else {
+      if (!cuenta) {
+        console.error("Error: cuenta no definida");
+        setIsLoading(false); // Finalizar la carga en caso de error
+        return;
+      }
       const cuentaActualizada = {
         ...cuenta,
         cuentaNombre,
@@ -90,11 +117,21 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
         cuentaTelefono,
         cuentaDireccion,
       };
-      console.log("Patchear cuenta: ", cuentaActualizada);
-      patchCuentaContext(cuentaActualizada);
+      patchCuentaContext(cuentaActualizada).then((cuentaActualizada) => {
+        if (cuentaActualizada && cuentaActualizada.length > 0) {
+          selectCuenta(cuentaActualizada[0]); // Asegurarse de pasar el objeto de cuenta
+          setCliente(`${cuentaActualizada[0].cuentaNombre} - CUIT: ${cuentaActualizada[0].cuentaCuit}`);
+        } else {
+          console.error("Error al actualizar la cuenta");
+        }
+        setIsLoading(false); // Finalizar la carga
+      });
     }
-    selectCuenta(cuentaNueva);
     setIsEditing(false); // Deshabilitar edición después de guardar
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
   };
 
   return (
@@ -109,6 +146,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
         label="Cliente"
         onSelection={handleSelection}
         placeholder={cliente || "Seleccione o cree una cuenta"}
+        disabled={disabled}
       />
       <div className="info-cuenta-container">
         <div>
@@ -119,7 +157,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
             onChange={handleInputChange}
             name="nombre"
             placeholder="Ingrese Nombre"
-            disabled={!seleccionado || !isEditing}
+            disabled={!seleccionado || !isEditing || disabled}
           />
           </label>
         </div>
@@ -131,7 +169,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
             onChange={handleInputChange}
             name="cuit"
             placeholder="Ingrese CUIT"
-            disabled={!seleccionado || !isEditing}
+            disabled={!seleccionado || !isEditing || disabled}
           />
           </label>
         </div>
@@ -143,7 +181,7 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
             onChange={handleInputChange}
             name="telefono"
             placeholder="Ingrese Telefono"
-            disabled={!seleccionado || !isEditing}
+            disabled={!seleccionado || !isEditing || disabled}
           />
           </label>
         </div>
@@ -155,17 +193,28 @@ const CuentasForm = ({ cuenta, selectCuenta }) => {
             onChange={handleInputChange}
             name="direccion"
             placeholder="Ingrese Direccion"
-            disabled={!seleccionado || !isEditing}
+            disabled={!seleccionado || !isEditing || disabled}
           />
           </label>
         </div>
       </div>
-      <button
-        onClick={handleSubmitCuenta}
-        disabled={!cliente || cliente === "" || !cuentaNombre}
-      >
-        Guardar
-      </button>
+      {isEditing ? (
+        <button
+          onClick={handleSubmitCuenta}
+          type="button" 
+          disabled={!cliente || cliente === "" || !cuentaNombre || disabled || isLoading}
+        >
+          Guardar
+        </button>
+      ) : (
+        <button
+          onClick={handleEdit}
+          type="button" 
+          disabled={disabled || isLoading}
+        >
+          Editar
+        </button>
+      )}
     </div>
   );
 };

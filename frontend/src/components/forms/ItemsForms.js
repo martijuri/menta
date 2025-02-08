@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ItemForm from './ItemForm';
 
-const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
+const ItemsForms = ({ onFormsChange, initialItems, onItemRemove, disabled }) => {
   const [forms, setForms] = useState([]);
 
   useEffect(() => {
@@ -36,12 +36,19 @@ const ItemsForms = ({ onFormsChange, initialItems, onItemRemove }) => {
     <div className='items-container'>
       {forms.length > 0 ? (
         forms.map((form) => (
-          <ItemForm key={form.id} id={form.id} data={form.data} handleChange={handleFormChange} onRemove={removeForm} />
+          <ItemForm
+            key={form.id}
+            id={form.id}
+            data={form.data}
+            handleChange={handleFormChange}
+            onRemove={removeForm}
+            disabled={disabled}
+          />
         ))
       ) : (
         <p>Agrega un nuevo marco.</p>
       )}
-      <button className='new-item-button' type="button" onClick={addForm}>Agregar marco</button>
+      <button className='new-item-button' type="button" onClick={addForm} disabled={disabled}>Agregar marco</button>
     </div>
   );
 };

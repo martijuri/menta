@@ -85,7 +85,8 @@ export async function patchCuenta(req, res) {
       "UPDATE cuentas SET cuentaNombre = ?, cuentaCuit = ?, cuentaTelefono = ?, cuentaDireccion = ? WHERE idCuenta = ?",
       [cuenta.cuentaNombre, cuenta.cuentaCuit, cuenta.cuentaTelefono, cuenta.cuentaDireccion, id]
     );
-    res.json({ message: "Cuenta actualizada" });
+    const [updatedCuenta] = await pool.query("SELECT * FROM cuentas WHERE idCuenta = ?", [id]);
+    res.json(updatedCuenta);
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -99,11 +100,12 @@ export async function patchCuenta(req, res) {
 export async function postCuenta(req, res) {
   try {
     const { cuentaNombre, cuentaCuit, cuentaDireccion, cuentaTelefono } = req.body;
-    await pool.query(
+    const result = await pool.query(
       "INSERT INTO cuentas (cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion) VALUES (?, ?, ?, ?)",
       [cuentaNombre, cuentaCuit, cuentaTelefono, cuentaDireccion]
     );
-    res.json({ message: "Cuenta creada" });
+    const [newCuenta] = await pool.query("SELECT * FROM cuentas WHERE idCuenta = ?", [result.insertId]);
+    res.json(newCuenta);
   } catch (error) {
     console.error(error);
     res.status(500).json({

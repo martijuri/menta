@@ -165,7 +165,7 @@ const TransaccionesForm = () => {
         onFormsChange={handleItemsChange}
         initialItems={items}
         onItemRemove={handleItemRemove}
-        disabled={isLoading} // Deshabilitar inputs de ItemsForms
+        disabled={isLoading} // Pasar isLoading a ItemsForms
       />
       <div className="buttons-container">
         <button

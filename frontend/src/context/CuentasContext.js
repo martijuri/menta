@@ -28,6 +28,7 @@ export const CuentasProvider = ({ children }) => {
     try {
       const response = await postCuenta(cuenta);
       setIsCuentasLoaded(false); // Marcar datos como desactualizados
+      return response;
     } catch (error) {
       console.error("Error al crear la cuenta:", error);
     }
@@ -37,6 +38,7 @@ export const CuentasProvider = ({ children }) => {
     try {
       const response = await patchCuenta(cuenta.idCuenta, cuenta);
       setIsCuentasLoaded(false); // Marcar datos como desactualizados
+      return response;
     } catch (error) {
       console.error("Error al actualizar la cuenta:", error);
     }

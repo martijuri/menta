@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useStock } from "../../context/StockContext";
 import FiltroInput from "../utils/FiltroInput";
 
-const ItemForm = ({ id, data, handleChange, onRemove }) => {
+const ItemForm = ({ id, data, handleChange, onRemove, disabled = false }) => {
   const { stock } = useStock();
   const marcos = stock.map((marco) => marco.idMarco);
   const [cantidad, setCantidad] = useState(data.cantidadItemTransaccion);
@@ -11,7 +11,11 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
   const marco = stock.find((marco) => marco.idMarco === option);
 
   useEffect(() => {
-    handleChange(id, { ...data, cantidadItemTransaccion: cantidad, idMarcoItemTransaccion: option });
+    handleChange(id, {
+      ...data,
+      cantidadItemTransaccion: cantidad,
+      idMarcoItemTransaccion: option,
+    });
   }, [cantidad, option]);
 
   const handleFilterChange = (option) => {
@@ -32,15 +36,22 @@ const ItemForm = ({ id, data, handleChange, onRemove }) => {
             : "Seleccione el marco"
         }
         onSelection={handleFilterChange}
+        disabled={disabled}
       />
       <input
         type="number"
         value={cantidad}
         onChange={handleCantidadChange}
+        disabled={disabled}
       />
-      <h5>Stock disponible: {marco ? marco.stockMarco : ''}</h5>
-      <h5>Reservados: {marco ? marco.reservados : ''}</h5>
-      <button className="delete-button" type="button" onClick={() => onRemove(id)}>
+      <h5>Stock disponible: {marco ? marco.stockMarco : ""}</h5>
+      <h5>Reservados: {marco ? marco.reservados : ""}</h5>
+      <button
+        className="delete-button"
+        type="button"
+        onClick={() => onRemove(id)}
+        disabled={disabled}
+      >
         Eliminar
       </button>
     </div>

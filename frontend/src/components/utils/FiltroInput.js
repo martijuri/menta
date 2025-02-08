@@ -12,7 +12,7 @@ import Select from "react-select";
  *
  * @returns {JSX.Element} El componente de selección.
  */
-const FiltroInput = ({ options, placeholder, onSelection, label }) => {
+const FiltroInput = ({ options, placeholder, onSelection, label, disabled = false }) => {
   const [selectedOption, setSelectedOption] = useState(placeholder);
 
   const handleChange = (option) => {
@@ -31,7 +31,8 @@ const FiltroInput = ({ options, placeholder, onSelection, label }) => {
           label: option
         }))}
         placeholder={placeholder}
-        isSearchable
+        isSearchable={true}
+        isDisabled={disabled}
       />
     </>
   );
