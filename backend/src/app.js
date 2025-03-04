@@ -38,9 +38,4 @@ app.get("/ping", async (req, res) => {
   res.json(message[0]);
 });
 
-// Redirigir a la página de login si no se encuentra la ruta
-app.get("*", (req, res) => {
-  res.redirect("/login");
-});
-
 export default app;
