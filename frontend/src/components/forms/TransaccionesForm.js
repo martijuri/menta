@@ -42,7 +42,7 @@ const TransaccionesForm = () => {
     };
 
     fetchTransaccion();
-  }, [id, transacciones, transaccion, getTransaccionPorId, transaccionVacia]);
+  }, [id, transacciones, getTransaccionPorId, transaccionVacia]);
 
   useEffect(() => {
     setNuevosItems(items.filter((item) => !item.idItemTransaccion));
@@ -111,13 +111,16 @@ const TransaccionesForm = () => {
     <form className="transacciones-form" onSubmit={onSubmit}>
       <CuentasForm
         cuenta={transaccion.cuenta}
-        selectCuenta={(newCuenta) =>
-          setTransaccion({
-            ...transaccion,
-            cuenta: newCuenta,
-            idCuentaTransaccion: newCuenta.idCuenta,
-          })
-        }
+        selectCuenta={(newCuenta) => {
+          setTransaccion((prevTransaccion) => {
+            const updatedTransaccion = {
+              ...prevTransaccion,
+              cuenta: newCuenta,
+              idCuentaTransaccion: newCuenta.idCuenta,
+            };
+            return updatedTransaccion;
+          });
+        }}
         disabled={isLoading} // Deshabilitar inputs de CuentasForm
       />
       {!transaccion.cuenta ? (
@@ -142,7 +145,7 @@ const TransaccionesForm = () => {
               disabled={isLoading} // Deshabilitar input
             />
           </div>
-          <div>
+          {/* <div>
             <label>Fecha de Entrega:</label>
             <input
               type="date"
@@ -158,7 +161,7 @@ const TransaccionesForm = () => {
               }
               disabled={isLoading} // Deshabilitar input
             />
-          </div>
+          </div> */}
         </div>
       )}
       <ItemsForms
