@@ -4,7 +4,7 @@ import { useTipos } from "../../context/TiposContext";
 import FiltroInput from "../utils/FiltroInput";
 import "../../styles/Stock.css";
 
-const StockForm = ({ handleSubmit }) => {
+const StockForm = ({ handleSubmit, disabled }) => {
   const [formState, setFormState] = useState({
     idMarcoItemTransaccion: null,
     cantidadItemTransaccion: 0,
@@ -77,6 +77,7 @@ const StockForm = ({ handleSubmit }) => {
         placeholder="Seleccione el marco"
         onSelection={handleSetMarco}
         label="Código: "
+        disabled={disabled}
       />
 
       {marco && !isNuevoMarco && (
@@ -91,6 +92,7 @@ const StockForm = ({ handleSubmit }) => {
             value={formState.cantidadItemTransaccion}
             onChange={handleInputChange}
             className={errors.cantidadItemTransaccion ? "error" : ""}
+            disabled={disabled}
           />
           {errors.cantidadItemTransaccion && (
             <span className="error-message">{errors.cantidadItemTransaccion}</span>
@@ -109,6 +111,7 @@ const StockForm = ({ handleSubmit }) => {
               value={formState.idMarco}
               onChange={handleInputChange}
               className={errors.idMarco ? "error" : ""}
+              disabled={disabled}
             />
             {errors.idMarco && (
               <span className="error-message">{errors.idMarco}</span>
@@ -119,6 +122,7 @@ const StockForm = ({ handleSubmit }) => {
               value={formState.idTipoMarco}
               onChange={handleInputChange}
               className={errors.idTipoMarco ? "error" : ""}
+              disabled={disabled}
             >
               <option value="">Seleccione el tipo de marco</option>
               {tiposDeMarcos.map((tipo) => (
@@ -140,6 +144,7 @@ const StockForm = ({ handleSubmit }) => {
               value={formState.cantidadItemTransaccion}
               onChange={handleInputChange}
               className={errors.cantidadItemTransaccion ? "error" : ""}
+              disabled={disabled}
             />
             {errors.cantidadItemTransaccion && (
               <span className="error-message">{errors.cantidadItemTransaccion}</span>
@@ -154,6 +159,7 @@ const StockForm = ({ handleSubmit }) => {
               value={formState.precioDolar}
               onChange={handleInputChange}
               className={errors.precioDolar ? "error" : ""}
+              disabled={disabled}
             />
             {errors.precioDolar && (
               <span className="error-message">{errors.precioDolar}</span>
