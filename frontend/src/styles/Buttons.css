@@ -38,6 +38,10 @@ button {
   transform: scale(0.98);
 }
 
+.accept-button{
+  background-color: #108a39;
+  color: white;
+}
 .new-item-button {
   background-color: #2ecc71;
   color: white;
@@ -281,4 +285,91 @@ button {
   background-color: #2ecc71;
   color: white;
   margin: 20px;
+}
+
+/* Botones en pantallas pequeñas */
+@media (max-width: 768px) {
+  .stock-table .edit-button {
+    position: relative;
+    width: 40px; /* Reducir el ancho del botón */
+    height: 40px; /* Hacerlo más compacto */
+    padding: 0; /* Eliminar padding extra */
+    text-align: center;
+    overflow: hidden; /* Ocultar contenido extra */
+  }
+
+  .stock-table .edit-button::after {
+    content: "✏️"; /* Ícono o texto reducido para editar */
+    font-size: 16px; /* Ajustar el tamaño del ícono */
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .stock-table .edit-button span {
+    visibility: hidden; /* Ocultar el texto original */
+  }
+
+  .stock-table .delete-button {
+    position: relative;
+    width: 40px; /* Reducir el ancho del botón */
+    height: 40px; /* Hacerlo más compacto */
+    padding: 0; /* Eliminar padding extra */
+    text-align: center;
+    overflow: hidden; /* Ocultar contenido extra */
+  }
+
+  .stock-table .delete-button::after {
+    content: "✖︎"; /* Ícono o texto reducido para eliminar */
+    font-size: 16px; /* Ajustar el tamaño del ícono */
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .stock-table .delete-button span {
+    visibility: hidden; /* Ocultar el texto original */
+  }
+
+  .stock-table .accept-button,
+  .stock-table .cancel-button {
+    position: relative; /* Necesario para posicionar ::after */
+    width: 40px; /* Reducir el ancho del botón */
+    height: 40px; /* Hacerlo más compacto */
+    padding: 0; /* Eliminar padding extra */
+    text-align: center;
+    overflow: hidden; /* Ocultar contenido extra */
+  }
+
+  .stock-table .accept-button::after {
+    content: "✔︎"; /* Ícono o texto reducido para aceptar */
+    font-size: 16px; /* Ajustar el tamaño del ícono */
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .stock-table .accept-button span {
+    visibility: hidden; /* Ocultar el texto original */
+  }
+
+  .stock-table .cancel-button::after {
+    content: "✖︎"; /* Ícono o texto reducido para cancelar */
+    font-size: 16px; /* Ajustar el tamaño del ícono */
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .stock-table .cancel-button span {
+    visibility: hidden; /* Ocultar el texto original */
+  }
 }

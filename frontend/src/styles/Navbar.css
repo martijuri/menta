@@ -1,35 +1,47 @@
-/* Estilos para la barra de navegación lateral */
+/* Estilos generales para la barra de navegación superior */
 .navbar {
-  height: 100%;
-  width: 60px; /* Ancho inicial de la barra lateral */
   position: fixed;
+  background-color: #111;
+  overflow-y: hidden;
+  height: 40px; /* Altura de la barra de navegación superior */
+  width: 100%; /* Ancho completo */
   top: 0;
   left: 0;
-  background-color: #111;
-  overflow-x: hidden;
+  flex-direction: row; /* Cambiar a dirección horizontal */
+  padding-top: 0;
+  padding-left: 0;
   transition: 0.5s;
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
+  justify-content: space-between; /* Espaciar elementos horizontalmente */
   align-items: center; /* Centrar elementos horizontalmente */
-  z-index: 1000; /* Asegurar que la navbar esté por encima del overlay */
+  z-index: 1000; /* Asegurar que esté encima del contenido */
 }
 
 .navbar.expanded {
-  width: 200px; /* Ancho cuando está expandida */
+  width: 100vh; /* Altura completa cuando está expandida */
+  height: 200px; /* Ancho fijo cuando está expandida */
+  padding-top: 20px; /* Espacio superior para el contenido */
+  padding-left: 20px; /* Espacio izquierdo para el contenido */
+  z-index: 1000; /* Asegurar que esté encima del contenido */
 }
 
 .navbar ul {
-  list-style-type: none;
-  padding: 0;
-  margin-top: 60px; /* Ajustar para que no se superponga con el contenido */
-  width: 100%; /* Asegurar que los elementos ul ocupen todo el ancho */
+  display: none; /* Ocultar los elementos inicialmente */
+  flex-direction: column; /* Mostrar los elementos en columna cuando se expanden */
+  position: absolute;
+  top: 30px; /* Debajo de la barra de navegación */
+  left: 0;
+  width: 100%; /* Ancho completo */
+  background-color: #111; /* Fondo igual al de la barra */
+  z-index: 999; /* Asegurar que esté encima del contenido */
+}
+
+.navbar.expanded ul {
+  display: flex; /* Mostrar los elementos cuando la barra está expandida */
 }
 
 .navbar li {
-  padding: 20px 8px; /* Aumentar el padding para más separación */
-  text-align: center; /* Centrar texto horizontalmente */
-  display: none; /* Ocultar elementos li por defecto */
+  display: block; /* Mostrar elementos li por defecto */
+  padding: 10px 20px; /* Ajustar padding para separación vertical */
 }
 
 .navbar.expanded li {
@@ -49,8 +61,8 @@
 
 .navbar .toggle-btn {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 5px;
+  left: 15px;
   font-size: 20px;
   cursor: pointer;
   color: white;
@@ -72,33 +84,29 @@
   display: block; /* Mostrar cuando la navbar está expandida */
 }
 
+
 /* Media queries para pantallas grandes */
 @media (min-width: 1024px) {
   .navbar {
-    height: 60px; /* Altura de la barra de navegación horizontal */
+    height: 60px; /* Altura de la barra de navegación superior */
     width: 100%; /* Ancho completo */
-    top: 0;
-    left: 0;
-    flex-direction: row; /* Cambiar a dirección horizontal */
-    padding-top: 0;
-    padding-left: 20px; /* Añadir padding izquierdo */
-    justify-content: center; /* Centrar elementos horizontalmente */
+    padding-top: 0; /* Sin padding superior */
+    padding-left: 0; /* Sin padding izquierdo */
   }
-
   .navbar ul {
+    flex-direction: row; /* Cambiar a diseño horizontal */
+    justify-content: center; /* Centrar horizontalmente */
+    padding: 0;
     display: flex; /* Mostrar los elementos en línea */
     align-items: center; /* Centrar verticalmente */
     margin: 0;
-    width: auto; /* Ajustar el ancho automáticamente */
+    width: 100%; /* Ajustar el ancho automáticamente */
   }
 
   .navbar li {
     display: block; /* Mostrar elementos li por defecto */
+    text-align: center;
     padding: 0 20px; /* Ajustar padding para separación horizontal */
-  }
-
-  .navbar.expanded {
-    width: 100%; /* Mantener el ancho completo cuando está expandida */
   }
 
   .navbar .toggle-btn {

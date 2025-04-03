@@ -20,8 +20,8 @@
 /* Ajustes para pantallas pequeñas (navbar lateral) */
 @media (max-width: 768px) {
   .app-container {
-    margin-left: 60px; /* Ajustar para que no se superponga con la navbar lateral */
-    margin-top: 0; /* Sin margen superior */
+    margin-top: 40px; 
+    height: 100vh; /* Altura completa de la ventana */
   }
 }
 
@@ -30,4 +30,10 @@
   max-height: 80vh; /* Ajusta la altura máxima según tus necesidades */
   overflow-y: auto; /* Habilita el scroll vertical */
   padding: 10px; /* Opcional: agrega padding para mejor apariencia */
+}
+
+.root{
+  height: 100vh; /* Altura completa de la ventana */
+  width: 100vw; /* Ancho completo de la ventana */
+  background-color: beige;
 }

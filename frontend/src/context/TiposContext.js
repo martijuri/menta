@@ -25,6 +25,10 @@ export const TiposProvider = ({ children }) => {
   }, [isLoaded, cargarTiposDeMarcos]);
 
   const getTipoMarco = (id) => {
+    // Check if tiposDeMarcos is loaded, return null if not
+    if (!isLoaded) {
+      return null;
+    }
     return tiposDeMarcos.find((tipo) => tipo.idTipo === id);
   };
 

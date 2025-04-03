@@ -2,8 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useTransacciones } from "../../context/TransaccionesContext";
 import { useStock } from "../../context/StockContext";
-import { generarPresupuestoExcel } from '../../api/utils.api';
-import '../../styles/Buttons.css';
+import { generarPresupuestoExcel } from "../../api/utils.api";
+import "../../styles/Buttons.css";
 
 // Botones de acción
 
@@ -31,7 +31,7 @@ export const DeleteButton = ({ id, type, onDelete }) => {
 
   return (
     <button className="delete-button" onClick={handleDelete}>
-      Eliminar
+      <span>Eliminar</span>
     </button>
   );
 };
@@ -49,16 +49,16 @@ export const EditButton = ({ id, type }) => {
 
   return (
     <button className="edit-button" onClick={handleEdit}>
-      Editar
+      <span>Editar</span>
     </button>
   );
 };
 
 // Botón que redirige a una URL específica pasada como prop
-export const LinkButton = ({ className,url, text }) => {
+export const LinkButton = ({ className, url, text }) => {
   return (
     <Link to={url}>
-      <button className={className?className:"link-button"}>{text}</button>
+      <button className={className ? className : "link-button"}>{text}</button>
     </Link>
   );
 };
@@ -68,7 +68,9 @@ export const CompleteButton = ({ id }) => {
   const { patchTransaccionContext, getTransaccionPorId } = useTransacciones();
 
   const handleComplete = async () => {
-    const confirm = window.confirm("¿Está seguro de que desea marcar esta transacción como entregada?");
+    const confirm = window.confirm(
+      "¿Está seguro de que desea marcar esta transacción como entregada?"
+    );
     if (!confirm) return;
 
     try {
@@ -99,7 +101,9 @@ export const IncompleteButton = ({ id }) => {
   const { patchTransaccionContext, getTransaccionPorId } = useTransacciones();
 
   const handleIncomplete = async () => {
-    const confirm = window.confirm("¿Está seguro de que desea marcar esta transacción como no entregada?");
+    const confirm = window.confirm(
+      "¿Está seguro de que desea marcar esta transacción como no entregada?"
+    );
     if (!confirm) return;
 
     try {
@@ -127,7 +131,7 @@ export const IncompleteButton = ({ id }) => {
 // Botón que imprime una transacción
 export const PrintButton = ({ id }) => {
   const { getTransaccionPorId } = useTransacciones();
-  const {getPrecioDolarPorId}= useStock();
+  const { getPrecioDolarPorId } = useStock();
 
   const handleGenerateBudget = async () => {
     try {
@@ -135,20 +139,26 @@ export const PrintButton = ({ id }) => {
       if (transaccion) {
         const data = {
           cliente: transaccion.cuenta.cuentaNombre,
-          productos: transaccion.itemsTransaccion.map(item => ({
+          productos: transaccion.itemsTransaccion.map((item) => ({
             descripcion: item.idMarcoItemTransaccion,
             cantidad: item.cantidadItemTransaccion,
             precioUnitario: getPrecioDolarPorId(item.idMarcoItemTransaccion),
           })),
-          subtotal: transaccion.itemsTransaccion.reduce((acc, item) => acc + (item.cantidadItemTransaccion * getPrecioDolarPorId(item.idMarcoItemTransaccion)), 0),
+          subtotal: transaccion.itemsTransaccion.reduce(
+            (acc, item) =>
+              acc +
+              item.cantidadItemTransaccion *
+                getPrecioDolarPorId(item.idMarcoItemTransaccion),
+            0
+          ),
         };
         await generarPresupuestoExcel(data);
-        console.log('Presupuesto generado y descargado exitosamente');
+        console.log("Presupuesto generado y descargado exitosamente");
       } else {
         console.error(`Transacción con id ${id} no encontrada.`);
       }
     } catch (error) {
-      console.error('Error al generar el presupuesto:', error);
+      console.error("Error al generar el presupuesto:", error);
     }
   };
 
@@ -199,7 +209,7 @@ export const OptionsButton = ({ id, type }) => {
       <button className="options-button" onClick={handleOptions}>
         Opciones
       </button>
-    </div >
+    </div>
   );
 };
 

@@ -4,7 +4,7 @@ import { useTipos } from "../../context/TiposContext";
 import SearchBar from "../utils/SearchBar";
 import { DeleteButton } from "../utils/Buttons";
 import Filter from "../utils/Filter";
-import '../../styles/StockTable.css';
+import "../../styles/StockTable.css";
 
 const StockTable = () => {
   const [marcos, setMarcos] = useState([]);
@@ -93,7 +93,6 @@ const StockTable = () => {
             <th>Tipo</th>
             <th>Stock</th>
             <th>Reservados</th>
-            <th>Precio (USD)</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -133,30 +132,18 @@ const StockTable = () => {
               <td>{marco.reservados}</td>
               <td>
                 {editingMarco === marco.idMarco ? (
-                  <input
-                    type="number"
-                    name="precioDolar"
-                    value={editValues.precioDolar}
-                    onChange={handleInputChange}
-                  />
-                ) : (
-                  marco.precioDolar
-                )}
-              </td>
-              <td>
-                {editingMarco === marco.idMarco ? (
                   <>
                     <button
                       className="accept-button"
                       onClick={() => handleAcceptClick(marco.idMarco)}
                     >
-                      Aceptar
+                      <span>Aceptar</span>
                     </button>
                     <button
                       className="cancel-button"
                       onClick={handleCancelClick}
                     >
-                      Cancelar
+                      <span>Cancelar</span>
                     </button>
                   </>
                 ) : (
@@ -165,12 +152,18 @@ const StockTable = () => {
                       className="edit-button"
                       onClick={() => handleEditClick(marco)}
                     >
-                      Editar
+                      <span>Editar</span>
                     </button>
                     <DeleteButton
                       id={marco.idMarco}
                       type="marco"
-                      onDelete={() => setFilteredMarcos(filteredMarcos.filter((m) => m.idMarco !== marco.idMarco))}
+                      onDelete={() =>
+                        setFilteredMarcos(
+                          filteredMarcos.filter(
+                            (m) => m.idMarco !== marco.idMarco
+                          )
+                        )
+                      }
                     />
                   </>
                 )}

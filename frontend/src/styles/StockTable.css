@@ -15,7 +15,7 @@ thead th {
 .stock-table input,
 .stock-table select {
   padding: 10px;
-  font-size: 16px;
+  font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -27,14 +27,15 @@ thead th {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
-  font-size: 18px;
+  font-size: 14px;
+  table-layout: fixed;
 }
 
 td {
-  padding: 8px 10px; 
+  padding: 8px 10px;
   border: 1px solid #ddd;
-  text-align: center; 
-  vertical-align: middle; 
+  text-align: center;
+  vertical-align: middle;
 }
 
 tbody tr:nth-child(even) {
@@ -45,4 +46,55 @@ tbody tr:nth-child(even) {
 .stock-table td input[type="number"],
 .stock-table td select {
   width: 90px; /* Ajusta el ancho según sea necesario */
+}
+
+@media (max-width: 768px) {
+  thead th:nth-child(1) {
+    width: 15vh;
+  }
+  thead th:nth-child(2) {
+    width: 5vh;
+  }
+  thead th:nth-child(3) {
+    width: 4vh;
+  }
+
+  thead th:nth-child(4) {
+    text-align: center; /* Asegurar que el texto esté centrado */
+    position: relative; /* Necesario para usar ::after */
+    color: transparent; /* Hacer el texto invisible pero mantener el fondo */
+    width: 4vh; /* Establecer un ancho fijo para la columna */
+  }
+
+  thead th:nth-child(5) {
+    width: 10vh; /* Establecer un ancho fijo para la columna */
+  }
+
+  thead th:nth-child(4)::after {
+    content: "Res."; /* Mostrar el texto reducido */
+    color: #000; /* Color del texto reducido */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .stock-table td:nth-child(4) {
+    width: 10px; /* Establecer el mismo ancho fijo para las celdas */
+  }
+  .stock-table td:nth-child(5) {
+    display: flex; /* Coloca los elementos en fila */
+    gap: 5px; /* Espaciado entre los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    align-items: center; /* Alinea los botones verticalmente */
+  }
+  .stock-table input,
+  .stock-table select {
+    width: 100%; /* Ancho completo para inputs y selects */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+  }
+
+  .stock-table td input[type="number"],
+  .stock-table td select {
+    width: 5vh; /* Ajusta el ancho según sea necesario */
+  }
 }
